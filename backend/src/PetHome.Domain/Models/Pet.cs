@@ -5,7 +5,7 @@ namespace PetHome.Domain.Models
     public class Pet
     {
         public Guid Id { get; private set; }
-        public string Name { get; private set; }
+        public string Nickname { get; private set; }
         public string Species { get; private set; }
         public string Description { get; private set; }
         public string Breed { get; private set; }
