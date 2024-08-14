@@ -4,6 +4,7 @@
     {
         NeedHelp,
         NeeedHome,
-        FoundHome
+        FoundHome,
+        OnTreatment
     }
 }
