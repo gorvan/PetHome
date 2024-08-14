@@ -3,7 +3,7 @@
     public class Volunteer
     {
         public Guid Id { get; private set; }
-        public Name Name { get; private set; }
+        public FullName Name { get; private set; }
         public string Description { get; private set; }
         public int Experience { get; private set; }
         public int FoundHomePets { get; private set; }

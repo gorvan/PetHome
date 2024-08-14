@@ -2,9 +2,9 @@
 {
     public record Adress
     {        
-        public string City { get; private set; }
-        public string Street { get; private set; }
-        public string HouseNumber { get; private set; }
-        public string AppartmentNumber { get; private set; }
+        public string City { get; }
+        public string Street { get; }
+        public string HouseNumber { get; }
+        public string AppartmentNumber { get; }
     }
 }
