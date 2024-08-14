@@ -21,5 +21,6 @@ namespace PetHome.Domain.Models
         public HelpStatus HelpStatus { get; private set; }
         public List<Requisite> Detailes { get; private set; }
         public DateTime CreateTime { get; private set; }
+        public List<PetPhoto> Photos { get; private set; }
     }
 }
