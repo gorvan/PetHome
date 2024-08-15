@@ -1,4 +1,4 @@
-﻿namespace PetHome.Domain.Models
+﻿namespace PetHome.Domain.Models.Volunteers
 {
     public record FullName
     {

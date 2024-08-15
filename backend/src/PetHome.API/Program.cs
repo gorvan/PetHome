@@ -1,4 +1,6 @@
 
+using PetHome.Infrastructure;
+
 namespace PetHome.API
 {
     public class Program
@@ -10,6 +12,8 @@ namespace PetHome.API
             builder.Services.AddControllers();            
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            builder.Services.AddScoped<ApplicationDbContext>();
 
             var app = builder.Build();
             

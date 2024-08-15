@@ -1,10 +1,14 @@
-﻿using PetHome.Domain.Models.SecondaryModels;
+﻿using PetHome.Domain.Models.CommonModels;
+using PetHome.Domain.Shared;
 
-namespace PetHome.Domain.Models
+namespace PetHome.Domain.Models.Pets
 {
-    public class Pet
+    public class Pet : Entity<PetId>
     {
-        public Guid Id { get; private set; }
+        private Pet(PetId id) : base(id)
+        {
+        }
+
         public string Nickname { get; private set; }
         public string Species { get; private set; }
         public string Description { get; private set; }
