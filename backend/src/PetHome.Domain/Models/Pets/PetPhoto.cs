@@ -8,9 +8,9 @@ namespace PetHome.Domain.Models.Pets
         {
         }
 
-        public string? Title { get; }
-        public string Path { get; }
-        public bool IsMain { get; }
+        public string? Title { get; private set; }
+        public string Path { get; private set; }
+        public bool IsMain { get; private set; }
 
 
     }

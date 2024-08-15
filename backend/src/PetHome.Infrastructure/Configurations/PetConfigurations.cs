@@ -10,106 +10,106 @@ namespace PetHome.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Pet> builder)
         {
             builder.ToTable("pets");
-            builder.HasKey(x => x.Id);
+            builder.HasKey(p => p.Id);
 
-            builder.Property(m => m.Id)
+            builder.Property(p => p.Id)
                 .HasConversion(
                     id => id.Value,
                     value => PetId.Create(value));
 
-            builder.Property(m => m.Nickname)
+            builder.Property(p => p.Nickname)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH);
 
-            builder.Property(m => m.Species)
+            builder.Property(p => p.Species)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH);
 
-            builder.Property(m => m.Description)
+            builder.Property(p => p.Description)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TEXT_LENGTH);
 
-            builder.Property(m => m.Breed)
+            builder.Property(p => p.Breed)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH);
 
-            builder.Property(m => m.Color)
+            builder.Property(p => p.Color)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH);
 
-            builder.Property(m => m.Health)
+            builder.Property(p => p.Health)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TEXT_LENGTH);
 
-            builder.ComplexProperty(m => m.Adress, tb =>
+            builder.ComplexProperty(p => p.Address, tb =>
             {
-                tb.Property(t => t.City)
+                tb.Property(a => a.City)
                 .IsRequired()
-                .HasMaxLength(Adress.MAX_LENGTH)
+                .HasMaxLength(Address.MAX_LENGTH)
                 .HasColumnName("city");
             });
 
-            builder.ComplexProperty(m => m.Adress, tb =>
+            builder.ComplexProperty(p => p.Address, tb =>
             {
-                tb.Property(t => t.Street)
+                tb.Property(a => a.Street)
                 .IsRequired()
-                .HasMaxLength(Adress.MAX_LENGTH)
+                .HasMaxLength(Address.MAX_LENGTH)
                 .HasColumnName("street");
             });
 
-            builder.ComplexProperty(m => m.Adress, tb =>
+            builder.ComplexProperty(p => p.Address, tb =>
             {
-                tb.Property(t => t.HouseNumber)
+                tb.Property(a => a.HouseNumber)
                 .IsRequired()                
                 .HasColumnName("house");
             });
 
-            builder.ComplexProperty(m => m.Adress, tb =>
+            builder.ComplexProperty(p => p.Address, tb =>
             {
-                tb.Property(t => t.AppartmentNumber)
+                tb.Property(a => a.AppartmentNumber)
                 .IsRequired()                
                 .HasColumnName("appartment");
             });
 
-            builder.Property(m => m.Weight)
+            builder.Property(p => p.Weight)
                 .IsRequired()
                 .HasColumnName("weight");
 
 
-            builder.Property(m => m.Height)
+            builder.Property(p => p.Height)
                 .IsRequired()
                 .HasColumnName("height");
 
-            builder.Property(m => m.Phone)
+            builder.Property(p => p.Phone)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH)
                 .HasColumnName("phone");
 
-            builder.Property(m => m.IsNeutered)
+            builder.Property(p => p.IsNeutered)
                 .IsRequired()
                 .HasColumnName("is_neutered");
 
-            builder.Property(m => m.BirthDay)
+            builder.Property(p => p.BirthDay)
                 .IsRequired()
                 .HasColumnName("birthday");
 
-            builder.Property(m => m.IsVaccinated)
+            builder.Property(p => p.IsVaccinated)
                 .IsRequired()
                 .HasColumnName("is_vaccinated");
 
-            builder.Property(m => m.HelpStatus)
+            builder.Property(p => p.HelpStatus)
                 .IsRequired()
                 .HasColumnName("help_status");
 
-            builder.Property(m => m.CreateTime)
+            builder.Property(p => p.CreateTime)
                 .IsRequired()
                 .HasColumnName("create_time");
 
-            builder.HasMany(m => m.Detailes)
+            builder.HasMany(p => p.Detailes)
                 .WithOne()
                 .HasForeignKey("pet_id");
 
-            builder.HasMany(m => m.Photos)
+            builder.HasMany(p => p.Photos)
                 .WithOne()
                 .HasForeignKey("pet_id");
         }

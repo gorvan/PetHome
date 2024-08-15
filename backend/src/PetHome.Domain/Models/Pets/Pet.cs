@@ -15,7 +15,7 @@ namespace PetHome.Domain.Models.Pets
         public string Breed { get; private set; }
         public string Color { get; private set; }
         public string Health { get; private set; }
-        public Adress Adress { get; private set; }
+        public Address Address { get; private set; }
         public double Weight { get; private set; }
         public double Height { get; private set; }
         public string Phone { get; private set; }

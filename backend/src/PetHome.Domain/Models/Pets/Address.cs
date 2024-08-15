@@ -1,11 +1,11 @@
 ﻿namespace PetHome.Domain.Models.Pets
 {
-    public record Adress
+    public record Address
     {
         public const int MAX_LENGTH = 100;
-        private Adress() { }
+        private Address() { }
 
-        private Adress(string city, string street, string houseNumber, string appartmentNumber)
+        private Address(string city, string street, string houseNumber, string appartmentNumber)
         {
             City = city;
             Street = street;
@@ -18,7 +18,7 @@
         public string HouseNumber { get; } = default!;
         public string AppartmentNumber { get; } = default!;
 
-        public static Adress Create(string city, string street, string house, string appartment)
+        public static Address Create(string city, string street, string house, string appartment)
             => new(city, street, house, appartment);
     }
 }

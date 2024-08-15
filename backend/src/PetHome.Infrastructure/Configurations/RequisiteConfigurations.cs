@@ -10,18 +10,18 @@ namespace PetHome.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Requisite> builder)
         {
             builder.ToTable("requisite");
-            builder.HasKey(x => x.Id);
+            builder.HasKey(r => r.Id);
 
-            builder.Property(m => m.Id)
+            builder.Property(r => r.Id)
                 .HasConversion(
                     id => id.Value,
                     value => RequisiteId.Create(value));
 
-            builder.Property(m => m.Name)
+            builder.Property(r => r.Name)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH);
 
-            builder.Property(m => m.Description)
+            builder.Property(r => r.Description)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TEXT_LENGTH);
         }

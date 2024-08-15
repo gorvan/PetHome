@@ -11,77 +11,77 @@ namespace PetHome.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Volunteer> builder)
         {
             builder.ToTable("volunteer");
-            builder.HasKey(x => x.Id);
+            builder.HasKey(v => v.Id);
 
-            builder.Property(m => m.Id)
+            builder.Property(v => v.Id)
                 .HasConversion(
                     id => id.Value,
                     value => VolunteerId.Create(value));
 
-            builder.ComplexProperty(m => m.Name, tb =>
+            builder.ComplexProperty(v => v.Name, tb =>
             {
-                tb.Property(t => t.FirstName)
+                tb.Property(n => n.FirstName)
                 .IsRequired()
-                .HasMaxLength(Adress.MAX_LENGTH)
+                .HasMaxLength(Address.MAX_LENGTH)
                 .HasColumnName("first_name");
             });
 
-            builder.ComplexProperty(m => m.Name, tb =>
+            builder.ComplexProperty(v => v.Name, tb =>
             {
-                tb.Property(t => t.SeconNname)
+                tb.Property(n => n.SeconNname)
                 .IsRequired()
-                .HasMaxLength(Adress.MAX_LENGTH)
+                .HasMaxLength(Address.MAX_LENGTH)
                 .HasColumnName("second_name");
             });
 
-            builder.ComplexProperty(m => m.Name, tb =>
+            builder.ComplexProperty(v => v.Name, tb =>
             {
-                tb.Property(t => t.Surname)
+                tb.Property(n => n.Surname)
                 .IsRequired()
                 .HasColumnName("surname");
             });
 
-            builder.Property(m => m.Description)
+            builder.Property(v => v.Description)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TEXT_LENGTH);
 
-            builder.Property(m => m.Experience)
+            builder.Property(v => v.Experience)
                 .IsRequired();
 
-            builder.Property(m => m.FoundHomePets)
+            builder.Property(v => v.FoundHomePets)
                 .IsRequired();
 
-            builder.Property(m => m.NeedHomePets)
+            builder.Property(v => v.NeedHomePets)
                 .IsRequired();
 
-            builder.Property(m => m.TreatPets)
+            builder.Property(v => v.TreatPets)
                 .IsRequired();
 
-            builder.Property(m => m.Phone)
+            builder.Property(v => v.Phone)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH)
                 .HasColumnName("phone");
 
-            builder.HasMany(m => m.Detailes)
+            builder.HasMany(v => v.Detailes)
                 .WithOne()
                 .HasForeignKey("voluteer_id");
 
-            builder.OwnsOne(m => m.SocialNetworks, sb =>
+            builder.OwnsOne(v => v.SocialNetworks, sb =>
             {
                 sb.ToJson();
-                sb.OwnsMany(s => s.SocialNetworks, nb =>
+                sb.OwnsMany(v => v.SocialNetworks, nb =>
                 {
-                    nb.Property(n => n.Name)
+                    nb.Property(sn => sn.Name)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_TITLE_LENGTH);
 
-                    nb.Property(n => n.Link)
+                    nb.Property(sn => sn.Link)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_TITLE_LENGTH);
                 });
             });
 
-            builder.HasMany(m => m.Pets)
+            builder.HasMany(v => v.Pets)
                 .WithOne()
                 .HasForeignKey("voluteer_id");
         }
