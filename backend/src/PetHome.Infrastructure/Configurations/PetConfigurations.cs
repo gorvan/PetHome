@@ -21,17 +21,29 @@ namespace PetHome.Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH);
 
-            builder.Property(p => p.Species)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+            builder.ComplexProperty(p => p.SpeciesBreedValue, tb =>
+            {
+                tb.Property(s => s.SpeciesId)
+                .HasConversion(
+                    id => id.Value,
+                    value => SpeciesId.Create(value))
+                .IsRequired()                
+                .HasColumnName("species_id");
+            });
+
+            builder.ComplexProperty(p => p.SpeciesBreedValue, tb =>
+            {
+                tb.Property(s => s.BreedId)
+                .HasConversion(
+                    id => id.Value,
+                    value => BreedId.Create(value))
+                .IsRequired()                
+                .HasColumnName("breed_id");
+            });
 
             builder.Property(p => p.Description)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_TEXT_LENGTH);
-
-            builder.Property(p => p.Breed)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+                .HasMaxLength(Constants.MAX_TEXT_LENGTH);           
 
             builder.Property(p => p.Color)
                 .IsRequired()
@@ -45,7 +57,7 @@ namespace PetHome.Infrastructure.Configurations
             {
                 tb.Property(a => a.City)
                 .IsRequired()
-                .HasMaxLength(Address.MAX_LENGTH)
+                .HasMaxLength(Constants.MAX_WORD_LENGTH)
                 .HasColumnName("city");
             });
 
@@ -53,7 +65,7 @@ namespace PetHome.Infrastructure.Configurations
             {
                 tb.Property(a => a.Street)
                 .IsRequired()
-                .HasMaxLength(Address.MAX_LENGTH)
+                .HasMaxLength(Constants.MAX_WORD_LENGTH)
                 .HasColumnName("street");
             });
 

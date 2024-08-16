@@ -22,7 +22,7 @@ namespace PetHome.Infrastructure.Configurations
             {
                 tb.Property(n => n.FirstName)
                 .IsRequired()
-                .HasMaxLength(Address.MAX_LENGTH)
+                .HasMaxLength(Constants.MAX_WORD_LENGTH)
                 .HasColumnName("first_name");
             });
 
@@ -30,7 +30,7 @@ namespace PetHome.Infrastructure.Configurations
             {
                 tb.Property(n => n.SeconNname)
                 .IsRequired()
-                .HasMaxLength(Address.MAX_LENGTH)
+                .HasMaxLength(Constants.MAX_WORD_LENGTH)
                 .HasColumnName("second_name");
             });
 
