@@ -7,6 +7,6 @@
             Id = id;
         }
 
-        public TId Id { get; private set; }
+        protected TId Id { get; private set; }
     }
 }
