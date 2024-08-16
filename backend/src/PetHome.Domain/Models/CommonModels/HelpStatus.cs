@@ -1,4 +1,4 @@
-﻿namespace PetHome.Domain.Models.SecondaryModels
+﻿namespace PetHome.Domain.Models.CommonModels
 {
     public enum HelpStatus
     {
