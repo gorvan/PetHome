@@ -10,9 +10,8 @@ namespace PetHome.Domain.Models.Pets
         }
 
         public string Nickname { get; private set; }
-        public string Species { get; private set; }
-        public string Description { get; private set; }
-        public string Breed { get; private set; }
+        public SpeciesBreedValue SpeciesBreedValue { get; private set; }
+        public string Description { get; private set; }       
         public string Color { get; private set; }
         public string Health { get; private set; }
         public Address Address { get; private set; }

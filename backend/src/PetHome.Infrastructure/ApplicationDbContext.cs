@@ -12,6 +12,7 @@ namespace PetHome.Infrastructure
 
         public DbSet<Volunteer> Volunteers => Set<Volunteer>();
         public DbSet<Pet> Pets => Set<Pet>();
+        public DbSet<Species> Species => Set<Species>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

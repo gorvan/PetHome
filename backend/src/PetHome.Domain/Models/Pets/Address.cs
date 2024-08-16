@@ -2,7 +2,6 @@
 {
     public record Address
     {
-        public const int MAX_LENGTH = 100;
         private Address() { }
 
         private Address(string city, string street, string houseNumber, string appartmentNumber)
