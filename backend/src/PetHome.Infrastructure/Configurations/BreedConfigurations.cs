@@ -17,9 +17,13 @@ namespace PetHome.Infrastructure.Configurations
                     id => id.Value,
                     value => BreedId.Create(value));
 
-            builder.Property(b => b.Name)
+            builder.ComplexProperty(v => v.Name, tb =>
+            {
+                tb.Property(n => n.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_WORD_LENGTH);
+                .HasMaxLength(Constants.MAX_WORD_LENGTH)
+                .HasColumnName("breed");
+            });           
         }
     }
 }

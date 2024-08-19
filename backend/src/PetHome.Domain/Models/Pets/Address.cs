@@ -1,4 +1,6 @@
-﻿namespace PetHome.Domain.Models.Pets
+﻿using PetHome.Domain.Shared;
+
+namespace PetHome.Domain.Models.Pets
 {
     public record Address
     {
@@ -17,7 +19,31 @@
         public string HouseNumber { get; } = default!;
         public string AppartmentNumber { get; } = default!;
 
-        public static Address Create(string city, string street, string house, string appartment)
-            => new(city, street, house, appartment);
+        public static Result<Address> Create(string city, string street, string house, string appartment)
+        {
+            if (string.IsNullOrWhiteSpace(city))
+            {
+                return $"{nameof(Address)} " + $"{nameof(city)}" + " can not be empty";
+            }
+
+            if (string.IsNullOrWhiteSpace(street))
+            {
+                return $"{nameof(Address)} " + $"{nameof(street)}" + " can not be empty";
+            }
+
+            if (string.IsNullOrWhiteSpace(house))
+            {
+                return $"{nameof(Address)} " + $"{nameof(house)}" + " can not be empty";
+            }
+
+            if (string.IsNullOrWhiteSpace(appartment))
+            {
+                return $"{nameof(Address)} " + $"{nameof(appartment)}" + " can not be empty";
+            }
+
+            var adress = new Address(city, street, house, appartment);
+
+            return adress;
+        }
     }
 }

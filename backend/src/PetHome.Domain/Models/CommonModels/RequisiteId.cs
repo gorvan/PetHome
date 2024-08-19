@@ -1,6 +1,8 @@
-﻿namespace PetHome.Domain.Models.CommonModels
+﻿using PetHome.Domain.Shared;
+
+namespace PetHome.Domain.Models.CommonModels
 {
-    public class RequisiteId
+    public record RequisiteId
     {
         private RequisiteId(Guid value)
         {
@@ -9,8 +11,8 @@
 
         public Guid Value { get; }
 
-        public static RequisiteId NewRequisiteId() => new(Guid.NewGuid());
-        public static RequisiteId Empty() => new(Guid.Empty);
-        public static RequisiteId Create(Guid id) => new(id);
+        public static RequisiteId NewRequisiteId() => new RequisiteId(Guid.NewGuid());
+        public static RequisiteId Empty() => new RequisiteId(Guid.Empty);
+        public static RequisiteId Create(Guid id) => new RequisiteId(id);
     }
 }

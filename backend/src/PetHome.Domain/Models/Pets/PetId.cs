@@ -1,4 +1,6 @@
-﻿namespace PetHome.Domain.Models.Pets
+﻿using PetHome.Domain.Shared;
+
+namespace PetHome.Domain.Models.Pets
 {
     public record PetId
     {
@@ -9,8 +11,8 @@
 
         public Guid Value { get; }
 
-        public static PetId NewPetId() => new(Guid.NewGuid());
-        public static PetId Empty() => new(Guid.Empty);
-        public static PetId Create(Guid id) => new(id);
+        public static PetId NewPetId() => new PetId(Guid.NewGuid());
+        public static PetId Empty() => new PetId(Guid.Empty);
+        public static PetId Create(Guid id) => new PetId(id);
     }
 }

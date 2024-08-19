@@ -1,14 +1,45 @@
-﻿using PetHome.Domain.Shared;
+﻿using PetHome.Domain.Models.CommonModels;
+using PetHome.Domain.Shared;
 
 namespace PetHome.Domain.Models.Pets
 {
     public class Species : Entity<SpeciesId>
-    {        
+    {
+        private List<Breed> _breeds = [];
         private Species(SpeciesId id) : base(id)
         {
         }
 
-        public string Name { get; private set; }
-        public List<Breed> Breeds { get; private set; }
+        private Species(SpeciesId id, NotNullableString name) : base(id)
+        {
+            Name = name;
+        }
+
+        public NotNullableString Name { get; private set; }
+        public List<Breed> Breeds => _breeds;
+
+
+        public static Result<Species> Create(SpeciesId id, NotNullableString name)
+        {
+            if (name is null)
+            {
+                return $"{nameof(Species)} " + $"{nameof(name)}" + " can not be empty";
+            }
+
+            var species = new Species(id, name);
+            return species;
+        }
+
+        public Result AddBreed(Breed breed)
+        {
+            if (breed is null)
+            {
+                return "Breed can not be null";
+            }
+
+            _breeds.Add(breed);
+
+            return Result.Success();
+        }
     }
 }

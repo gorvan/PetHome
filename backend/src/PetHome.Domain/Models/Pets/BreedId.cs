@@ -1,6 +1,6 @@
 ﻿namespace PetHome.Domain.Models.Pets
 {
-    public class BreedId
+    public record BreedId
     {
         private BreedId(Guid value)
         {

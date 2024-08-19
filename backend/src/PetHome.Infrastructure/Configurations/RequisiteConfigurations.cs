@@ -17,13 +17,31 @@ namespace PetHome.Infrastructure.Configurations
                     id => id.Value,
                     value => RequisiteId.Create(value));
 
-            builder.Property(r => r.Name)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+            builder.ComplexProperty(p => p.Name, 
+                tb =>
+                {
+                    tb.Property(a => a.Value)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                    .HasColumnName("name");
+                });
 
-            builder.Property(r => r.Description)
+            builder.Property(v => v.DescriptionValue)
+                .HasConversion(
+                    id => id.Value,
+                    value => Description.Create(value).Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_TEXT_LENGTH)
+                .HasColumnName("description");
+
+            //builder.ComplexProperty(v => v.DescriptionValue,
+            //    tb =>
+            //    {
+            //        tb.Property(n => n.Value)
+            //        .IsRequired()
+            //        .HasMaxLength(Constants.MAX_TEXT_LENGTH)
+            //        .HasColumnName("description");
+            //    });
         }
     }
 }

@@ -15,11 +15,15 @@ namespace PetHome.Infrastructure.Configurations
             builder.Property(s => s.Id)
                 .HasConversion(
                     id => id.Value,
-                    value => SpeciesId.Create(value));            
-
-            builder.Property(s =>s.Name)
+                    value => SpeciesId.Create(value));  
+           
+            builder.ComplexProperty(v => v.Name, tb =>
+            {
+                tb.Property(n => n.Value)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_WORD_LENGTH);
+                .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                .HasColumnName("name");
+            });
 
             builder.HasMany(s => s.Breeds)
                 .WithOne()

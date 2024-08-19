@@ -1,6 +1,8 @@
-﻿namespace PetHome.Domain.Models.Pets
+﻿using PetHome.Domain.Shared;
+
+namespace PetHome.Domain.Models.Pets
 {
-    public record SpeciesBreedValue
+    public record SpeciesBreedValue 
     {        
         private SpeciesBreedValue() { }
 
@@ -13,7 +15,21 @@
         public SpeciesId SpeciesId { get; } = default!;
         public BreedId BreedId { get; } = default!;
         
-        public static SpeciesBreedValue Create(SpeciesId speciesId, BreedId breedId)
-            => new(speciesId, breedId);
+        public static Result<SpeciesBreedValue> Create(SpeciesId speciesId, BreedId breedId)
+        {
+            if(speciesId is null)
+            {
+                return $"{nameof(SpeciesId)} can not be null";
+            }
+
+            if (breedId is null)
+            {
+                return $"{nameof(BreedId)} can not be null";
+            }
+
+            var speciesBreedValue  = new SpeciesBreedValue(speciesId, breedId);
+            return speciesBreedValue;
+        }
     }
+            
 }

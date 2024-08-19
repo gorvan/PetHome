@@ -19,14 +19,17 @@ namespace PetHome.Infrastructure.Configurations
 
             builder.Property(p => p.Title)
                 .IsRequired(false)
-                .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+                .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                .HasColumnName("title");
 
             builder.Property(p => p.IsMain)
-                .IsRequired();
+                .IsRequired()
+                .HasColumnName("is_main");
 
             builder.Property(p => p.Path)
                 .IsRequired()
-                .HasMaxLength(Constants.MAX_TEXT_LENGTH);
+                .HasMaxLength(Constants.MAX_TEXT_LENGTH)
+                .HasColumnName("path");
         }
     }
 }

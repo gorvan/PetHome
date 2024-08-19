@@ -1,6 +1,6 @@
 ﻿namespace PetHome.Domain.Models.Pets
 {
-    public class PetPhotoId
+    public record PetPhotoId
     {
         private PetPhotoId(Guid value)
         {
