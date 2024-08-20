@@ -4,9 +4,9 @@ namespace PetHome.Domain.Models.CommonModels
 {
     public record Description
     {
-        private Description(string description)
+        private Description(string value)
         {
-            Value = description;
+            Value = value;
         }        
 
         public string Value { get; } = default!;
@@ -27,6 +27,11 @@ namespace PetHome.Domain.Models.CommonModels
             var descriptionValue = new Description(description);
 
             return descriptionValue;
+        }
+
+        public static implicit operator string(Description value)
+        {
+            return value.Value;
         }
     }
 }

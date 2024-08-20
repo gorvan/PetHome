@@ -17,7 +17,7 @@ namespace PetHome.Domain.Models.Pets
             IsMain = isMain;
         }
 
-        public string? Title { get; private set; }
+        public string Title { get; private set; }
         public string Path { get; private set; }
         public bool IsMain { get; private set; }
 

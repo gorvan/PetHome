@@ -6,12 +6,12 @@ namespace PetHome.Domain.Models.Volunteers
     public record Email
     {
         private Email() { }
-        private Email(string email)
+        private Email(string emailValue)
         {
-            Value = email;
+            EmailValue = emailValue;
         }
 
-        public string Value { get; } = default!;
+        public string EmailValue { get; } = default!;
 
         public static Result<Email> Create(string email)
         {

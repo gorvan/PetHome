@@ -9,12 +9,12 @@ namespace PetHome.Domain.Models.Volunteers
         private FullName(string firstName, string secondName, string surname) 
         { 
             FirstName = firstName;
-            SecondNname = secondName;
+            SecondName = secondName;
             Surname = surname;
         }
 
         public string FirstName { get; } = default!;
-        public string SecondNname { get; } = default!;
+        public string SecondName { get; } = default!;
         public string Surname { get; } = default!;
 
         public static Result<FullName> Create(string firstName, string secondName, string surname)

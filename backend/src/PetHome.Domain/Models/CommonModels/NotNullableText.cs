@@ -4,12 +4,12 @@ namespace PetHome.Domain.Models.CommonModels
 {
     public record NotNullableText
     {
-        private NotNullableText(string value)
+        private NotNullableText(string text)
         {
-            this.Value = value;
+            Text = text;
         }
 
-        public string Value { get; } = default!;
+        public string Text { get; } = default!;
 
         public static Result<NotNullableText> Create(string value)
         {

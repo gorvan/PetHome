@@ -5,12 +5,29 @@ using PetHome.Domain.Shared;
 namespace PetHome.Domain.Models.Volunteers
 {
     public class Volunteer : Entity<VolunteerId>
-    {
-        private readonly List<Requisite> _detailes = [];
+    {        
         private readonly List<Pet> _pets = [];       
 
         private Volunteer(VolunteerId id) : base(id)
         {
+        }
+
+        private Volunteer(
+            VolunteerId id,
+            FullName name,
+            Email email,
+            Description descriptionValue,
+            Phone phone,
+            SocialNetworkCollection socialNetworkValue,
+            RecuisiteCollection recuisiteCollectionValue) 
+            : base(id)
+        {
+            Name = name;
+            Email = email;
+            DescriptionValue =descriptionValue;
+            Phone = phone;
+            SocialNetworksValue = socialNetworkValue;
+            RequisiteCollectionValue = recuisiteCollectionValue;
         }
 
         public FullName Name { get; private set; }
@@ -31,13 +48,8 @@ namespace PetHome.Domain.Models.Volunteers
             .Count();
         public Phone Phone { get; private set; }
         public SocialNetworkCollection SocialNetworksValue { get; private set; }
-        public IReadOnlyList<Requisite> Detailes =>_detailes;
-        public IReadOnlyList<Pet> Pets =>_pets;
-
-        public void AddRequisite(Requisite requisite)
-        {
-            _detailes.Add(requisite);
-        }
+        public RecuisiteCollection RequisiteCollectionValue { get; private set; }        
+        public IReadOnlyList<Pet>? Pets =>_pets;
 
         public void AddPet(Pet pet)
         {
@@ -50,18 +62,42 @@ namespace PetHome.Domain.Models.Volunteers
             Description description, 
             Phone phone, 
             SocialNetworkCollection socialNetwork,
-            Requisite requisite)
+            RecuisiteCollection requisite)
         {
             var volunteerId = VolunteerId.NewVolunteerId();
-            var volunteer = new Volunteer(volunteerId);
-            
-            volunteer.Name = name;
-            volunteer.Email = email;
-            volunteer.DescriptionValue = description;
-            volunteer.Phone = phone;
-            volunteer.SocialNetworksValue = socialNetwork;  
-            volunteer.AddRequisite(requisite);
 
+            if (name is null)
+            {
+                return "Name can not be null";
+            }
+
+            if (email is null)
+            {
+                return "Email can not be null";
+            }
+
+            if (description is null)
+            {
+                return "Description can not be null";
+            }
+
+            if (phone is null)
+            {
+                return "Phone can not be null";
+            }
+
+            if (socialNetwork is null)
+            {
+                return "SocialNetwork can not be null";
+            }
+
+            if (requisite is null)
+            {
+                return "Requisite can not be null";
+            }
+
+            var volunteer = new Volunteer(volunteerId, name, email, 
+                description, phone, socialNetwork, requisite);  
             return volunteer;
         }
     }

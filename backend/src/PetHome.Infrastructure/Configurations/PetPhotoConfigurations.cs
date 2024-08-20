@@ -9,7 +9,7 @@ namespace PetHome.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<PetPhoto> builder)
         {
-            builder.ToTable("pet_photo");
+            builder.ToTable("pet_photos");
             builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Id)
@@ -18,12 +18,12 @@ namespace PetHome.Infrastructure.Configurations
                     value => PetPhotoId.Create(value));
 
             builder.Property(p => p.Title)
-                .IsRequired(false)
+                .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH)
                 .HasColumnName("title");
 
             builder.Property(p => p.IsMain)
-                .HasDefaultValue(false)
+                .IsRequired()
                 .HasColumnName("is_main");
 
             builder.Property(p => p.Path)

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetHome.Domain.Models.CommonModels;
 using PetHome.Domain.Models.Volunteers;
 using PetHome.Domain.Shared;
 
@@ -10,7 +9,7 @@ namespace PetHome.Infrastructure.Configurations
     {
         public void Configure(EntityTypeBuilder<Volunteer> builder)
         {
-            builder.ToTable("volunteer");
+            builder.ToTable("volunteers");
             builder.HasKey(v => v.Id);
 
             builder.Property(v => v.Id)
@@ -24,38 +23,38 @@ namespace PetHome.Infrastructure.Configurations
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_WORD_LENGTH)
                 .HasColumnName("first_name");
-            
-                tb.Property(n => n.SecondNname)
-                .IsRequired(false)
+
+                tb.Property(n => n.SecondName)
+                .IsRequired()
                 .HasMaxLength(Constants.MAX_WORD_LENGTH)
                 .HasColumnName("second_name");
-           
+
                 tb.Property(n => n.Surname)
-                .IsRequired(false)
+                .IsRequired()
                 .HasMaxLength(Constants.MAX_WORD_LENGTH)
                 .HasColumnName("surname");
             });
 
-            builder.Property(v => v.DescriptionValue)
-                .HasConversion(
-                    id => id.Value,
-                    value => Description.Create(value).Value)
-                .IsRequired(false)
+            builder.ComplexProperty(v => v.DescriptionValue, tb =>
+            {
+                tb.Property(n => n.Value)
+                .IsRequired()
                 .HasMaxLength(Constants.MAX_TEXT_LENGTH)
                 .HasColumnName("description");
+            });
 
             builder.ComplexProperty(v => v.Email, tb =>
             {
-                tb.Property(n => n.Value)
+                tb.Property(n => n.EmailValue)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TITLE_LENGTH)
                 .HasColumnName("email");
             });
 
-            builder.Property(v => v.Experience)                
+            builder.Property(v => v.Experience)
                 .HasDefaultValue(0)
-                .HasColumnName("experience");            
-            
+                .HasColumnName("experience");
+
             builder.ComplexProperty(v => v.Phone, tb =>
             {
                 tb.Property(n => n.PhoneNumber)
@@ -64,32 +63,36 @@ namespace PetHome.Infrastructure.Configurations
                 .HasColumnName("phone");
             });
 
-            builder.HasMany(v => v.Detailes)
-                .WithOne()                
-                .HasForeignKey("voluteer_id")
-                .IsRequired(false);
-
-            builder.OwnsOne(v => v.SocialNetworksValue, sb =>
+            builder.OwnsOne(n => n.RequisiteCollectionValue, reqb =>
             {
-                sb.ToJson();
-                sb.OwnsMany(s => s.SocialNetworks, nb =>
+                reqb.ToJson("requisite");
+                reqb.OwnsMany(r => r.CollectionValues, rb =>
                 {
-                    nb.Property(sn => sn.Name)
-                    .HasConversion(
-                        s => s.Value,
-                        value => NotNullableString.Create(value).Value)
-                    .IsRequired(false)
+                    rb.Property(c => c.Name)
+                    .IsRequired()
                     .HasMaxLength(Constants.MAX_TITLE_LENGTH);
 
-                    nb.Property(sn => sn.Link)
-                    .HasConversion(
-                        s => s.Value,
-                        value => NotNullableText.Create(value).Value)
-                    .IsRequired(false)
-                    .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+                    rb.Property(c => c.DescriptionValue)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_TEXT_LENGTH);
                 });
             });
 
+            builder.OwnsOne(v => v.SocialNetworksValue, sb =>
+            {
+                sb.ToJson("social_networks");
+
+                sb.OwnsMany(s => s.SocialNetworks, nb =>
+                {
+                    nb.Property(sn => sn.Name)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+
+                    nb.Property(sn => sn.Link)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+                });
+            });
 
             builder.HasMany(v => v.Pets)
                 .WithOne()

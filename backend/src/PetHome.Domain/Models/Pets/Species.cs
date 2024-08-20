@@ -15,8 +15,8 @@ namespace PetHome.Domain.Models.Pets
             Name = name;
         }
 
-        public NotNullableString Name { get; private set; }
-        public List<Breed> Breeds => _breeds;
+        public NotNullableString Name { get; private set; }        
+        public List<Breed>? Breeds => _breeds;
 
 
         public static Result<Species> Create(SpeciesId id, NotNullableString name)

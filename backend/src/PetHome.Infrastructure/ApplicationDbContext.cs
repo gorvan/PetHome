@@ -17,8 +17,9 @@ namespace PetHome.Infrastructure
         {
             optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));
             optionsBuilder.UseSnakeCaseNamingConvention();
-            optionsBuilder.EnableDetailedErrors();
             optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+            optionsBuilder.LogTo(System.Console.WriteLine);
+            optionsBuilder.EnableDetailedErrors();            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

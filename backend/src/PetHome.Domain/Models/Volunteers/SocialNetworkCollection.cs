@@ -5,9 +5,9 @@ namespace PetHome.Domain.Models.Volunteers
     public record SocialNetworkCollection
     {
         private SocialNetworkCollection() { }
-        private SocialNetworkCollection(List<SocialNetwork> networks)
+        private SocialNetworkCollection(List<SocialNetwork> socialNetworks)
         {
-            _socialNetworks = networks;
+            _socialNetworks = socialNetworks;
         }
 
         private List<SocialNetwork> _socialNetworks { get; } = [];
@@ -21,15 +21,9 @@ namespace PetHome.Domain.Models.Volunteers
                 return $"{nameof(SocialNetworkCollection)} " + $"{nameof(networks)}" + " can not be null";
             }            
 
-            var fullName = new SocialNetworkCollection(networks);
+            var socialNet = new SocialNetworkCollection(networks);
 
-            return fullName;
-        }
-
-        public Result Add(SocialNetwork network)
-        {
-            _socialNetworks.Add(network);
-            return Result.Success();
+            return socialNet;
         }
     }
 }

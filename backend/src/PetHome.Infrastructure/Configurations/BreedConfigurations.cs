@@ -15,7 +15,8 @@ namespace PetHome.Infrastructure.Configurations
             builder.Property(b => b.Id)
                 .HasConversion(
                     id => id.Value,
-                    value => BreedId.Create(value));
+                    value => BreedId.Create(value))
+                .IsRequired();
 
             builder.ComplexProperty(v => v.Name, tb =>
             {

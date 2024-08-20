@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PetHome.Domain.Models.CommonModels;
 using PetHome.Domain.Models.Pets;
 using PetHome.Domain.Shared;
 
@@ -27,6 +28,7 @@ namespace PetHome.Infrastructure.Configurations
 
             builder.HasMany(s => s.Breeds)
                 .WithOne()
+                .IsRequired(false)
                 .HasForeignKey("species_id");
         }
     }

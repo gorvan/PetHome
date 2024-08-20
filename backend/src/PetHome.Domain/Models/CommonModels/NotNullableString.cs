@@ -27,5 +27,9 @@ namespace PetHome.Domain.Models.CommonModels
             return valueObject;
         }
 
+        public static implicit operator string(NotNullableString value)
+        {
+            return value.Value;
+        }
     }
 }

@@ -4,8 +4,7 @@ using PetHome.Domain.Shared;
 namespace PetHome.Domain.Models.Pets
 {
     public class Pet : Entity<PetId>
-    {
-        private readonly List<Requisite> _detailes = [];
+    {        
         private readonly List<PetPhoto> _photo = [];
 
         private Pet(PetId id) : base(id)
@@ -21,7 +20,7 @@ namespace PetHome.Domain.Models.Pets
             Description health,
             Address address,
             Phone phone,
-            bool isneutered,
+            bool isNeutered,
             DateTimeValue birthDay,
             bool isVaccinated,
             HelpStatus helpStatus)
@@ -34,7 +33,7 @@ namespace PetHome.Domain.Models.Pets
             Health = health;
             Address = address;
             Phone = phone;
-            IsNeutered = isneutered;
+            IsNeutered = isNeutered;
             BirthDay = birthDay;
             IsVaccinated = isVaccinated;
             HelpStatus = helpStatus;
@@ -53,16 +52,11 @@ namespace PetHome.Domain.Models.Pets
         public DateTimeValue BirthDay { get; private set; }
         public bool IsVaccinated { get; private set; }
         public HelpStatus HelpStatus { get; private set; }
-        public IReadOnlyList<Requisite> Detailes => _detailes;
+        public RecuisiteCollection RequisiteCollectionValue { get; private set; }
         public DateTime CreateTime { get; private set; }
-        public IReadOnlyList<PetPhoto> Photos => _photo;
+        public IReadOnlyList<PetPhoto>? Photos => _photo;
 
-
-        public void AddRequisite(Requisite requisite)
-        {
-            _detailes.Add(requisite);
-        }
-
+        
         public void AddPhoto(PetPhoto photo)
         {
             _photo.Add(photo);

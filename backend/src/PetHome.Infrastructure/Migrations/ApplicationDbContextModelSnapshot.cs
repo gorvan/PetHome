@@ -23,49 +23,6 @@ namespace PetHome.Infrastructure.Migrations
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
-            modelBuilder.Entity("PetHome.Domain.Models.CommonModels.Requisite", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<string>("DescriptionValue")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("description");
-
-                    b.Property<Guid?>("pet_id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("pet_id");
-
-                    b.Property<Guid?>("voluteer_id")
-                        .HasColumnType("uuid")
-                        .HasColumnName("voluteer_id");
-
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetHome.Domain.Models.CommonModels.Requisite.Name#NotNullableString", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("Value")
-                                .IsRequired()
-                                .HasMaxLength(100)
-                                .HasColumnType("character varying(100)")
-                                .HasColumnName("name");
-                        });
-
-                    b.HasKey("Id")
-                        .HasName("pk_requisite");
-
-                    b.HasIndex("pet_id")
-                        .HasDatabaseName("ix_requisite_pet_id");
-
-                    b.HasIndex("voluteer_id")
-                        .HasDatabaseName("ix_requisite_voluteer_id");
-
-                    b.ToTable("requisite", (string)null);
-                });
-
             modelBuilder.Entity("PetHome.Domain.Models.Pets.Breed", b =>
                 {
                     b.Property<Guid>("Id")
@@ -107,16 +64,6 @@ namespace PetHome.Infrastructure.Migrations
                     b.Property<DateTime>("CreateTime")
                         .HasColumnType("timestamp with time zone")
                         .HasColumnName("create_time");
-
-                    b.Property<string>("DescriptionValue")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("description");
-
-                    b.Property<string>("Health")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("health");
 
                     b.Property<double>("Height")
                         .ValueGeneratedOnAdd()
@@ -193,9 +140,32 @@ namespace PetHome.Infrastructure.Migrations
                             b1.IsRequired();
 
                             b1.Property<string>("Value")
+                                .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
                                 .HasColumnName("color");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("DescriptionValue", "PetHome.Domain.Models.Pets.Pet.DescriptionValue#Description", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
+                                .HasColumnName("description");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Health", "PetHome.Domain.Models.Pets.Pet.Health#Description", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("character varying(2000)")
+                                .HasColumnName("health");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("Nickname", "PetHome.Domain.Models.Pets.Pet.Nickname#NotNullableString", b1 =>
@@ -224,7 +194,7 @@ namespace PetHome.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<Guid?>("BreedId")
+                            b1.Property<Guid>("BreedId")
                                 .HasColumnType("uuid")
                                 .HasColumnName("breed_id");
 
@@ -249,9 +219,7 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     b.Property<bool>("IsMain")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
-                        .HasDefaultValue(false)
                         .HasColumnName("is_main");
 
                     b.Property<string>("Path")
@@ -261,6 +229,7 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnName("path");
 
                     b.Property<string>("Title")
+                        .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("character varying(100)")
                         .HasColumnName("title");
@@ -270,12 +239,12 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnName("pet_id");
 
                     b.HasKey("Id")
-                        .HasName("pk_pet_photo");
+                        .HasName("pk_pet_photos");
 
                     b.HasIndex("pet_id")
-                        .HasDatabaseName("ix_pet_photo_pet_id");
+                        .HasDatabaseName("ix_pet_photos_pet_id");
 
-                    b.ToTable("pet_photo", (string)null);
+                    b.ToTable("pet_photos", (string)null);
                 });
 
             modelBuilder.Entity("PetHome.Domain.Models.Pets.Species", b =>
@@ -307,22 +276,28 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<string>("DescriptionValue")
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("description");
-
                     b.Property<int>("Experience")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasDefaultValue(0)
                         .HasColumnName("experience");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Email", "PetHome.Domain.Models.Volunteers.Volunteer.Email#Email", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("DescriptionValue", "PetHome.Domain.Models.Volunteers.Volunteer.DescriptionValue#Description", b1 =>
                         {
                             b1.IsRequired();
 
                             b1.Property<string>("Value")
+                                .IsRequired()
+                                .HasMaxLength(2000)
+                                .HasColumnType("character varying(2000)")
+                                .HasColumnName("description");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("Email", "PetHome.Domain.Models.Volunteers.Volunteer.Email#Email", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("EmailValue")
                                 .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
@@ -339,12 +314,14 @@ namespace PetHome.Infrastructure.Migrations
                                 .HasColumnType("character varying(100)")
                                 .HasColumnName("first_name");
 
-                            b1.Property<string>("SecondNname")
+                            b1.Property<string>("SecondName")
+                                .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
                                 .HasColumnName("second_name");
 
                             b1.Property<string>("Surname")
+                                .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
                                 .HasColumnName("surname");
@@ -362,22 +339,9 @@ namespace PetHome.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id")
-                        .HasName("pk_volunteer");
+                        .HasName("pk_volunteers");
 
-                    b.ToTable("volunteer", (string)null);
-                });
-
-            modelBuilder.Entity("PetHome.Domain.Models.CommonModels.Requisite", b =>
-                {
-                    b.HasOne("PetHome.Domain.Models.Pets.Pet", null)
-                        .WithMany("Detailes")
-                        .HasForeignKey("pet_id")
-                        .HasConstraintName("fk_requisite_pets_pet_id");
-
-                    b.HasOne("PetHome.Domain.Models.Volunteers.Volunteer", null)
-                        .WithMany("Detailes")
-                        .HasForeignKey("voluteer_id")
-                        .HasConstraintName("fk_requisite_volunteer_voluteer_id");
+                    b.ToTable("volunteers", (string)null);
                 });
 
             modelBuilder.Entity("PetHome.Domain.Models.Pets.Breed", b =>
@@ -393,7 +357,58 @@ namespace PetHome.Infrastructure.Migrations
                     b.HasOne("PetHome.Domain.Models.Volunteers.Volunteer", null)
                         .WithMany("Pets")
                         .HasForeignKey("voluteer_id")
-                        .HasConstraintName("fk_pets_volunteer_voluteer_id");
+                        .HasConstraintName("fk_pets_volunteers_voluteer_id");
+
+                    b.OwnsOne("PetHome.Domain.Models.CommonModels.RecuisiteCollection", "RequisiteCollectionValue", b1 =>
+                        {
+                            b1.Property<Guid>("PetId")
+                                .HasColumnType("uuid");
+
+                            b1.HasKey("PetId")
+                                .HasName("pk_pets");
+
+                            b1.ToTable("pets");
+
+                            b1.ToJson("requisite");
+
+                            b1.WithOwner()
+                                .HasForeignKey("PetId")
+                                .HasConstraintName("fk_pets_pets_pet_id");
+
+                            b1.OwnsMany("PetHome.Domain.Models.CommonModels.Requisite", "CollectionValues", b2 =>
+                                {
+                                    b2.Property<Guid>("RecuisiteCollectionPetId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("DescriptionValue")
+                                        .IsRequired()
+                                        .HasMaxLength(2000)
+                                        .HasColumnType("character varying(2000)");
+
+                                    b2.Property<string>("Name")
+                                        .IsRequired()
+                                        .HasMaxLength(100)
+                                        .HasColumnType("character varying(100)");
+
+                                    b2.HasKey("RecuisiteCollectionPetId", "Id")
+                                        .HasName("pk_pets");
+
+                                    b2.ToTable("pets");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("RecuisiteCollectionPetId")
+                                        .HasConstraintName("fk_pets_pets_recuisite_collection_pet_id");
+                                });
+
+                            b1.Navigation("CollectionValues");
+                        });
+
+                    b.Navigation("RequisiteCollectionValue")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("PetHome.Domain.Models.Pets.PetPhoto", b =>
@@ -401,7 +416,7 @@ namespace PetHome.Infrastructure.Migrations
                     b.HasOne("PetHome.Domain.Models.Pets.Pet", null)
                         .WithMany("Photos")
                         .HasForeignKey("pet_id")
-                        .HasConstraintName("fk_pet_photo_pets_pet_id");
+                        .HasConstraintName("fk_pet_photos_pets_pet_id");
                 });
 
             modelBuilder.Entity("PetHome.Domain.Models.Volunteers.Volunteer", b =>
@@ -414,13 +429,13 @@ namespace PetHome.Infrastructure.Migrations
 
                             b1.HasKey("VolunteerId");
 
-                            b1.ToTable("volunteer");
+                            b1.ToTable("volunteers");
 
-                            b1.ToJson("SocialNetworksValue");
+                            b1.ToJson("social_networks");
 
                             b1.WithOwner()
                                 .HasForeignKey("VolunteerId")
-                                .HasConstraintName("fk_volunteer_volunteer_id");
+                                .HasConstraintName("fk_volunteers_volunteers_id");
 
                             b1.OwnsMany("PetHome.Domain.Models.Volunteers.SocialNetwork", "SocialNetworks", b2 =>
                                 {
@@ -432,25 +447,78 @@ namespace PetHome.Infrastructure.Migrations
                                         .HasColumnType("integer");
 
                                     b2.Property<string>("Link")
+                                        .IsRequired()
                                         .HasMaxLength(100)
                                         .HasColumnType("character varying(100)");
 
                                     b2.Property<string>("Name")
+                                        .IsRequired()
                                         .HasMaxLength(100)
                                         .HasColumnType("character varying(100)");
 
                                     b2.HasKey("SocialNetworkCollectionVolunteerId", "Id")
-                                        .HasName("pk_volunteer");
+                                        .HasName("pk_volunteers");
 
-                                    b2.ToTable("volunteer");
+                                    b2.ToTable("volunteers");
 
                                     b2.WithOwner()
                                         .HasForeignKey("SocialNetworkCollectionVolunteerId")
-                                        .HasConstraintName("fk_volunteer_volunteer_social_network_collection_volunteer_id");
+                                        .HasConstraintName("fk_volunteers_volunteers_social_network_collection_volunteer_id");
                                 });
 
                             b1.Navigation("SocialNetworks");
                         });
+
+                    b.OwnsOne("PetHome.Domain.Models.CommonModels.RecuisiteCollection", "RequisiteCollectionValue", b1 =>
+                        {
+                            b1.Property<Guid>("VolunteerId")
+                                .HasColumnType("uuid")
+                                .HasColumnName("id");
+
+                            b1.HasKey("VolunteerId");
+
+                            b1.ToTable("volunteers");
+
+                            b1.ToJson("requisite");
+
+                            b1.WithOwner()
+                                .HasForeignKey("VolunteerId")
+                                .HasConstraintName("fk_volunteers_volunteers_id");
+
+                            b1.OwnsMany("PetHome.Domain.Models.CommonModels.Requisite", "CollectionValues", b2 =>
+                                {
+                                    b2.Property<Guid>("RecuisiteCollectionVolunteerId")
+                                        .HasColumnType("uuid");
+
+                                    b2.Property<int>("Id")
+                                        .ValueGeneratedOnAdd()
+                                        .HasColumnType("integer");
+
+                                    b2.Property<string>("DescriptionValue")
+                                        .IsRequired()
+                                        .HasMaxLength(2000)
+                                        .HasColumnType("character varying(2000)");
+
+                                    b2.Property<string>("Name")
+                                        .IsRequired()
+                                        .HasMaxLength(100)
+                                        .HasColumnType("character varying(100)");
+
+                                    b2.HasKey("RecuisiteCollectionVolunteerId", "Id")
+                                        .HasName("pk_volunteers");
+
+                                    b2.ToTable("volunteers");
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("RecuisiteCollectionVolunteerId")
+                                        .HasConstraintName("fk_volunteers_volunteers_recuisite_collection_volunteer_id");
+                                });
+
+                            b1.Navigation("CollectionValues");
+                        });
+
+                    b.Navigation("RequisiteCollectionValue")
+                        .IsRequired();
 
                     b.Navigation("SocialNetworksValue")
                         .IsRequired();
@@ -458,8 +526,6 @@ namespace PetHome.Infrastructure.Migrations
 
             modelBuilder.Entity("PetHome.Domain.Models.Pets.Pet", b =>
                 {
-                    b.Navigation("Detailes");
-
                     b.Navigation("Photos");
                 });
 
@@ -470,8 +536,6 @@ namespace PetHome.Infrastructure.Migrations
 
             modelBuilder.Entity("PetHome.Domain.Models.Volunteers.Volunteer", b =>
                 {
-                    b.Navigation("Detailes");
-
                     b.Navigation("Pets");
                 });
 #pragma warning restore 612, 618

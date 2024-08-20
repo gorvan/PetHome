@@ -4,11 +4,10 @@ using System.Text.RegularExpressions;
 namespace PetHome.Domain.Models.CommonModels
 {
     public record Phone
-    {
-        private Phone() { }
-        private Phone(string phone)
+    {        
+        private Phone(string phoneNumber)
         {
-            PhoneNumber = phone;
+            PhoneNumber = phoneNumber;
         }
 
         public string PhoneNumber { get; } = default!;

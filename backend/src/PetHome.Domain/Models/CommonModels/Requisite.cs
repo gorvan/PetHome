@@ -1,27 +1,34 @@
-﻿using PetHome.Domain.Shared;
+﻿using PetHome.Domain.Models.Volunteers;
+using PetHome.Domain.Shared;
 
 namespace PetHome.Domain.Models.CommonModels
 {
-    public class Requisite : Entity<RequisiteId>
+    public record Requisite 
     {
-        private Requisite(RequisiteId id) : base(id)
-        {
-        }
-
-        private Requisite(RequisiteId id, NotNullableString name, Description description)
-            : base(id)
+        private Requisite() { }
+        private Requisite( string name, string description)            
         {
             Name = name;
             DescriptionValue = description;
         }
 
-        public NotNullableString Name { get; private set; }
-        public Description DescriptionValue { get; private set; }
-        
+        public string Name { get; } = default!;
+        public string DescriptionValue { get; } = default!;
 
-        public static Result<Requisite> Create(RequisiteId requisiteId, NotNullableString name, Description description)
+
+        public static Result<Requisite> Create(string name, string description)
         {
-            var requisite = new Requisite(requisiteId, name, description);
+            if (name is null)
+            {
+                return $"{nameof(Requisite)} " + $"{nameof(name)}" + " can not be null";
+            }
+
+            if (description is null)
+            {
+                return $"{nameof(Requisite)} " + $"{nameof(description)}" + " can not be null";
+            }
+
+            var requisite = new Requisite(name, description);
 
             return requisite;
         }

@@ -1,5 +1,4 @@
 ﻿using PetHome.Domain.Models.CommonModels;
-using PetHome.Domain.Models.Pets;
 using PetHome.Domain.Models.Volunteers;
 using PetHome.Domain.Shared;
 
@@ -20,7 +19,7 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
         public async Task<Result<Guid>> Execute(CreateVolunteerRequest request, CancellationToken token)
         {
             var phoneResult = Phone.Create(request.phone);
-            if(phoneResult.IsFailure)
+            if (phoneResult.IsFailure)
             {
                 return phoneResult.Error!;
             }
@@ -55,63 +54,48 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
 
             var socialColl = new List<SocialNetwork>();
 
-            foreach (var item in request.SocialNetworkDtos)
-            {
-                var networkNameResult = NotNullableString.Create(item.name);
-                if (networkNameResult.IsFailure)
-                {
-                    return networkNameResult.Error!;
-                }
-
-                var networkPathResult = NotNullableText.Create(item.path);
-                if (networkPathResult.IsFailure)
-                {
-                    return networkPathResult.Error!;
-                }
-
+            foreach (var item in request.socialNetworkDtos)
+            {               
                 var socialNetworkResult = SocialNetwork
-                .Create(networkNameResult.Value, networkPathResult.Value);
+                .Create(item.name, item.path);
                 if (socialNetworkResult.IsFailure)
                 {
                     return socialNetworkResult.Error!;
                 }
 
                 socialColl.Add(socialNetworkResult.Value);
-            }            
+            }
 
-            var socialNetworkCollectionResult = SocialNetworkCollection.Create(socialColl); 
-            if(socialNetworkCollectionResult.IsFailure)
+            var socialNetworkCollectionResult = SocialNetworkCollection.Create(socialColl);
+            if (socialNetworkCollectionResult.IsFailure)
             {
                 return socialNetworkCollectionResult.Error!;
             }
 
-            var requisiteIdResult = RequisiteId.NewRequisiteId();           
+            var requisiteColl = new List<Requisite>();
 
-            var requisiteNameResult = NotNullableString.Create(request.requisiteName);
-            if (requisiteNameResult.IsFailure)
-            {
-                return requisiteNameResult.Error!;
+            foreach (var item in request.requisiteDtos)
+            {  
+                var requisite = Requisite.Create(item.name, item.description);
+                if(requisite.IsFailure)
+                {
+                    return requisite.Error!;
+                }
+
+                requisiteColl.Add(requisite.Value);
             }
 
-            var requisiteDescriptionResult = Description
-                .Create(request.requisiteDescription);
-            if (requisiteDescriptionResult.IsFailure)
+            var requisiteCollectionResult = RecuisiteCollection.Create(requisiteColl);
+            if(requisiteCollectionResult.IsFailure)
             {
-                return requisiteDescriptionResult.Error!;
-            }
-
-            var requisiteResult = Requisite.Create(requisiteIdResult, 
-                    requisiteNameResult.Value, requisiteDescriptionResult.Value);
-            if(requisiteResult.IsFailure)
-            {
-                return requisiteResult.Error!;
-            }                
+                return requisiteCollectionResult.Error!;
+            }            
 
             var volunteerResult = Volunteer.Create(fullNameResult.Value, emailResult.Value,
                 descriptionResult.Value, phoneResult.Value, socialNetworkCollectionResult.Value,
-                 requisiteResult.Value);
+                 requisiteCollectionResult.Value);
 
-            if(volunteerResult.IsFailure)
+            if (volunteerResult.IsFailure)
             {
                 return volunteerResult.Error!;
             }

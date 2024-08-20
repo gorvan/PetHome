@@ -5,16 +5,16 @@ namespace PetHome.Domain.Models.Volunteers
 {
     public record SocialNetwork
     {
-        private SocialNetwork(NotNullableString name, NotNullableText link) 
+        private SocialNetwork(string name, string link) 
         {
             Name = name;
             Link = link;
         }
 
-        public NotNullableString Name { get; } = default!;
-        public NotNullableText Link { get; } = default!;
+        public string Name { get; } = default!;
+        public string Link { get; } = default!;
 
-        public static Result<SocialNetwork> Create(NotNullableString name, NotNullableText link)
+        public static Result<SocialNetwork> Create(string name, string link)
         {
             if (name is null)
             {

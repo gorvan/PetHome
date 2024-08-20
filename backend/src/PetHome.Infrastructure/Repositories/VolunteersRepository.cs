@@ -24,7 +24,7 @@ namespace PetHome.Infrastructure.Repositories
         public async Task<Result<Volunteer>> GetById(VolunteerId id, CancellationToken token)
         {
             var volunteer = await _context.Volunteers
-                .Include(v => v.Detailes)
+                .Include(v => v.RequisiteCollectionValue)
                 .FirstOrDefaultAsync(v => v.Id == id);
 
             if (volunteer is null)

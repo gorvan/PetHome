@@ -7,11 +7,14 @@
         string emaile, 
         string description, 
         string phone,
-        List<SosialNetworkDto> SocialNetworkDtos,
-        string requisiteName, 
-        string requisiteDescription);
+        List<SocialNetworkDto> socialNetworkDtos,
+        List<RequisiteDto> requisiteDtos);
 
-    public record SosialNetworkDto(
+    public record SocialNetworkDto(
         string name, 
         string path);
+
+    public record RequisiteDto(
+        string name,
+        string description);
 }
