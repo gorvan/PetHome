@@ -4,7 +4,6 @@ namespace PetHome.Domain.Models.CommonModels
 {
     public record Description
     {
-        private Description() { }
         private Description(string description)
         {
             Value = description;

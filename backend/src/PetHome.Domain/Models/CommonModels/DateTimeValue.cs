@@ -4,8 +4,6 @@ namespace PetHome.Domain.Models.CommonModels
 {
     public record DateTimeValue
     {
-        private DateTimeValue() { }
-
         private DateTimeValue(DateTime date)
         {
             Date = date;

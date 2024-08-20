@@ -20,23 +20,13 @@ namespace PetHome.Domain.Models.Pets
 
 
         public static Result<Species> Create(SpeciesId id, NotNullableString name)
-        {
-            if (name is null)
-            {
-                return $"{nameof(Species)} " + $"{nameof(name)}" + " can not be empty";
-            }
-
+        {            
             var species = new Species(id, name);
             return species;
         }
 
         public Result AddBreed(Breed breed)
         {
-            if (breed is null)
-            {
-                return "Breed can not be null";
-            }
-
             _breeds.Add(breed);
 
             return Result.Success();

@@ -3,9 +3,7 @@
 namespace PetHome.Domain.Models.Pets
 {
     public record SpeciesBreedValue 
-    {        
-        private SpeciesBreedValue() { }
-
+    {  
         private SpeciesBreedValue(SpeciesId speciesId, BreedId breedId)
         {
             SpeciesId = speciesId;

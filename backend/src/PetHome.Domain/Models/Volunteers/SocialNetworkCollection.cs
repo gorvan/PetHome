@@ -13,11 +13,6 @@ namespace PetHome.Domain.Models.Volunteers
         private List<SocialNetwork> _socialNetworks { get; } = [];
         public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
 
-        public static Result<SocialNetworkCollection> Create()
-        { 
-            var fullName = new SocialNetworkCollection();
-            return fullName;
-        }
 
         public static Result<SocialNetworkCollection> Create(List<SocialNetwork> networks)
         {
@@ -33,11 +28,6 @@ namespace PetHome.Domain.Models.Volunteers
 
         public Result Add(SocialNetwork network)
         {
-            if(network is null)
-            {
-                return "SocialNetwork value can not be null";
-            }
-
             _socialNetworks.Add(network);
             return Result.Success();
         }

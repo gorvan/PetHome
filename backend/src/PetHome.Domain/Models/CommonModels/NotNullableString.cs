@@ -4,7 +4,6 @@ namespace PetHome.Domain.Models.CommonModels
 {
     public record NotNullableString
     {
-        private NotNullableString() { }
         private NotNullableString(string value)
         {
             Value = value;

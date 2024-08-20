@@ -18,12 +18,7 @@ namespace PetHome.Domain.Models.Pets
         public NotNullableString Name { get; private set; }
 
         public static Result<Breed> Create(BreedId id, NotNullableString name)
-        {
-            if (name is null)
-            {
-                return $"{nameof(Breed)} " + $"{nameof(name)}" + " can not be null";
-            }
-
+        { 
             var breed = new Breed(id, name);
             return breed;
         }

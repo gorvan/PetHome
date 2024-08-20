@@ -6,7 +6,6 @@ namespace PetHome.Domain.Models.CommonModels
     public record Phone
     {
         private Phone() { }
-
         private Phone(string phone)
         {
             PhoneNumber = phone;

@@ -32,16 +32,7 @@ namespace PetHome.Infrastructure.Configurations
                     value => Description.Create(value).Value)
                 .IsRequired()
                 .HasMaxLength(Constants.MAX_TEXT_LENGTH)
-                .HasColumnName("description");
-
-            //builder.ComplexProperty(v => v.DescriptionValue,
-            //    tb =>
-            //    {
-            //        tb.Property(n => n.Value)
-            //        .IsRequired()
-            //        .HasMaxLength(Constants.MAX_TEXT_LENGTH)
-            //        .HasColumnName("description");
-            //    });
+                .HasColumnName("description");            
         }
     }
 }

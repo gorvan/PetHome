@@ -23,7 +23,7 @@ namespace PetHome.Infrastructure.Configurations
                 .HasColumnName("title");
 
             builder.Property(p => p.IsMain)
-                .IsRequired()
+                .HasDefaultValue(false)
                 .HasColumnName("is_main");
 
             builder.Property(p => p.Path)

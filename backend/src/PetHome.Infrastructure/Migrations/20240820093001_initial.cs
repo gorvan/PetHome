@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetHome.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -28,15 +28,12 @@ namespace PetHome.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    experience = table.Column<int>(type: "integer", nullable: false),
-                    found_home_pets = table.Column<int>(type: "integer", nullable: false),
-                    need_home_pets = table.Column<int>(type: "integer", nullable: false),
-                    treat_pets = table.Column<int>(type: "integer", nullable: false),
+                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
+                    experience = table.Column<int>(type: "integer", nullable: false, defaultValue: 0),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     first_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    second_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    surname = table.Column<string>(type: "text", nullable: false),
+                    second_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
+                    surname = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     phone = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     SocialNetworksValue = table.Column<string>(type: "jsonb", nullable: false)
                 },
@@ -51,7 +48,7 @@ namespace PetHome.Infrastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     species_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    breed = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false)
+                    breed = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false, defaultValue: "Unknown")
                 },
                 constraints: table =>
                 {
@@ -68,24 +65,24 @@ namespace PetHome.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    health = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    weight = table.Column<double>(type: "double precision", nullable: false),
-                    height = table.Column<double>(type: "double precision", nullable: false),
-                    is_neutered = table.Column<bool>(type: "boolean", nullable: false),
-                    is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
+                    description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
+                    health = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: true),
+                    weight = table.Column<double>(type: "double precision", nullable: false, defaultValue: 0.0),
+                    height = table.Column<double>(type: "double precision", nullable: false, defaultValue: 0.0),
+                    is_neutered = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
+                    is_vaccinated = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     help_status = table.Column<int>(type: "integer", nullable: false),
                     create_time = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     voluteer_id = table.Column<Guid>(type: "uuid", nullable: true),
-                    appartment = table.Column<string>(type: "text", nullable: false),
+                    appartment = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     city = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    house = table.Column<string>(type: "text", nullable: false),
+                    house = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     street = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     birthday = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
-                    color = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
+                    color = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     nick_name = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
                     phone = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
-                    breed_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    breed_id = table.Column<Guid>(type: "uuid", nullable: true),
                     species_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
@@ -105,7 +102,7 @@ namespace PetHome.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     title = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: true),
                     path = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
-                    is_main = table.Column<bool>(type: "boolean", nullable: false),
+                    is_main = table.Column<bool>(type: "boolean", nullable: false, defaultValue: false),
                     pet_id = table.Column<Guid>(type: "uuid", nullable: true)
                 },
                 constraints: table =>

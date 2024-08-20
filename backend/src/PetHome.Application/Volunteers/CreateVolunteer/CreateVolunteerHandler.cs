@@ -19,18 +19,24 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
 
         public async Task<Result<Guid>> Execute(CreateVolunteerRequest request, CancellationToken token)
         {
-            var fullNameResult = FullName.Create(request.firstName, request.secondName, request.surname);
-
-            if(fullNameResult.IsFailure)
+            var phoneResult = Phone.Create(request.phone);
+            if(phoneResult.IsFailure)
             {
-                return fullNameResult.Error!;
+                return phoneResult.Error!;
             }
 
-            var nameResult = await _volunteerRepository.GetByName(fullNameResult.Value, token);
+            var existVolunteerResult = await _volunteerRepository.GetByPhone(phoneResult.Value, token);
 
-            if(nameResult!=null && nameResult.IsSuccess)
+            if (existVolunteerResult.IsSuccess)
             {
-                return "Volunteer name must be unique";
+                return "Volunteer must be unique by phone";
+            }
+
+            var fullNameResult = FullName.Create(request.firstName, request.secondName, request.surname);
+
+            if (fullNameResult.IsFailure)
+            {
+                return fullNameResult.Error!;
             }
 
             var emailResult = Email.Create(request.emaile);
@@ -47,40 +53,36 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 return descriptionResult.Error!;
             }
 
-            var phoneResult = Phone.Create(request.phone);
+            var socialColl = new List<SocialNetwork>();
 
-            if (phoneResult.IsFailure)
+            foreach (var item in request.SocialNetworkDtos)
             {
-                return phoneResult.Error!;
-            }
+                var networkNameResult = NotNullableString.Create(item.name);
+                if (networkNameResult.IsFailure)
+                {
+                    return networkNameResult.Error!;
+                }
 
-            var socialNetworkCollectionResult = SocialNetworkCollection.Create();
-            var networkNameResult = NotNullableString.Create(request.socialNetworkName);
-            if (networkNameResult.IsFailure)
-            {
-                return networkNameResult.Error!;
-            }
+                var networkPathResult = NotNullableText.Create(item.path);
+                if (networkPathResult.IsFailure)
+                {
+                    return networkPathResult.Error!;
+                }
 
-            var networkPathResult = NotNullableText.Create(request.socialNetworkDescription);
-            if (networkPathResult.IsFailure)
-            {
-                return networkPathResult.Error!;
-            }
-
-            var socialNetworkResult = SocialNetwork
+                var socialNetworkResult = SocialNetwork
                 .Create(networkNameResult.Value, networkPathResult.Value);
+                if (socialNetworkResult.IsFailure)
+                {
+                    return socialNetworkResult.Error!;
+                }
 
-            if (socialNetworkResult.IsFailure)
+                socialColl.Add(socialNetworkResult.Value);
+            }            
+
+            var socialNetworkCollectionResult = SocialNetworkCollection.Create(socialColl); 
+            if(socialNetworkCollectionResult.IsFailure)
             {
-                return socialNetworkResult.Error!;
-            }
-
-            var socialNetworkAddResult = socialNetworkCollectionResult.Value
-                .Add(socialNetworkResult.Value);
-
-            if(socialNetworkAddResult.IsFailure)
-            {
-                return socialNetworkAddResult.Error!;
+                return socialNetworkCollectionResult.Error!;
             }
 
             var requisiteIdResult = RequisiteId.NewRequisiteId();           
@@ -103,9 +105,7 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
             if(requisiteResult.IsFailure)
             {
                 return requisiteResult.Error!;
-            }           
-
-            var pet = Pet.CreateEmpty();
+            }                
 
             var volunteerResult = Volunteer.Create(fullNameResult.Value, emailResult.Value,
                 descriptionResult.Value, phoneResult.Value, socialNetworkCollectionResult.Value,

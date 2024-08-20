@@ -1,5 +1,4 @@
 ﻿using PetHome.Domain.Models.CommonModels;
-using PetHome.Domain.Models.Volunteers;
 using PetHome.Domain.Shared;
 
 namespace PetHome.Domain.Models.Pets
@@ -13,9 +12,18 @@ namespace PetHome.Domain.Models.Pets
         {
         }
 
-        private Pet(PetId id, NotNullableString nickname, SpeciesBreedValue speciesBreedValue,
-            Description descriptionValue, NotNullableString color, Description health,
-            Address address, Phone phone, bool isneutered, DateTimeValue birthDay, bool isVaccinated,
+        private Pet(
+            PetId id,
+            NotNullableString nickname,
+            SpeciesBreedValue speciesBreedValue,
+            Description descriptionValue,
+            NotNullableString color,
+            Description health,
+            Address address,
+            Phone phone,
+            bool isneutered,
+            DateTimeValue birthDay,
+            bool isVaccinated,
             HelpStatus helpStatus)
             : base(id)
         {
@@ -34,7 +42,7 @@ namespace PetHome.Domain.Models.Pets
 
         public NotNullableString Nickname { get; private set; }
         public SpeciesBreedValue SpeciesBreedValue { get; private set; }
-        public Description DescriptionValue { get; private set; }       
+        public Description DescriptionValue { get; private set; }
         public NotNullableString Color { get; private set; }
         public Description Health { get; private set; }
         public Address Address { get; private set; }
@@ -46,7 +54,7 @@ namespace PetHome.Domain.Models.Pets
         public bool IsVaccinated { get; private set; }
         public HelpStatus HelpStatus { get; private set; }
         public IReadOnlyList<Requisite> Detailes => _detailes;
-        public DateTime CreateTime { get; private set; }        
+        public DateTime CreateTime { get; private set; }
         public IReadOnlyList<PetPhoto> Photos => _photo;
 
 
@@ -59,51 +67,53 @@ namespace PetHome.Domain.Models.Pets
         {
             _photo.Add(photo);
         }
-
-        public static Result<Pet> CreateEmpty()
-        {
-            var petId = PetId.NewPetId();
-            return new Pet(petId);
-        }
-
-        public static Result<Pet> Create(NotNullableString nickname, SpeciesBreedValue speciesBreedValue,
-            Description descriptionValue, NotNullableString color, Description health,
-            Address address, Phone phone, bool isneutered, DateTimeValue birthDay, bool isVaccinated,
+        
+        public static Result<Pet> Create(
+            PetId petId,
+            NotNullableString nickname, 
+            SpeciesBreedValue speciesBreedValue,
+            Description descriptionValue, 
+            NotNullableString color, 
+            Description health,
+            Address address, 
+            Phone phone, 
+            bool isneutered, 
+            DateTimeValue birthDay, 
+            bool isVaccinated,
             HelpStatus helpStatus)
-        {
-            var petId = PetId.NewPetId();
+        {           
 
-            if(nickname is null)
+            if (nickname is null)
             {
                 return "Nickname can not be null";
             }
 
-            if(speciesBreedValue is null)
+            if (speciesBreedValue is null)
             {
                 return "SpeciesBreedValue can not be null";
             }
 
-            if(descriptionValue is null)
+            if (descriptionValue is null)
             {
                 return "DescriptionValue can not be null";
             }
 
-            if(color is null)
+            if (color is null)
             {
                 return "Color can not be null";
             }
 
-            if(health is null)
+            if (health is null)
             {
                 return "Health can not be null";
             }
 
-            if(address is null)
+            if (address is null)
             {
                 return "Address can not be null";
             }
 
-            if(phone is null)
+            if (phone is null)
             {
                 return "Phone can not be null";
             }
@@ -113,12 +123,11 @@ namespace PetHome.Domain.Models.Pets
                 return "BirthDay can not be null";
             }
 
-            var pet = new Pet(petId, nickname, speciesBreedValue, descriptionValue,
-                    color, health, address, phone, isneutered, birthDay, isVaccinated, helpStatus);
-            pet.Weight = 0;
-            pet.Height = 0;
+            var pet = new Pet(petId, nickname, speciesBreedValue, 
+                descriptionValue, color, health, address, phone, 
+                isneutered, birthDay, isVaccinated, helpStatus);
+            
             pet.CreateTime = DateTime.Now;
-
             return pet;
         }
     }

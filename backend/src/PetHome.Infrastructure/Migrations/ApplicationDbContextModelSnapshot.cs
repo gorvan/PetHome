@@ -43,7 +43,7 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("voluteer_id");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetHome.Domain.Models.CommonModels.Requisite.Name#NonNullableString", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetHome.Domain.Models.CommonModels.Requisite.Name#NotNullableString", b1 =>
                         {
                             b1.IsRequired();
 
@@ -76,14 +76,16 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("species_id");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetHome.Domain.Models.Pets.Breed.Name#NonNullableString", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetHome.Domain.Models.Pets.Breed.Name#NotNullableString", b1 =>
                         {
                             b1.IsRequired();
 
                             b1.Property<string>("Value")
                                 .IsRequired()
+                                .ValueGeneratedOnAdd()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
+                                .HasDefaultValue("Unknown")
                                 .HasColumnName("breed");
                         });
 
@@ -107,19 +109,19 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnName("create_time");
 
                     b.Property<string>("DescriptionValue")
-                        .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)")
                         .HasColumnName("description");
 
                     b.Property<string>("Health")
-                        .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)")
                         .HasColumnName("health");
 
                     b.Property<double>("Height")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("double precision")
+                        .HasDefaultValue(0.0)
                         .HasColumnName("height");
 
                     b.Property<int>("HelpStatus")
@@ -127,15 +129,21 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnName("help_status");
 
                     b.Property<bool>("IsNeutered")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(false)
                         .HasColumnName("is_neutered");
 
                     b.Property<bool>("IsVaccinated")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(false)
                         .HasColumnName("is_vaccinated");
 
                     b.Property<double>("Weight")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("double precision")
+                        .HasDefaultValue(0.0)
                         .HasColumnName("weight");
 
                     b.Property<Guid?>("voluteer_id")
@@ -148,7 +156,8 @@ namespace PetHome.Infrastructure.Migrations
 
                             b1.Property<string>("AppartmentNumber")
                                 .IsRequired()
-                                .HasColumnType("text")
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
                                 .HasColumnName("appartment");
 
                             b1.Property<string>("City")
@@ -159,7 +168,8 @@ namespace PetHome.Infrastructure.Migrations
 
                             b1.Property<string>("HouseNumber")
                                 .IsRequired()
-                                .HasColumnType("text")
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
                                 .HasColumnName("house");
 
                             b1.Property<string>("Street")
@@ -178,18 +188,17 @@ namespace PetHome.Infrastructure.Migrations
                                 .HasColumnName("birthday");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Color", "PetHome.Domain.Models.Pets.Pet.Color#NonNullableString", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Color", "PetHome.Domain.Models.Pets.Pet.Color#NotNullableString", b1 =>
                         {
                             b1.IsRequired();
 
                             b1.Property<string>("Value")
-                                .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
                                 .HasColumnName("color");
                         });
 
-                    b.ComplexProperty<Dictionary<string, object>>("Nickname", "PetHome.Domain.Models.Pets.Pet.Nickname#NonNullableString", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Nickname", "PetHome.Domain.Models.Pets.Pet.Nickname#NotNullableString", b1 =>
                         {
                             b1.IsRequired();
 
@@ -215,7 +224,7 @@ namespace PetHome.Infrastructure.Migrations
                         {
                             b1.IsRequired();
 
-                            b1.Property<Guid>("BreedId")
+                            b1.Property<Guid?>("BreedId")
                                 .HasColumnType("uuid")
                                 .HasColumnName("breed_id");
 
@@ -240,7 +249,9 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     b.Property<bool>("IsMain")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("boolean")
+                        .HasDefaultValue(false)
                         .HasColumnName("is_main");
 
                     b.Property<string>("Path")
@@ -273,7 +284,7 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetHome.Domain.Models.Pets.Species.Name#NonNullableString", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("Name", "PetHome.Domain.Models.Pets.Species.Name#NotNullableString", b1 =>
                         {
                             b1.IsRequired();
 
@@ -297,26 +308,15 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnName("id");
 
                     b.Property<string>("DescriptionValue")
-                        .IsRequired()
                         .HasMaxLength(2000)
                         .HasColumnType("character varying(2000)")
                         .HasColumnName("description");
 
                     b.Property<int>("Experience")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
+                        .HasDefaultValue(0)
                         .HasColumnName("experience");
-
-                    b.Property<int>("FoundHomePets")
-                        .HasColumnType("integer")
-                        .HasColumnName("found_home_pets");
-
-                    b.Property<int>("NeedHomePets")
-                        .HasColumnType("integer")
-                        .HasColumnName("need_home_pets");
-
-                    b.Property<int>("TreatPets")
-                        .HasColumnType("integer")
-                        .HasColumnName("treat_pets");
 
                     b.ComplexProperty<Dictionary<string, object>>("Email", "PetHome.Domain.Models.Volunteers.Volunteer.Email#Email", b1 =>
                         {
@@ -340,14 +340,13 @@ namespace PetHome.Infrastructure.Migrations
                                 .HasColumnName("first_name");
 
                             b1.Property<string>("SecondNname")
-                                .IsRequired()
                                 .HasMaxLength(100)
                                 .HasColumnType("character varying(100)")
                                 .HasColumnName("second_name");
 
                             b1.Property<string>("Surname")
-                                .IsRequired()
-                                .HasColumnType("text")
+                                .HasMaxLength(100)
+                                .HasColumnType("character varying(100)")
                                 .HasColumnName("surname");
                         });
 
@@ -433,12 +432,10 @@ namespace PetHome.Infrastructure.Migrations
                                         .HasColumnType("integer");
 
                                     b2.Property<string>("Link")
-                                        .IsRequired()
                                         .HasMaxLength(100)
                                         .HasColumnType("character varying(100)");
 
                                     b2.Property<string>("Name")
-                                        .IsRequired()
                                         .HasMaxLength(100)
                                         .HasColumnType("character varying(100)");
 

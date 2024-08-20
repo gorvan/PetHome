@@ -5,7 +5,6 @@ namespace PetHome.Domain.Models.Volunteers
 {
     public record SocialNetwork
     {
-        private SocialNetwork() { }
         private SocialNetwork(NotNullableString name, NotNullableText link) 
         {
             Name = name;

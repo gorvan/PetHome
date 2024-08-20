@@ -17,9 +17,18 @@ namespace PetHome.Domain.Models.Volunteers
         public Email Email { get; private set; }
         public Description DescriptionValue { get; private set; }
         public int Experience { get; private set; }
-        public int FoundHomePets { get; private set; }
-        public int NeedHomePets { get; private set; }
-        public int TreatPets { get; private set; }
+        public int FoundHomePets =>
+            _pets
+            .Where(p => p.HelpStatus == HelpStatus.FoundHome)
+            .Count();
+        public int NeedHomePets =>
+            _pets
+            .Where(p => p.HelpStatus == HelpStatus.NeeedHome)
+            .Count();
+        public int TreatPets =>
+            _pets
+            .Where(p => p.HelpStatus == HelpStatus.OnTreatment)
+            .Count();
         public Phone Phone { get; private set; }
         public SocialNetworkCollection SocialNetworksValue { get; private set; }
         public IReadOnlyList<Requisite> Detailes =>_detailes;
@@ -35,47 +44,22 @@ namespace PetHome.Domain.Models.Volunteers
             _pets.Add(pet);
         }
 
-        public static Result<Volunteer> Create(FullName name, Email email, 
-            Description description, Phone phone, SocialNetworkCollection socialNetwork,
+        public static Result<Volunteer> Create(
+            FullName name, 
+            Email email, 
+            Description description, 
+            Phone phone, 
+            SocialNetworkCollection socialNetwork,
             Requisite requisite)
         {
             var volunteerId = VolunteerId.NewVolunteerId();
             var volunteer = new Volunteer(volunteerId);
-
-            if(name is null)
-            {
-                return "Name can not be null";
-            }
+            
             volunteer.Name = name;
-
-            if (email is null)
-            {
-                return "Email can not be null";
-            }
             volunteer.Email = email;
-
-            if (description is null)
-            {
-                return "Description can not be null";
-            }
             volunteer.DescriptionValue = description;
-
-            if (phone is null)
-            {
-                return "Phone can not be null";
-            }
             volunteer.Phone = phone;
-
-            if (socialNetwork is null)
-            {
-                return "SocialNetwork can not be null";
-            }
-            volunteer.SocialNetworksValue = socialNetwork;            
-
-            if (requisite is null)
-            {
-                return "Requisite can not be null";
-            }
+            volunteer.SocialNetworksValue = socialNetwork;  
             volunteer.AddRequisite(requisite);
 
             return volunteer;

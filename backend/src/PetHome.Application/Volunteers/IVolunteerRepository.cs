@@ -1,5 +1,6 @@
 ﻿using PetHome.Domain.Shared;
 using PetHome.Domain.Models.Volunteers;
+using PetHome.Domain.Models.CommonModels;
 
 namespace PetHome.Application.Volunteers
 {
@@ -7,6 +8,6 @@ namespace PetHome.Application.Volunteers
     {
         Task<Result<Guid>> Add(Volunteer volunteer, CancellationToken token);
         Task<Result<Volunteer>> GetById(VolunteerId id, CancellationToken token);
-        Task<Result<Volunteer>> GetByName(FullName fullName, CancellationToken token);
+        Task<Result<Volunteer>> GetByPhone(Phone phone, CancellationToken token);
     }
 }

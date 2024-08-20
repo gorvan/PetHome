@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetHome.Application.Volunteers;
+using PetHome.Domain.Models.CommonModels;
 using PetHome.Domain.Models.Volunteers;
 using PetHome.Domain.Shared;
 
@@ -24,11 +25,7 @@ namespace PetHome.Infrastructure.Repositories
         {
             var volunteer = await _context.Volunteers
                 .Include(v => v.Detailes)
-                .Include(v=>v.Pets)
-                .ThenInclude(p => p.Detailes)              
-                .Include(v => v.Pets)
-                .ThenInclude(p => p.Photos)
-                .FirstOrDefaultAsync(v=>v.Id == id);
+                .FirstOrDefaultAsync(v => v.Id == id);
 
             if (volunteer is null)
             {
@@ -38,22 +35,24 @@ namespace PetHome.Infrastructure.Repositories
             return volunteer;
         }
 
-        public async Task<Result<Volunteer>> GetByName(FullName fullName, CancellationToken token)
+        public async Task<Result<Volunteer>> GetByPhone(Phone phone, CancellationToken token)
         {
-            if(_context.Volunteers.Count() == 0)
+            try
             {
-                return null;
+                var res = await _context
+                    .Volunteers
+                    .FirstOrDefaultAsync(v => v.Phone == phone, token);
+                if (res == null)
+                {
+                    return "Volunteers is null";
+                }
+                return res;
+
             }
-
-            var volunteer = await _context.Volunteers                
-                .FirstOrDefaultAsync(v => v.Name == fullName);
-
-            if (volunteer is null)
+            catch (Exception ex)
             {
-                return "Volunteer not found";
+                return ex.ToString();
             }
-
-            return volunteer;
         }
     }
 }

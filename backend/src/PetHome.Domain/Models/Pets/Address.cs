@@ -4,8 +4,6 @@ namespace PetHome.Domain.Models.Pets
 {
     public record Address
     {
-        private Address() { }
-
         private Address(string city, string street, string houseNumber, string appartmentNumber)
         {
             City = city;

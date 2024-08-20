@@ -5,8 +5,7 @@ namespace PetHome.Domain.Models.Volunteers
 {
     public record Email
     {
-        public Email() { }
-
+        private Email() { }
         private Email(string email)
         {
             Value = email;

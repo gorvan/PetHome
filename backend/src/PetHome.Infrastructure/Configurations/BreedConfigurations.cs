@@ -21,6 +21,7 @@ namespace PetHome.Infrastructure.Configurations
             {
                 tb.Property(n => n.Value)
                 .IsRequired()
+                .HasDefaultValue("Unknown")
                 .HasMaxLength(Constants.MAX_WORD_LENGTH)
                 .HasColumnName("breed");
             });           
