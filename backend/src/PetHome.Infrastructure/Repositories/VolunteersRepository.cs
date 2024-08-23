@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetHome.Application.Volunteers;
-using PetHome.Domain.Models.CommonModels;
-using PetHome.Domain.Models.Volunteers;
+using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.Shared;
+using PetHome.Domain.Shared.IDs;
 
 namespace PetHome.Infrastructure.Repositories
 {
@@ -24,7 +24,7 @@ namespace PetHome.Infrastructure.Repositories
         public async Task<Result<Volunteer>> GetById(VolunteerId id, CancellationToken token)
         {
             var volunteer = await _context.Volunteers
-                .Include(v => v.RequisiteCollectionValue)
+                .Include(v => v.Requisites)
                 .FirstOrDefaultAsync(v => v.Id == id);
 
             if (volunteer is null)
@@ -37,22 +37,14 @@ namespace PetHome.Infrastructure.Repositories
 
         public async Task<Result<Volunteer>> GetByPhone(Phone phone, CancellationToken token)
         {
-            try
+            var res = await _context
+                .Volunteers
+                .FirstOrDefaultAsync(v => v.Phone == phone, token);
+            if (res == null)
             {
-                var res = await _context
-                    .Volunteers
-                    .FirstOrDefaultAsync(v => v.Phone == phone, token);
-                if (res == null)
-                {
-                    return "Volunteers is null";
-                }
-                return res;
-
+                return "Volunteers is null";
             }
-            catch (Exception ex)
-            {
-                return ex.ToString();
-            }
+            return res;
         }
     }
 }

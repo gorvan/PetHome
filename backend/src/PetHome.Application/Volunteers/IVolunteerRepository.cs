@@ -1,6 +1,6 @@
 ﻿using PetHome.Domain.Shared;
-using PetHome.Domain.Models.Volunteers;
-using PetHome.Domain.Models.CommonModels;
+using PetHome.Domain.PetManadgement.AggregateRoot;
+using PetHome.Domain.Shared.IDs;
 
 namespace PetHome.Application.Volunteers
 {

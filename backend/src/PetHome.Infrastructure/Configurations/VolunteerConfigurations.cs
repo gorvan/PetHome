@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetHome.Domain.Models.Volunteers;
+using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.Shared;
+using PetHome.Domain.Shared.IDs;
 
 namespace PetHome.Infrastructure.Configurations
 {
@@ -10,94 +11,110 @@ namespace PetHome.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Volunteer> builder)
         {
             builder.ToTable("volunteers");
+
             builder.HasKey(v => v.Id);
 
             builder.Property(v => v.Id)
                 .HasConversion(
-                    id => id.Value,
-                    value => VolunteerId.Create(value));
+                    id => id.Id,
+                    value => VolunteerId.Create(value))
+                .IsRequired();
 
-            builder.ComplexProperty(v => v.Name, tb =>
-            {
-                tb.Property(n => n.FirstName)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_WORD_LENGTH)
-                .HasColumnName("first_name");
-
-                tb.Property(n => n.SecondName)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_WORD_LENGTH)
-                .HasColumnName("second_name");
-
-                tb.Property(n => n.Surname)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_WORD_LENGTH)
-                .HasColumnName("surname");
-            });
-
-            builder.ComplexProperty(v => v.DescriptionValue, tb =>
-            {
-                tb.Property(n => n.Value)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TEXT_LENGTH)
-                .HasColumnName("description");
-            });
-
-            builder.ComplexProperty(v => v.Email, tb =>
-            {
-                tb.Property(n => n.EmailValue)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TITLE_LENGTH)
-                .HasColumnName("email");
-            });
-
-            builder.Property(v => v.Experience)
-                .HasDefaultValue(0)
-                .HasColumnName("experience");
-
-            builder.ComplexProperty(v => v.Phone, tb =>
-            {
-                tb.Property(n => n.PhoneNumber)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TITLE_LENGTH)
-                .HasColumnName("phone");
-            });
-
-            builder.OwnsOne(n => n.RequisiteCollectionValue, reqb =>
-            {
-                reqb.ToJson("requisite");
-                reqb.OwnsMany(r => r.CollectionValues, rb =>
+            builder.ComplexProperty(v => v.Name,
+                vb =>
                 {
-                    rb.Property(c => c.Name)
+                    vb.Property(n => n.FirstName)
                     .IsRequired()
-                    .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+                    .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                    .HasColumnName("first_name");
 
-                    rb.Property(c => c.DescriptionValue)
+                    vb.Property(n => n.SecondName)
                     .IsRequired()
-                    .HasMaxLength(Constants.MAX_TEXT_LENGTH);
+                    .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                    .HasColumnName("second_name");
+
+                    vb.Property(n => n.Surname)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                    .HasColumnName("surname");
                 });
-            });
 
-            builder.OwnsOne(v => v.SocialNetworksValue, sb =>
-            {
-                sb.ToJson("social_networks");
-
-                sb.OwnsMany(s => s.SocialNetworks, nb =>
+            builder.ComplexProperty(v => v.Email,
+                vb =>
                 {
-                    nb.Property(sn => sn.Name)
+                    vb.Property(e => e.EmailValue)
                     .IsRequired()
-                    .HasMaxLength(Constants.MAX_TITLE_LENGTH);
-
-                    nb.Property(sn => sn.Link)
-                    .IsRequired()
-                    .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+                    .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                    .HasColumnName("email");
                 });
-            });
+
+
+            builder.ComplexProperty(v => v.Description,
+                vb =>
+                {
+                    vb.Property(d => d.Description)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_TEXT_LENGTH)
+                    .HasColumnName("description");
+                });
+
+            builder.ComplexProperty(v => v.Phone,
+                vb =>
+                {
+                    vb.Property(p => p.PhoneNumber)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                    .HasColumnName("phone");
+                });
+
+            builder.OwnsOne(v => v.SocialNets,
+                vb =>
+                {
+                    vb.ToJson();
+
+                    vb.OwnsMany(s => s.SocialNets,
+                        sb =>
+                        {
+                            sb.Property(s => s.Name)
+                            .IsRequired()
+                            .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                            .HasColumnName("social_net_name");
+
+                            sb.Property(s => s.Link)
+                            .IsRequired()
+                            .HasMaxLength(Constants.MAX_TEXT_LENGTH)
+                            .HasColumnName("social_net_link");
+                        });
+                });
+
+            builder.OwnsOne(v => v.Requisites,
+                vb =>
+                {
+                    vb.ToJson();
+                    vb.OwnsMany(r => r.Requisites,
+                        rb =>
+                        {
+                            rb.Property(r => r.Name)
+                            .IsRequired()
+                            .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                            .HasColumnName("recuisite_name");
+
+                            rb.Property(r => r.Description)
+                            .IsRequired()
+                            .HasMaxLength(Constants.MAX_TEXT_LENGTH)
+                            .HasColumnName("recuisite_description");
+                        });
+
+                });
 
             builder.HasMany(v => v.Pets)
                 .WithOne()
-                .IsRequired(false)
-                .HasForeignKey("voluteer_id");
+                .HasForeignKey("volunteer_id");
+
+            builder.Property(v => v.Experience)
+                .IsRequired()
+                .HasColumnName("experience");
+
         }
     }
 }

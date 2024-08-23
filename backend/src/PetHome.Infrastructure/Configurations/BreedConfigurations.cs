@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetHome.Domain.Models.Pets;
 using PetHome.Domain.Shared;
+using PetHome.Domain.Shared.IDs;
+using PetHome.Domain.SpeciesManagement.ValueObjects;
 
 namespace PetHome.Infrastructure.Configurations
 {
@@ -10,22 +11,19 @@ namespace PetHome.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Breed> builder)
         {
             builder.ToTable("breeds");
+
             builder.HasKey(b => b.Id);
 
             builder.Property(b => b.Id)
                 .HasConversion(
-                    id => id.Value,
+                    id => id.Id,
                     value => BreedId.Create(value))
-                .IsRequired();
+                .HasColumnName("breed_id");
 
-            builder.ComplexProperty(v => v.Name, tb =>
-            {
-                tb.Property(n => n.Value)
+            builder.Property(b => b.Name)
                 .IsRequired()
-                .HasDefaultValue("Unknown")
-                .HasMaxLength(Constants.MAX_WORD_LENGTH)
-                .HasColumnName("breed");
-            });           
+                .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                .HasColumnName("name");
         }
     }
 }

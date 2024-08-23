@@ -1,6 +1,8 @@
-﻿using PetHome.Domain.Models.CommonModels;
-using PetHome.Domain.Models.Volunteers;
+﻿using PetHome.Domain.PetManadgement.AggregateRoot;
+using PetHome.Domain.PetManadgement.Entities;
+using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
+using PetHome.Domain.Shared.IDs;
 
 namespace PetHome.Application.Volunteers.CreateVolunteer
 {
@@ -12,12 +14,10 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
             _volunteerRepository = volunteerRepository;
         }
 
-        //validation
-        //domain model creating
-        //save to database
-
         public async Task<Result<Guid>> Execute(CreateVolunteerRequest request, CancellationToken token)
         {
+            var volunteerId = VolunteerId.NewVolunteerId();
+
             var phoneResult = Phone.Create(request.phone);
             if (phoneResult.IsFailure)
             {
@@ -45,7 +45,7 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 return emailResult.Error!;
             }
 
-            var descriptionResult = Description.Create(request.description);
+            var descriptionResult = VolunteerDescription.Create(request.description);
 
             if (descriptionResult.IsFailure)
             {
@@ -66,7 +66,7 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 socialColl.Add(socialNetworkResult.Value);
             }
 
-            var socialNetworkCollectionResult = SocialNetworkCollection.Create(socialColl);
+            var socialNetworkCollectionResult = SocialNetworks.Create(socialColl);
             if (socialNetworkCollectionResult.IsFailure)
             {
                 return socialNetworkCollectionResult.Error!;
@@ -85,15 +85,15 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 requisiteColl.Add(requisite.Value);
             }
 
-            var requisiteCollectionResult = RecuisiteCollection.Create(requisiteColl);
+            var requisiteCollectionResult = VolunteersRequisites.Create(requisiteColl);
             if(requisiteCollectionResult.IsFailure)
             {
                 return requisiteCollectionResult.Error!;
             }            
 
-            var volunteerResult = Volunteer.Create(fullNameResult.Value, emailResult.Value,
+            var volunteerResult = Volunteer.Create(volunteerId, fullNameResult.Value, emailResult.Value,
                 descriptionResult.Value, phoneResult.Value, socialNetworkCollectionResult.Value,
-                 requisiteCollectionResult.Value);
+                 requisiteCollectionResult.Value, new List<Pet>(), 0);
 
             if (volunteerResult.IsFailure)
             {
