@@ -70,41 +70,6 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
             IEnumerable<Pet> pets,
             int experience)
         {
-            if (name is null)
-            {
-                return "Name can not be null";
-            }
-
-            if (email is null)
-            {
-                return "Email can not be null";
-            }
-
-            if (description is null)
-            {
-                return "Description can not be null";
-            }
-
-            if (phone is null)
-            {
-                return "Phone can not be null";
-            }
-
-            if (socialNets is null)
-            {
-                return "SocialNetworks can not be null";
-            }
-
-            if (requisites is null)
-            {
-                return "Requisites can not be null";
-            }
-
-            if (pets is null)
-            {
-                return "Pets can not be null";
-            }
-
             var volunteer = new Volunteer(
                     id,
                     name,

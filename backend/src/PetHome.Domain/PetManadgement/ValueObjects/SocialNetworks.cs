@@ -16,12 +16,6 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
 
         public static Result<SocialNetworks> Create(IEnumerable<SocialNetwork> socialNets)
         {
-            if (socialNets is null)
-            {
-                return $"{nameof(SocialNetworks)} "
-                    + $"{nameof(socialNets)}" + " can not be null";
-            }
-
             var socialNet = new SocialNetworks(socialNets);
 
             return socialNet;

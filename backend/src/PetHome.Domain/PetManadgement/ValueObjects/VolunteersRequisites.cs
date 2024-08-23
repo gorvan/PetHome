@@ -16,12 +16,6 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
 
         public static Result<VolunteersRequisites> Create(List<Requisite> requisites)
         {
-            if (requisites is null)
-            {
-                return $"{nameof(VolunteersRequisites)} "
-                    + $"{nameof(requisites)}" + " can not be null";
-            }
-
             var requisitesValue = new VolunteersRequisites(requisites);
 
             return requisitesValue;

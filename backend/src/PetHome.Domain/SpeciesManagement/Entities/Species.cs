@@ -35,11 +35,6 @@ namespace PetHome.Domain.SpeciesManagement.Entities
                 return "Species name can not be empty";
             }
 
-            if (breeds is null)
-            {
-                return "Breeds can not be null";
-            }
-
             var species = new Species(id, name, breeds);
 
             return species;

@@ -93,62 +93,6 @@ namespace PetHome.Domain.PetManadgement.Entities
             double height,
             IEnumerable<PetPhoto> photos)
         {
-
-            if (nickname is null)
-            {
-                return "Nickname can not be null";
-            }
-
-            if (speciesBreed is null)
-            {
-                return "SpeciesBreedValue can not be null";
-            }
-
-            if (description is null)
-            {
-                return "DescriptionValue can not be null";
-            }
-
-            if (color is null)
-            {
-                return "Color can not be null";
-            }
-
-            if (health is null)
-            {
-                return "Health can not be null";
-            }
-
-            if (address is null)
-            {
-                return "Address can not be null";
-            }
-
-            if (phone is null)
-            {
-                return "Phone can not be null";
-            }
-
-            if (requisites is null)
-            {
-                return "Requisites can not be null";
-            }
-
-            if (birthDay is null)
-            {
-                return "BirthDay can not be null";
-            }
-
-            if (createDate is null)
-            {
-                return "CreateDate can not be null";
-            }
-
-            if (photos is null)
-            {
-                return "Photos can not be null";
-            }
-
             var petValue = new Pet(
                 id,
                 nickname,
