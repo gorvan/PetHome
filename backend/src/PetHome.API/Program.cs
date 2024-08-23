@@ -1,5 +1,8 @@
 
+using PetHome.Application.Volunteers;
+using PetHome.Application.Volunteers.CreateVolunteer;
 using PetHome.Infrastructure;
+using PetHome.Infrastructure.Repositories;
 
 namespace PetHome.API
 {
@@ -14,6 +17,8 @@ namespace PetHome.API
             builder.Services.AddSwaggerGen();
 
             builder.Services.AddScoped<ApplicationDbContext>();
+            builder.Services.AddScoped<IVolunteerRepository, VolunteersRepository>();
+            builder.Services.AddScoped<CreateVolunteerHandler>();
 
             var app = builder.Build();
             

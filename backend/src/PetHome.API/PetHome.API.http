@@ -1,6 +1,6 @@
 @PetHome.API_HostAddress = http://localhost:5250
 
-GET {{PetHome.API_HostAddress}}/weatherforecast/
+GET {{PetHome.API_HostAddress}}/Volunteers/
 Accept: application/json
 
 ###

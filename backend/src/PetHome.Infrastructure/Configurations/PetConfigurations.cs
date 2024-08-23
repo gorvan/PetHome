@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetHome.Domain.Models.Pets;
+using PetHome.Domain.PetManadgement.Entities;
 using PetHome.Domain.Shared;
+using PetHome.Domain.Shared.IDs;
 
 namespace PetHome.Infrastructure.Configurations
 {
@@ -10,100 +11,136 @@ namespace PetHome.Infrastructure.Configurations
         public void Configure(EntityTypeBuilder<Pet> builder)
         {
             builder.ToTable("pets");
+
             builder.HasKey(p => p.Id);
 
             builder.Property(p => p.Id)
                 .HasConversion(
-                    id => id.Value,
-                    value => PetId.Create(value));
+                id => id.Id,
+                value => PetId.Create(value))
+                .HasColumnName("pet_id");
 
-            builder.Property(p => p.Nickname)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+            builder.ComplexProperty(p => p.Nickname,
+                pb =>
+                {
+                    pb.Property(n => n.Nickname)
+                    .IsRequired()
+                    .HasMaxLength(Constants.MAX_TITLE_LENGTH)
+                    .HasColumnName("nickname");
+                });
 
-            builder.ComplexProperty(p => p.SpeciesBreedValue, tb =>
-            {
-                tb.Property(s => s.SpeciesId)
-                .HasConversion(
-                    id => id.Value,
-                    value => SpeciesId.Create(value))
-                .IsRequired()                
-                .HasColumnName("species_id");
-            });
+            builder.ComplexProperty(p => p.SpeciesBreed,
+                pb =>
+                {
+                    pb.Property(s => s.SpeciesId)
+                    .HasConversion(
+                        id => id.Id,
+                        value => SpeciesId.Create(value))
+                    .IsRequired()
+                    .HasColumnName("species_id");
 
-            builder.ComplexProperty(p => p.SpeciesBreedValue, tb =>
-            {
-                tb.Property(s => s.BreedId)
-                .HasConversion(
-                    id => id.Value,
-                    value => BreedId.Create(value))
-                .IsRequired()                
-                .HasColumnName("breed_id");
-            });
+                    pb.Property(s => s.BreedId)
+                    .HasConversion(
+                        id => id.Id,
+                        value => BreedId.Create(value))
+                    .IsRequired()
+                    .HasColumnName("breed_id");
+                });
 
-            builder.Property(p => p.Description)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TEXT_LENGTH);           
+            builder.ComplexProperty(p => p.Description,
+                pb =>
+                {
+                    pb.Property(d => d.Description)
+                    .IsRequired()
+                    .HasColumnName("description");
+                });
 
-            builder.Property(p => p.Color)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+            builder.ComplexProperty(p => p.Color,
+                pb =>
+                {
+                    pb.Property(c => c.Color)
+                    .IsRequired()
+                    .HasColumnName("color");
+                });
 
-            builder.Property(p => p.Health)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TEXT_LENGTH);
+            builder.ComplexProperty(p => p.Health,
+                pb =>
+                {
+                    pb.Property(h => h.Health)
+                    .IsRequired()
+                    .HasColumnName("health");
+                });
 
-            builder.ComplexProperty(p => p.Address, tb =>
-            {
-                tb.Property(a => a.City)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_WORD_LENGTH)
-                .HasColumnName("city");
-            });
+            builder.ComplexProperty(p => p.Address,
+                pb =>
+                {
+                    pb.Property(a => a.City)
+                    .IsRequired()
+                    .HasColumnName("city");
 
-            builder.ComplexProperty(p => p.Address, tb =>
-            {
-                tb.Property(a => a.Street)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_WORD_LENGTH)
-                .HasColumnName("street");
-            });
+                    pb.Property(a => a.Street)
+                    .IsRequired()
+                    .HasColumnName("street");
 
-            builder.ComplexProperty(p => p.Address, tb =>
-            {
-                tb.Property(a => a.HouseNumber)
-                .IsRequired()                
-                .HasColumnName("house");
-            });
+                    pb.Property(a => a.HouseNumber)
+                    .IsRequired()
+                    .HasColumnName("house");
 
-            builder.ComplexProperty(p => p.Address, tb =>
-            {
-                tb.Property(a => a.AppartmentNumber)
-                .IsRequired()                
-                .HasColumnName("appartment");
-            });
+                    pb.Property(a => a.AppartmentNumber)
+                    .IsRequired()
+                    .HasColumnName("appartment");
+                });
 
-            builder.Property(p => p.Weight)
-                .IsRequired()
-                .HasColumnName("weight");
+            builder.ComplexProperty(p => p.Phone,
+               pb =>
+               {
+                   pb.Property(p => p.PhoneNumber)
+                   .IsRequired()
+                   .HasColumnName("phone");
+               });
+
+            builder.OwnsOne(p => p.Requisites,
+               pb =>
+               {
+                   pb.ToJson("requisites");
+
+                   pb.OwnsMany(r => r.Requisites,
+                       rb =>
+                       {
+                           rb.Property(i => i.Name)
+                           .IsRequired()
+                           .HasMaxLength(Constants.MAX_TITLE_LENGTH);
+
+                           rb.Property(i => i.Description)
+                          .IsRequired()
+                          .HasMaxLength(Constants.MAX_TEXT_LENGTH);
+                       });
+               });
 
 
-            builder.Property(p => p.Height)
-                .IsRequired()
-                .HasColumnName("height");
+            builder.ComplexProperty(p => p.BirthDay,
+               pb =>
+               {
+                   pb.Property(d => d.Date)
+                   .IsRequired()
+                   .HasColumnName("birthday");
+               });
 
-            builder.Property(p => p.Phone)
-                .IsRequired()
-                .HasMaxLength(Constants.MAX_TITLE_LENGTH)
-                .HasColumnName("phone");
+            builder.ComplexProperty(p => p.CreateDate,
+               pb =>
+               {
+                   pb.Property(d => d.Date)
+                   .IsRequired()
+                   .HasColumnName("create_date");
+               });
 
             builder.Property(p => p.IsNeutered)
                 .IsRequired()
                 .HasColumnName("is_neutered");
 
-            builder.Property(p => p.BirthDay)
+            builder.Property(p => p.IsVaccinated)
                 .IsRequired()
-                .HasColumnName("birthday");
+                .HasColumnName("is_vaccinated");
 
             builder.Property(p => p.IsVaccinated)
                 .IsRequired()
@@ -113,17 +150,17 @@ namespace PetHome.Infrastructure.Configurations
                 .IsRequired()
                 .HasColumnName("help_status");
 
-            builder.Property(p => p.CreateTime)
+            builder.Property(p => p.Weight)
                 .IsRequired()
-                .HasColumnName("create_time");
+                .HasColumnName("weight");
 
-            builder.HasMany(p => p.Detailes)
-                .WithOne()
-                .HasForeignKey("pet_id");
+            builder.Property(p => p.Height)
+                .IsRequired()
+                .HasColumnName("height");
 
             builder.HasMany(p => p.Photos)
-                .WithOne()
-                .HasForeignKey("pet_id");
+            .WithOne()
+            .HasForeignKey("pet_id");
         }
     }
 }

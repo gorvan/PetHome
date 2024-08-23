@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using PetHome.Domain.Models.Pets;
-using PetHome.Domain.Models.Volunteers;
+using PetHome.Domain.PetManadgement.AggregateRoot;
+using PetHome.Domain.SpeciesManagement.Entities;
 
 namespace PetHome.Infrastructure
 {
@@ -11,7 +11,6 @@ namespace PetHome.Infrastructure
         private const string DATABASE = "Database";
 
         public DbSet<Volunteer> Volunteers => Set<Volunteer>();
-        public DbSet<Pet> Pets => Set<Pet>();
         public DbSet<Species> Species => Set<Species>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -19,6 +18,7 @@ namespace PetHome.Infrastructure
             optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));
             optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
+            optionsBuilder.EnableDetailedErrors();
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
