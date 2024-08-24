@@ -38,12 +38,13 @@ namespace PetHome.Infrastructure.Repositories
         public async Task<Result<Volunteer>> GetByPhone(Phone phone, CancellationToken token)
         {
             var res = await _context
-                .Volunteers
-                .FirstOrDefaultAsync(v => v.Phone == phone, token);
+                .Volunteers.FirstOrDefaultAsync(v => v.Phone == phone, token);
+            
             if (res == null)
             {
                 return "Volunteers is null";
             }
+
             return res;
         }
     }

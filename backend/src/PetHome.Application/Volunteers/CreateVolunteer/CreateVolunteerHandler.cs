@@ -66,12 +66,7 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 socialColl.Add(socialNetworkResult.Value);
             }
 
-            var socialNetworkCollectionResult = SocialNetworks.Create(socialColl);
-            if (socialNetworkCollectionResult.IsFailure)
-            {
-                return socialNetworkCollectionResult.Error!;
-            }
-
+            var socialNetworkCollectionResult = new SocialNetworks(socialColl);  
             var requisiteColl = new List<Requisite>();
 
             foreach (var item in request.requisiteDtos)
@@ -85,15 +80,11 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 requisiteColl.Add(requisite.Value);
             }
 
-            var requisiteCollectionResult = VolunteersRequisites.Create(requisiteColl);
-            if(requisiteCollectionResult.IsFailure)
-            {
-                return requisiteCollectionResult.Error!;
-            }            
-
+            var requisiteCollectionResult = new VolunteersRequisites(requisiteColl);
+          
             var volunteerResult = Volunteer.Create(volunteerId, fullNameResult.Value, emailResult.Value,
-                descriptionResult.Value, phoneResult.Value, socialNetworkCollectionResult.Value,
-                 requisiteCollectionResult.Value, new List<Pet>(), 0);
+                descriptionResult.Value, phoneResult.Value, socialNetworkCollectionResult,
+                 requisiteCollectionResult, new List<Pet>(), 0);
 
             if (volunteerResult.IsFailure)
             {

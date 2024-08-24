@@ -11,7 +11,7 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
         {
         }
 
-        private Volunteer(
+        public Volunteer(
             VolunteerId id,
             FullName name,
             Email email,

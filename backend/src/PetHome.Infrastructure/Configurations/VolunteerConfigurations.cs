@@ -70,39 +70,25 @@ namespace PetHome.Infrastructure.Configurations
             builder.OwnsOne(v => v.SocialNets,
                 vb =>
                 {
-                    vb.ToJson();
+                    vb.ToJson("social_networks");
 
                     vb.OwnsMany(s => s.SocialNets,
                         sb =>
                         {
-                            sb.Property(s => s.Name)
-                            .IsRequired()
-                            .HasMaxLength(Constants.MAX_TITLE_LENGTH)
-                            .HasColumnName("social_net_name");
-
-                            sb.Property(s => s.Link)
-                            .IsRequired()
-                            .HasMaxLength(Constants.MAX_TEXT_LENGTH)
-                            .HasColumnName("social_net_link");
+                            sb.Property(s => s.Name);
+                            sb.Property(s => s.Link);
                         });
                 });
 
             builder.OwnsOne(v => v.Requisites,
                 vb =>
                 {
-                    vb.ToJson();
+                    vb.ToJson("requisites");
                     vb.OwnsMany(r => r.Requisites,
                         rb =>
                         {
-                            rb.Property(r => r.Name)
-                            .IsRequired()
-                            .HasMaxLength(Constants.MAX_TITLE_LENGTH)
-                            .HasColumnName("recuisite_name");
-
-                            rb.Property(r => r.Description)
-                            .IsRequired()
-                            .HasMaxLength(Constants.MAX_TEXT_LENGTH)
-                            .HasColumnName("recuisite_description");
+                            rb.Property(r => r.Name);
+                            rb.Property(r => r.Description);
                         });
 
                 });
@@ -114,7 +100,6 @@ namespace PetHome.Infrastructure.Configurations
             builder.Property(v => v.Experience)
                 .IsRequired()
                 .HasColumnName("experience");
-
         }
     }
 }
