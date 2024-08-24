@@ -57,7 +57,7 @@ namespace PetHome.API.Extensions
         {
             return errorType switch
             {
-                ErrorType.Validtion => StatusCodes.Status400BadRequest,
+                ErrorType.Validation => StatusCodes.Status400BadRequest,
                 ErrorType.NotFound => StatusCodes.Status404NotFound,
                 ErrorType.Conflict => StatusCodes.Status409Conflict,
                 ErrorType.Failure => StatusCodes.Status500InternalServerError,

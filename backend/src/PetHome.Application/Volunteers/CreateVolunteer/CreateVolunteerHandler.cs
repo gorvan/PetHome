@@ -16,21 +16,21 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
 
         public async Task<Result<Guid>> Execute(CreateVolunteerRequest request, CancellationToken token)
         {
-            var volunteerId = VolunteerId.NewVolunteerId();
-
-            var phoneResult = Phone.Create(request.phone);
-            if (phoneResult.IsFailure)
+            var phoneCheckResult = Phone.Create(request.phone);
+            if (phoneCheckResult.IsFailure)
             {
-                return phoneResult.Error!;
+                return phoneCheckResult.Error!;
             }
 
             var existVolunteerResult = await _volunteerRepository
-                .GetByPhone(phoneResult.Value, token);
+                .GetByPhone(phoneCheckResult.Value, token);
 
-            if (existVolunteerResult.IsSuccess)
+            if (existVolunteerResult.Error == Error.None)
             {
-                return Errors.Volunteer.AlreadyExist();
+                return Errors.General.AlreadyExist();
             }
+
+            var volunteerId = VolunteerId.NewVolunteerId();
 
             var fullNameResult = FullName.Create(
                 request.firstName,
@@ -91,7 +91,7 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 fullNameResult.Value,
                 emailResult.Value,
                 descriptionResult.Value,
-                phoneResult.Value,
+                phoneCheckResult.Value,
                 socialNetworkCollectionResult,
                 requisiteCollectionResult,
                 new List<Pet>(),

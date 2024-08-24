@@ -5,9 +5,9 @@
         public SocialNetworks() { }
         public SocialNetworks(IEnumerable<SocialNetwork> socialNets)
         {
-            SocialNets = socialNets.ToList();
+            Networks = socialNets.ToList();
         }
 
-        public IReadOnlyList<SocialNetwork> SocialNets { get; } = [];
+        public IReadOnlyList<SocialNetwork> Networks { get; } = [];
     }
 }

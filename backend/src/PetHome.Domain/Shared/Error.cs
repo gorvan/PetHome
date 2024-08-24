@@ -17,7 +17,7 @@
         }
 
         public static Error Validation(string code, string message) =>
-            new Error(code, message, ErrorType.Validtion);
+            new Error(code, message, ErrorType.Validation);
 
         public static Error NotFound(string code, string message) =>
             new Error(code, message, ErrorType.NotFound);
@@ -32,7 +32,7 @@
     public enum ErrorType
     {
         None,
-        Validtion,
+        Validation,
         NotFound,
         Failure,
         Conflict

@@ -11,8 +11,7 @@
 
         public static Result<DateValue> Create(DateTime date)
         {
-            if (date == DateTime.MinValue
-                || date == DateTime.MaxValue
+            if (date < new DateTime(1900, 1, 1)
                 || date > DateTime.Now)
             {
                 return Errors.General.ValueIsInvalid("Date");

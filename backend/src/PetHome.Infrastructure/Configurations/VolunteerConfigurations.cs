@@ -72,7 +72,7 @@ namespace PetHome.Infrastructure.Configurations
                 {
                     vb.ToJson("social_networks");
 
-                    vb.OwnsMany(s => s.SocialNets,
+                    vb.OwnsMany(s => s.Networks,
                         sb =>
                         {
                             sb.Property(s => s.Name);
