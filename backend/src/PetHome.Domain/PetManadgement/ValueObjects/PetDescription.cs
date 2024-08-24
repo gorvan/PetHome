@@ -19,20 +19,15 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(description))
             {
-                return $"{nameof(PetDescription)} "
-                    + $"{nameof(description)}" + " can not be empty";
+                return Errors.General.ValueIsRequeired("Description");
             }
 
             if (description.Length > MAX_TEXT_LENGTH)
             {
-                return $"{nameof(PetDescription)} "
-                    + $"{nameof(description)}" + $" can not be more than " +
-                    $"{MAX_TEXT_LENGTH} symbols";
+                return Errors.General.ValueIsInvalid("Description");
             }
 
-            var descriptionValue = new PetDescription(description);
-
-            return descriptionValue;
+            return new PetDescription(description);
         }
     }
 }

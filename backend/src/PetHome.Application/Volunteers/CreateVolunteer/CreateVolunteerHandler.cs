@@ -24,14 +24,18 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 return phoneResult.Error!;
             }
 
-            var existVolunteerResult = await _volunteerRepository.GetByPhone(phoneResult.Value, token);
+            var existVolunteerResult = await _volunteerRepository
+                .GetByPhone(phoneResult.Value, token);
 
             if (existVolunteerResult.IsSuccess)
             {
-                return "Volunteer must be unique by phone";
+                return Errors.Volunteer.AlreadyExist();
             }
 
-            var fullNameResult = FullName.Create(request.firstName, request.secondName, request.surname);
+            var fullNameResult = FullName.Create(
+                request.firstName,
+                request.secondName,
+                request.surname);
 
             if (fullNameResult.IsFailure)
             {
@@ -55,7 +59,7 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
             var socialColl = new List<SocialNetwork>();
 
             foreach (var item in request.socialNetworkDtos)
-            {               
+            {
                 var socialNetworkResult = SocialNetwork
                 .Create(item.name, item.path);
                 if (socialNetworkResult.IsFailure)
@@ -66,13 +70,13 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 socialColl.Add(socialNetworkResult.Value);
             }
 
-            var socialNetworkCollectionResult = new SocialNetworks(socialColl);  
+            var socialNetworkCollectionResult = new SocialNetworks(socialColl);
             var requisiteColl = new List<Requisite>();
 
             foreach (var item in request.requisiteDtos)
-            {  
+            {
                 var requisite = Requisite.Create(item.name, item.description);
-                if(requisite.IsFailure)
+                if (requisite.IsFailure)
                 {
                     return requisite.Error!;
                 }
@@ -81,18 +85,21 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
             }
 
             var requisiteCollectionResult = new VolunteersRequisites(requisiteColl);
-          
-            var volunteerResult = Volunteer.Create(volunteerId, fullNameResult.Value, emailResult.Value,
-                descriptionResult.Value, phoneResult.Value, socialNetworkCollectionResult,
-                 requisiteCollectionResult, new List<Pet>(), 0);
 
-            if (volunteerResult.IsFailure)
-            {
-                return volunteerResult.Error!;
-            }
+            var volunteer = new Volunteer(
+                volunteerId,
+                fullNameResult.Value,
+                emailResult.Value,
+                descriptionResult.Value,
+                phoneResult.Value,
+                socialNetworkCollectionResult,
+                requisiteCollectionResult,
+                new List<Pet>(),
+                0);
 
-            await _volunteerRepository.Add(volunteerResult.Value, token);
-            return (Guid)volunteerResult.Value.Id;
+            await _volunteerRepository.Add(volunteer, token);
+
+            return (Guid)volunteer.Id;
         }
     }
 }

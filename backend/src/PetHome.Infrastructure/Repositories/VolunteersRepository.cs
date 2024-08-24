@@ -29,7 +29,7 @@ namespace PetHome.Infrastructure.Repositories
 
             if (volunteer is null)
             {
-                return "Volunteer not found";
+                return Errors.General.NotFound(id);
             }
 
             return volunteer;
@@ -37,15 +37,15 @@ namespace PetHome.Infrastructure.Repositories
 
         public async Task<Result<Volunteer>> GetByPhone(Phone phone, CancellationToken token)
         {
-            var res = await _context
+            var volunteer = await _context
                 .Volunteers.FirstOrDefaultAsync(v => v.Phone == phone, token);
             
-            if (res == null)
+            if (volunteer == null)
             {
-                return "Volunteers is null";
+                return Errors.General.NotFound();
             }
 
-            return res;
+            return volunteer;
         }
     }
 }

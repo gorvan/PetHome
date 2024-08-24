@@ -24,15 +24,13 @@ namespace PetHome.Domain.PetManadgement.Entities
             string path,
             bool isMain)
         {
-            if (string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(path)
+                || path.Length > Constants.MAX_PATH_LENGTH)
             {
-                return $"{nameof(PetPhoto)} "
-                    + $"{nameof(path)}" + " can not be empty";
+                return Errors.General.ValueIsInvalid("Photo.Path");
             }
 
-            var photoValue = new PetPhoto(id, path, isMain);
-
-            return photoValue;
+            return new PetPhoto(id, path, isMain);
         }
     }
 }

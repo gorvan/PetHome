@@ -15,19 +15,18 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
 
         public static Result<SocialNetwork> Create(string name, string link)
         {
-            if (name is null)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return $"{nameof(SocialNetwork)} " + $"{nameof(name)}" + " can not be null";
+                return Errors.General.ValueIsRequeired("SocialNetwork.Name");
             }
 
-            if (link is null)
+            if (string.IsNullOrWhiteSpace(name) 
+                || link.Length > Constants.MAX_PATH_LENGTH)
             {
-                return $"{nameof(SocialNetwork)} " + $"{nameof(link)}" + " can not be null";
+                return Errors.General.ValueIsInvalid("SocialNetwork.Link");
             }
 
-            var network = new SocialNetwork(name, link);
-
-            return network;
+            return new SocialNetwork(name, link);
         }
     }
 }

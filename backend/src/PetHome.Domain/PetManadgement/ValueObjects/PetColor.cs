@@ -15,13 +15,10 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(color))
             {
-                return $"{nameof(PetColor)} "
-                    + $"{nameof(color)}" + " can not be empty";
+                return Errors.General.ValueIsRequeired("Color");
             }
 
-            var colorValue = new PetColor(color);
-
-            return colorValue;
+            return new PetColor(color);
         }
     }
 }

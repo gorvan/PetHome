@@ -15,13 +15,10 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(nickname))
             {
-                return $"{nameof(PetNickname)} "
-                    + $"{nameof(nickname)}" + " can not be empty";
+                return Errors.General.ValueIsRequeired("Nickname");
             }
 
-            var nicknameValue = new PetNickname(nickname);
-
-            return nicknameValue;
+            return new PetNickname(nickname);
         }
     }
 }

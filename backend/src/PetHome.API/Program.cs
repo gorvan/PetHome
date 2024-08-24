@@ -1,8 +1,5 @@
-
-using PetHome.Application.Volunteers;
-using PetHome.Application.Volunteers.CreateVolunteer;
+using PetHome.Application;
 using PetHome.Infrastructure;
-using PetHome.Infrastructure.Repositories;
 
 namespace PetHome.API
 {
@@ -11,17 +8,17 @@ namespace PetHome.API
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
-            
-            builder.Services.AddControllers();            
+
+            builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
-            builder.Services.AddScoped<ApplicationDbContext>();
-            builder.Services.AddScoped<IVolunteerRepository, VolunteersRepository>();
-            builder.Services.AddScoped<CreateVolunteerHandler>();
+            builder.Services
+                .AddInfrastructure()
+                .AddApplication();
 
             var app = builder.Build();
-            
+
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();
@@ -32,7 +29,7 @@ namespace PetHome.API
             app.UseHttpsRedirection();
             app.UseAuthorization();
 
-            app.MapControllers();            
+            app.MapControllers();
 
             app.Run();
         }

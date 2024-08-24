@@ -2,6 +2,9 @@
 {
     public record Error
     {
+        public static readonly Error None
+            = new Error(string.Empty, string.Empty, ErrorType.None);
+
         public string Code { get; }
         public string Message { get; }
         public ErrorType Type { get; }
@@ -13,7 +16,7 @@
             Type = type;
         }
 
-        public static Error Validation(string code, string message)=>
+        public static Error Validation(string code, string message) =>
             new Error(code, message, ErrorType.Validtion);
 
         public static Error NotFound(string code, string message) =>
@@ -28,6 +31,7 @@
 
     public enum ErrorType
     {
+        None,
         Validtion,
         NotFound,
         Failure,
