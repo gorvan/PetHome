@@ -51,21 +51,21 @@ namespace PetHome.Domain.PetManadgement.Entities
 
         private readonly List<PetPhoto> _photo = [];
 
-        public PetNickname Nickname { get; private set; }
-        public SpeciesBreedValue SpeciesBreed { get; private set; }
-        public PetDescription Description { get; private set; }
-        public PetColor Color { get; private set; }
-        public HealthInfo Health { get; private set; }
-        public Address Address { get; private set; }
-        public Phone Phone { get; private set; }
-        public DateValue BirthDay { get; private set; }
-        public DateValue CreateDate { get; private set; }
-        public PetRequisites Requisites { get; private set; }
-        public bool IsNeutered { get; private set; }
-        public bool IsVaccinated { get; private set; }
-        public HelpStatus HelpStatus { get; private set; }
-        public double Weight { get; private set; }
-        public double Height { get; private set; }
+        public PetNickname Nickname { get; } = default!;
+        public SpeciesBreedValue SpeciesBreed { get; } = default!;
+        public PetDescription Description { get; } = default!;
+        public PetColor Color { get; } = default!;
+        public HealthInfo Health { get; } = default!;
+        public Address Address { get; } = default!;
+        public Phone Phone { get; } = default!;
+        public DateValue BirthDay { get; } = default!;
+        public DateValue CreateDate { get; } = default!;
+        public PetRequisites Requisites { get; } = default!;
+        public bool IsNeutered { get; }
+        public bool IsVaccinated { get; }
+        public HelpStatus HelpStatus { get; }
+        public double Weight { get; } = 0;
+        public double Height { get; } = 0;
         public IReadOnlyList<PetPhoto> Photos => _photo;
     }
 }
