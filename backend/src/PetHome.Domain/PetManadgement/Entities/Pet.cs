@@ -11,7 +11,7 @@ namespace PetHome.Domain.PetManadgement.Entities
         {
         }
 
-        private Pet(
+        public Pet(
             PetId id,
             PetNickname nickname,
             SpeciesBreedValue speciesBreed,
@@ -67,52 +67,5 @@ namespace PetHome.Domain.PetManadgement.Entities
         public double Weight { get; private set; }
         public double Height { get; private set; }
         public IReadOnlyList<PetPhoto> Photos => _photo;
-
-
-        public void AddPhoto(PetPhoto photo)
-        {
-            _photo.Add(photo);
-        }
-
-        public static Result<Pet> Create(
-            PetId id,
-            PetNickname nickname,
-            SpeciesBreedValue speciesBreed,
-            PetDescription description,
-            PetColor color,
-            HealthInfo health,
-            Address address,
-            Phone phone,
-            PetRequisites requisites,
-            DateValue birthDay,
-            DateValue createDate,
-            bool isNeutered,
-            bool isVaccinated,
-            HelpStatus helpStatus,
-            double weight,
-            double height,
-            IEnumerable<PetPhoto> photos)
-        {
-            var petValue = new Pet(
-                id,
-                nickname,
-                speciesBreed,
-                description,
-                color,
-                health,
-                address,
-                phone,
-                requisites,
-                birthDay,
-                createDate,
-                isNeutered,
-                isVaccinated,
-                helpStatus,
-                weight,
-                height,
-                photos);
-
-            return petValue;
-        }
     }
 }

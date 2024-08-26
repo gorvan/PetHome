@@ -15,19 +15,18 @@
 
         public static Result<Requisite> Create(string name, string description)
         {
-            if (name is null)
+            if (string.IsNullOrWhiteSpace(name))
             {
-                return $"{nameof(Requisite)} " + $"{nameof(name)}" + " can not be null";
+                return Errors.General.ValueIsRequeired("Requisite.Name");
             }
 
-            if (description is null)
+            if (string.IsNullOrWhiteSpace(description)
+                || description.Length > Constants.MAX_TEXT_LENGTH)
             {
-                return $"{nameof(Requisite)} " + $"{nameof(description)}" + " can not be null";
+                return Errors.General.ValueIsInvalid("Requisite.Description");
             }
 
-            var requisite = new Requisite(name, description);
-
-            return requisite;
+            return new Requisite(name, description);
         }
     }
 }

@@ -325,7 +325,7 @@ namespace PetHome.Infrastructure.Migrations
 
                             b1.ToTable("volunteers");
 
-                            b1.ToJson("SocialNets");
+                            b1.ToJson("social_networks");
 
                             b1.WithOwner()
                                 .HasForeignKey("VolunteerId")
@@ -342,15 +342,11 @@ namespace PetHome.Infrastructure.Migrations
 
                                     b2.Property<string>("Link")
                                         .IsRequired()
-                                        .HasMaxLength(2000)
-                                        .HasColumnType("character varying(2000)")
-                                        .HasColumnName("social_net_link");
+                                        .HasColumnType("text");
 
                                     b2.Property<string>("Name")
                                         .IsRequired()
-                                        .HasMaxLength(100)
-                                        .HasColumnType("character varying(100)")
-                                        .HasColumnName("social_net_name");
+                                        .HasColumnType("text");
 
                                     b2.HasKey("SocialNetworksVolunteerId", "Id")
                                         .HasName("pk_volunteers");
@@ -375,7 +371,7 @@ namespace PetHome.Infrastructure.Migrations
 
                             b1.ToTable("volunteers");
 
-                            b1.ToJson("Requisites");
+                            b1.ToJson("requisites");
 
                             b1.WithOwner()
                                 .HasForeignKey("VolunteerId")
@@ -392,15 +388,11 @@ namespace PetHome.Infrastructure.Migrations
 
                                     b2.Property<string>("Description")
                                         .IsRequired()
-                                        .HasMaxLength(2000)
-                                        .HasColumnType("character varying(2000)")
-                                        .HasColumnName("recuisite_description");
+                                        .HasColumnType("text");
 
                                     b2.Property<string>("Name")
                                         .IsRequired()
-                                        .HasMaxLength(100)
-                                        .HasColumnType("character varying(100)")
-                                        .HasColumnName("recuisite_name");
+                                        .HasColumnType("text");
 
                                     b2.HasKey("VolunteersRequisitesVolunteerId", "Id")
                                         .HasName("pk_volunteers");
@@ -456,13 +448,11 @@ namespace PetHome.Infrastructure.Migrations
 
                                     b2.Property<string>("Description")
                                         .IsRequired()
-                                        .HasMaxLength(2000)
-                                        .HasColumnType("character varying(2000)");
+                                        .HasColumnType("text");
 
                                     b2.Property<string>("Name")
                                         .IsRequired()
-                                        .HasMaxLength(100)
-                                        .HasColumnType("character varying(100)");
+                                        .HasColumnType("text");
 
                                     b2.HasKey("PetRequisitesPetId", "Id")
                                         .HasName("pk_pets");

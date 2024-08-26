@@ -21,11 +21,10 @@ namespace PetHome.Domain.SpeciesManagement.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                return "Name can not be empty";
+                return Errors.General.ValueIsRequeired("Breed.Name");
             }
 
-            var breedValue = new Breed(id, name);
-            return breedValue;
+            return new Breed(id, name);
         }
     }
 }

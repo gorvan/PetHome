@@ -32,12 +32,10 @@ namespace PetHome.Domain.SpeciesManagement.Entities
         {
             if (string.IsNullOrWhiteSpace(name))
             {
-                return "Species name can not be empty";
+                return Errors.General.ValueIsRequeired("Species.Name");
             }
 
-            var species = new Species(id, name, breeds);
-
-            return species;
+            return new Species(id, name, breeds);
         }
     }
 }

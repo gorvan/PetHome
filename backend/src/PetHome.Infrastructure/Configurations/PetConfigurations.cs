@@ -107,13 +107,8 @@ namespace PetHome.Infrastructure.Configurations
                    pb.OwnsMany(r => r.Requisites,
                        rb =>
                        {
-                           rb.Property(i => i.Name)
-                           .IsRequired()
-                           .HasMaxLength(Constants.MAX_TITLE_LENGTH);
-
-                           rb.Property(i => i.Description)
-                          .IsRequired()
-                          .HasMaxLength(Constants.MAX_TEXT_LENGTH);
+                           rb.Property(i => i.Name);
+                           rb.Property(i => i.Description);
                        });
                });
 

@@ -11,7 +11,7 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
         {
         }
 
-        private Volunteer(
+        public Volunteer(
             VolunteerId id,
             FullName name,
             Email email,
@@ -57,31 +57,5 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
             _pets
             .Where(p => p.HelpStatus == HelpStatus.OnTreatment)
             .Count();
-
-
-        public static Result<Volunteer> Create(
-            VolunteerId id,
-            FullName name,
-            Email email,
-            VolunteerDescription description,
-            Phone phone,
-            SocialNetworks socialNets,
-            VolunteersRequisites requisites,
-            IEnumerable<Pet> pets,
-            int experience)
-        {
-            var volunteer = new Volunteer(
-                    id,
-                    name,
-                    email,
-                    description,
-                    phone,
-                    socialNets,
-                    requisites,
-                    pets,
-                    experience);
-
-            return volunteer;
-        }
     }
 }

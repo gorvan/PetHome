@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using PetHome.API.Extensions;
 using PetHome.Application.Volunteers.CreateVolunteer;
 
 namespace PetHome.API.Controllers
@@ -8,17 +9,14 @@ namespace PetHome.API.Controllers
     public class VolunteersController : ControllerBase
     {
         [HttpPost]
-        public async Task<IActionResult> Create(
+        public async Task<ActionResult<Guid>> Create(
             [FromBody] CreateVolunteerRequest request,
             [FromServices] CreateVolunteerHandler handler,
             CancellationToken token)
         {
             var result = await handler.Execute(request, token);
-            if (result.IsFailure)
-                return BadRequest(result.Error);
-            return Ok(result);
+
+            return result.ToResponse<Guid>();
         }
     }
-
-
 }

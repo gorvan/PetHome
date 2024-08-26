@@ -15,20 +15,15 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(health))
             {
-                return $"{nameof(HealthInfo)} "
-                    + $"{nameof(health)}" + " can not be empty";
+                return Errors.General.ValueIsRequeired("Health");
             }
 
             if (health.Length > Constants.MAX_TEXT_LENGTH)
             {
-                return $"{nameof(HealthInfo)} "
-                    + $"{nameof(health)}" + $" can not be more than " +
-                    $"{Constants.MAX_TEXT_LENGTH} symbols";
+                return Errors.General.ValueIsInvalid("Health");
             }
 
-            var healthValue = new HealthInfo(health);
-
-            return healthValue;
+            return new HealthInfo(health);
         }
     }
 }

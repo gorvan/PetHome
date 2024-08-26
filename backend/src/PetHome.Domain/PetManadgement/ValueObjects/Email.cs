@@ -15,23 +15,20 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
 
         public string EmailValue { get; } = default!;
 
-
         public static Result<Email> Create(string email)
         {
             if (string.IsNullOrWhiteSpace(email))
             {
-                return $"{nameof(Email)} " + $"{nameof(email)}" + " can not be empty";
+                return Errors.General.ValueIsRequeired("Email");
             }
 
             var regex = new Regex(EMAIL_REGULAR_EXPR);
             if (!regex.IsMatch(email))
             {
-                return $"{nameof(Email)} has incorrect format";
+                return Errors.General.ValueIsInvalid("Email");
             }
 
-            var emailValue = new Email(email);
-
-            return emailValue;
+            return new Email(email);
         }
     }
 }

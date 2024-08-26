@@ -29,31 +29,25 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
         {
             if (string.IsNullOrWhiteSpace(city))
             {
-                return $"{nameof(Address)} "
-                    + $"{nameof(city)}" + " can not be empty";
+                return Errors.General.ValueIsInvalid("Address.City");
             }
 
             if (string.IsNullOrWhiteSpace(street))
             {
-                return $"{nameof(Address)} "
-                    + $"{nameof(street)}" + " can not be empty";
+                return Errors.General.ValueIsInvalid("Address.Street");
             }
 
             if (string.IsNullOrWhiteSpace(house))
             {
-                return $"{nameof(Address)} "
-                    + $"{nameof(house)}" + " can not be empty";
+                return Errors.General.ValueIsInvalid("Address.House");
             }
 
             if (string.IsNullOrWhiteSpace(appartment))
             {
-                return $"{nameof(Address)} "
-                    + $"{nameof(appartment)}" + " can not be empty";
+                return Errors.General.ValueIsInvalid("Address.Appartment");
             }
 
-            var adressValue = new Address(city, street, house, appartment);
-
-            return adressValue;
+            return new Address(city, street, house, appartment);
         }
     }
 }

@@ -11,19 +11,13 @@
 
         public static Result<DateValue> Create(DateTime date)
         {
-            if (date == DateTime.MinValue || date == DateTime.MaxValue)
+            if (date < new DateTime(1900, 1, 1)
+                || date > DateTime.Now)
             {
-                return "Date is invalid";
+                return Errors.General.ValueIsInvalid("Date");
             }
 
-            if (date > DateTime.Now)
-            {
-                return "Date can not be more than now";
-            }
-
-            var dateValue = new DateValue(date);
-
-            return dateValue;
+            return new DateValue(date);
         }
     }
 }

@@ -16,22 +16,26 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
 
         public async Task<Result<Guid>> Execute(CreateVolunteerRequest request, CancellationToken token)
         {
+            var phoneCheckResult = Phone.Create(request.phone);
+            if (phoneCheckResult.IsFailure)
+            {
+                return phoneCheckResult.Error!;
+            }
+
+            var existVolunteerResult = await _volunteerRepository
+                .GetByPhone(phoneCheckResult.Value, token);
+
+            if (existVolunteerResult.Error == Error.None)
+            {
+                return Errors.General.AlreadyExist();
+            }
+
             var volunteerId = VolunteerId.NewVolunteerId();
 
-            var phoneResult = Phone.Create(request.phone);
-            if (phoneResult.IsFailure)
-            {
-                return phoneResult.Error!;
-            }
-
-            var existVolunteerResult = await _volunteerRepository.GetByPhone(phoneResult.Value, token);
-
-            if (existVolunteerResult.IsSuccess)
-            {
-                return "Volunteer must be unique by phone";
-            }
-
-            var fullNameResult = FullName.Create(request.firstName, request.secondName, request.surname);
+            var fullNameResult = FullName.Create(
+                request.firstName,
+                request.secondName,
+                request.surname);
 
             if (fullNameResult.IsFailure)
             {
@@ -55,7 +59,7 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
             var socialColl = new List<SocialNetwork>();
 
             foreach (var item in request.socialNetworkDtos)
-            {               
+            {
                 var socialNetworkResult = SocialNetwork
                 .Create(item.name, item.path);
                 if (socialNetworkResult.IsFailure)
@@ -66,18 +70,13 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 socialColl.Add(socialNetworkResult.Value);
             }
 
-            var socialNetworkCollectionResult = SocialNetworks.Create(socialColl);
-            if (socialNetworkCollectionResult.IsFailure)
-            {
-                return socialNetworkCollectionResult.Error!;
-            }
-
+            var socialNetworkCollectionResult = new SocialNetworks(socialColl);
             var requisiteColl = new List<Requisite>();
 
             foreach (var item in request.requisiteDtos)
-            {  
+            {
                 var requisite = Requisite.Create(item.name, item.description);
-                if(requisite.IsFailure)
+                if (requisite.IsFailure)
                 {
                     return requisite.Error!;
                 }
@@ -85,23 +84,22 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
                 requisiteColl.Add(requisite.Value);
             }
 
-            var requisiteCollectionResult = VolunteersRequisites.Create(requisiteColl);
-            if(requisiteCollectionResult.IsFailure)
-            {
-                return requisiteCollectionResult.Error!;
-            }            
+            var requisiteCollectionResult = new VolunteersRequisites(requisiteColl);
 
-            var volunteerResult = Volunteer.Create(volunteerId, fullNameResult.Value, emailResult.Value,
-                descriptionResult.Value, phoneResult.Value, socialNetworkCollectionResult.Value,
-                 requisiteCollectionResult.Value, new List<Pet>(), 0);
+            var volunteer = new Volunteer(
+                volunteerId,
+                fullNameResult.Value,
+                emailResult.Value,
+                descriptionResult.Value,
+                phoneCheckResult.Value,
+                socialNetworkCollectionResult,
+                requisiteCollectionResult,
+                new List<Pet>(),
+                0);
 
-            if (volunteerResult.IsFailure)
-            {
-                return volunteerResult.Error!;
-            }
+            await _volunteerRepository.Add(volunteer, token);
 
-            await _volunteerRepository.Add(volunteerResult.Value, token);
-            return (Guid)volunteerResult.Value.Id;
+            return (Guid)volunteer.Id;
         }
     }
 }
