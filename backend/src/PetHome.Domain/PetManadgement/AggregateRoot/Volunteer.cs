@@ -35,14 +35,14 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
 
         private readonly List<Pet> _pets = [];
 
-        public FullName Name { get; private set; }
-        public Email Email { get; private set; }
-        public VolunteerDescription Description { get; private set; }
-        public Phone Phone { get; private set; }
-        public SocialNetworks SocialNets { get; private set; }
-        public VolunteersRequisites Requisites { get; private set; }
+        public FullName Name { get; } = default!;
+        public Email Email { get; } = default!;
+        public VolunteerDescription Description { get; } = default!;
+        public Phone Phone { get; } = default!;
+        public SocialNetworks SocialNets { get; } = default!;
+        public VolunteersRequisites Requisites { get; } = default!;
         public IReadOnlyList<Pet> Pets => _pets;
-        public int Experience { get; private set; }
+        public int Experience { get; } = 0;
         public int FoundHomePets =>
             _pets
             .Where(p => p.HelpStatus == HelpStatus.FoundHome)
