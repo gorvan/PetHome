@@ -27,8 +27,7 @@ namespace PetHome.Domain.PetManadgement.Entities
             bool isVaccinated,
             HelpStatus helpStatus,
             double weight,
-            double height,
-            IEnumerable<PetPhoto> photos)
+            double height)
             : base(id)
         {
             Nickname = nickname;
@@ -46,7 +45,6 @@ namespace PetHome.Domain.PetManadgement.Entities
             HelpStatus = helpStatus;
             Weight = weight;
             Height = height;
-            _photo = photos.ToList();
         }
 
         private readonly List<PetPhoto> _photo = [];

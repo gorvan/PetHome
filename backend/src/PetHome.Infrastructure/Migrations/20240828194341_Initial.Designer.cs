@@ -13,7 +13,7 @@ using PetHome.Infrastructure;
 namespace PetHome.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240823211555_Initial")]
+    [Migration("20240828194341_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -31,10 +31,6 @@ namespace PetHome.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
-
-                    b.Property<int>("Experience")
-                        .HasColumnType("integer")
-                        .HasColumnName("experience");
 
                     b.ComplexProperty<Dictionary<string, object>>("Description", "PetHome.Domain.PetManadgement.AggregateRoot.Volunteer.Description#VolunteerDescription", b1 =>
                         {
@@ -334,7 +330,7 @@ namespace PetHome.Infrastructure.Migrations
                                 .HasForeignKey("VolunteerId")
                                 .HasConstraintName("fk_volunteers_volunteers_id");
 
-                            b1.OwnsMany("PetHome.Domain.PetManadgement.ValueObjects.SocialNetwork", "SocialNets", b2 =>
+                            b1.OwnsMany("PetHome.Domain.PetManadgement.ValueObjects.SocialNetwork", "Networks", b2 =>
                                 {
                                     b2.Property<Guid>("SocialNetworksVolunteerId")
                                         .HasColumnType("uuid");
@@ -361,7 +357,7 @@ namespace PetHome.Infrastructure.Migrations
                                         .HasConstraintName("fk_volunteers_volunteers_social_networks_volunteer_id");
                                 });
 
-                            b1.Navigation("SocialNets");
+                            b1.Navigation("Networks");
                         });
 
                     b.OwnsOne("PetHome.Domain.PetManadgement.ValueObjects.VolunteersRequisites", "Requisites", b1 =>
