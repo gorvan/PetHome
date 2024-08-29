@@ -97,9 +97,7 @@ namespace PetHome.Infrastructure.Configurations
                 .WithOne()
                 .HasForeignKey("volunteer_id");
 
-            builder.Property(v => v.Experience)
-                .IsRequired()
-                .HasColumnName("experience");
+            builder.Navigation(v => v.Pets).AutoInclude();
         }
     }
 }

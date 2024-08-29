@@ -10,8 +10,8 @@ namespace PetHome.API.Controllers
     {
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
-            [FromBody] CreateVolunteerRequest request,
             [FromServices] CreateVolunteerHandler handler,
+            [FromBody] CreateVolunteerRequest request,
             CancellationToken token)
         {
             var result = await handler.Execute(request, token);

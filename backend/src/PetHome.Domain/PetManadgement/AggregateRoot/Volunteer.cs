@@ -18,9 +18,7 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
             VolunteerDescription description,
             Phone phone,
             SocialNetworks socialNets,
-            VolunteersRequisites requisites,
-            IEnumerable<Pet> pets,
-            int experience)
+            VolunteersRequisites requisites)
             : base(id)
         {
             Name = name;
@@ -29,8 +27,6 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
             Phone = phone;
             SocialNets = socialNets;
             Requisites = requisites;
-            _pets = pets.ToList();
-            Experience = experience;
         }
 
         private readonly List<Pet> _pets = [];
@@ -42,7 +38,9 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
         public SocialNetworks SocialNets { get; } = default!;
         public VolunteersRequisites Requisites { get; } = default!;
         public IReadOnlyList<Pet> Pets => _pets;
-        public int Experience { get; } = 0;
+        
+        public int Experience => GetExperience();
+
         public int FoundHomePets =>
             _pets
             .Where(p => p.HelpStatus == HelpStatus.FoundHome)
@@ -57,5 +55,22 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
             _pets
             .Where(p => p.HelpStatus == HelpStatus.OnTreatment)
             .Count();
+
+        private int GetExperience()
+        {
+            var firstPet = 
+                _pets
+                .OrderBy(p => p.CreateDate.Date)
+                .FirstOrDefault();
+            
+            if (firstPet == null)
+            {
+                return 0;
+            }
+
+            return DateTime.Now.Year - firstPet.CreateDate.Date.Year;
+        }        
     }
+
+    
 }
