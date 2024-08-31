@@ -11,8 +11,20 @@ namespace PetHome.API.Extensions
 
             var dbContext =
                 scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+            try
+            {
+                await dbContext.Database.MigrateAsync();
+            }
+            catch (Npgsql.NpgsqlException ex)
+            {
+                var innerMessage =
+                    string.IsNullOrWhiteSpace(ex.InnerException?.Message)
+                    ? ""
+                    : " . " + ex.InnerException.Message;
 
-            await dbContext.Database.MigrateAsync();
+                app.Logger.LogError("Error: {message}",
+                    $"{ex.Source} . {ex.Message}{innerMessage}");
+            }
         }
     }
 }
