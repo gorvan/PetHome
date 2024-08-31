@@ -1,20 +1,27 @@
-﻿using PetHome.Domain.PetManadgement.AggregateRoot;
+﻿using Microsoft.Extensions.Logging;
+using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
+
 
 namespace PetHome.Application.Volunteers.CreateVolunteer
 {
     public class CreateVolunteerHandler
     {
         private readonly IVolunteerRepository _volunteerRepository;
+        private readonly ILogger<CreateVolunteerHandler> _logger;
 
-        public CreateVolunteerHandler(IVolunteerRepository volunteerRepository)
+        public CreateVolunteerHandler(IVolunteerRepository volunteerRepository,
+            ILogger<CreateVolunteerHandler> logger)
         {
             _volunteerRepository = volunteerRepository;
+            _logger = logger;
         }
 
-        public async Task<Result<Guid>> Execute(CreateVolunteerRequest request, CancellationToken token)
+        public async Task<Result<Guid>> Execute(
+            CreateVolunteerRequest request,
+            CancellationToken token)
         {
             var phone = Phone.Create(request.phone).Value;
 
@@ -61,6 +68,8 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
 
             await _volunteerRepository.Add(volunteer, token);
 
+            _logger.LogInformation("Add new volunteer, Id: {volunteerId}", volunteerId);
+            
             return (Guid)volunteer.Id;
         }
     }
