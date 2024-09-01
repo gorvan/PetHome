@@ -24,7 +24,6 @@
 
             public static Error AlreadyExist()
             {
-
                 return Error.NotFound("record.already.exist",
                     "Volunteer already exist");
             }

@@ -5,7 +5,7 @@ using PetHome.Domain.Shared.IDs;
 
 namespace PetHome.Domain.PetManadgement.AggregateRoot
 {
-    public class Volunteer : Entity<VolunteerId>
+    public class Volunteer : Entity<VolunteerId>, ISoftDeletable
     {
         private Volunteer(VolunteerId id) : base(id)
         {
@@ -25,18 +25,21 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
             Email = email;
             Description = description;
             Phone = phone;
-            SocialNets = socialNets;
+            SocialNetworks = socialNets;
             Requisites = requisites;
         }
 
         private readonly List<Pet> _pets = [];
 
-        public FullName Name { get; } = default!;
-        public Email Email { get; } = default!;
-        public VolunteerDescription Description { get; } = default!;
-        public Phone Phone { get; } = default!;
-        public SocialNetworks SocialNets { get; } = default!;
-        public VolunteersRequisites Requisites { get; } = default!;
+        private bool _isDeleted = false;
+
+
+        public FullName Name { get; private set; } = default!;
+        public Email Email { get; private set; } = default!;
+        public VolunteerDescription Description { get; private set; } = default!;
+        public Phone Phone { get; private set; } = default!;
+        public SocialNetworks SocialNetworks { get; private set; } = default!;
+        public VolunteersRequisites Requisites { get; private set; } = default!;
         public IReadOnlyList<Pet> Pets => _pets;
         
         public int Experience => GetExperience();
@@ -69,8 +72,46 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
             }
 
             return DateTime.Now.Year - firstPet.CreateDate.Date.Year;
-        }        
-    }
+        }  
+        
+        public void UpdateMainInfo(
+            FullName fullName, 
+            Email email, 
+            Phone phone, 
+            VolunteerDescription description )
+        {
+            Name = fullName;
+            Email = email;
+            Phone = phone;
+            Description = description;
+        }
 
-    
+        public void UpdateRequisites(
+            VolunteersRequisites requisites)
+        {
+            Requisites = requisites;
+        }
+
+        public void UpdateSocialNetworks(
+            SocialNetworks socialNetworks)
+        {
+            SocialNetworks = socialNetworks;
+        }
+
+        public void Delete()
+        {
+            if (_isDeleted == false)
+            {
+                _isDeleted = true;
+            }
+        }
+
+        public void Restore()
+        {
+            if(_isDeleted)
+            {
+                _isDeleted = false;
+            }            
+        }
+    }    
 }

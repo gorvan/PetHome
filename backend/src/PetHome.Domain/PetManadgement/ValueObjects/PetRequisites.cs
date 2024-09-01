@@ -10,6 +10,6 @@ namespace PetHome.Domain.PetManadgement.ValueObjects
             Requisites = requisites.ToList();
         }
 
-        public IReadOnlyList<Requisite> Requisites { get; } = [];
+        public IReadOnlyList<Requisite> Requisites { get; }
     }
 }

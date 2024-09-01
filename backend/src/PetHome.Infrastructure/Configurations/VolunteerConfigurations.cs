@@ -67,7 +67,7 @@ namespace PetHome.Infrastructure.Configurations
                     .HasColumnName("phone");
                 });
 
-            builder.OwnsOne(v => v.SocialNets,
+            builder.OwnsOne(v => v.SocialNetworks,
                 vb =>
                 {
                     vb.ToJson("social_networks");
@@ -96,6 +96,10 @@ namespace PetHome.Infrastructure.Configurations
             builder.HasMany(v => v.Pets)
                 .WithOne()
                 .HasForeignKey("volunteer_id");
+
+            builder.Property<bool>("_isDeleted")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("is_delete");
 
             builder.Navigation(v => v.Pets).AutoInclude();
         }

@@ -5,7 +5,7 @@ using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
 
 
-namespace PetHome.Application.Volunteers.CreateVolunteer
+namespace PetHome.Application.Volunteers.Create
 {
     public class CreateVolunteerHandler
     {
@@ -34,9 +34,9 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
             var volunteerId = VolunteerId.NewVolunteerId();
 
             var fullName = FullName.Create(
-                request.fullName.firstName,
-                request.fullName.secondName,
-                request.fullName.surname).Value;
+                request.fullName.FirstName,
+                request.fullName.SecondName,
+                request.fullName.Surname).Value;
 
             var email = Email.Create(request.email).Value;
 
@@ -45,14 +45,14 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
 
             var socialColl = (from item in request.socialNetworkDtos
                               let socialNetwork = SocialNetwork
-                                    .Create(item.name, item.path).Value
+                                    .Create(item.Name, item.Path).Value
                               select socialNetwork).ToList();
 
             var socialNetworkCollection = new SocialNetworks(socialColl);
 
             var requisiteColl = (from item in request.requisiteDtos
                                  let requisite = Requisite
-                                    .Create(item.name, item.description).Value
+                                    .Create(item.Name, item.Description).Value
                                  select requisite).ToList();
 
             var requisiteCollection = new VolunteersRequisites(requisiteColl);
@@ -69,7 +69,7 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
             await _volunteerRepository.Add(volunteer, token);
 
             _logger.LogInformation("Add new volunteer, Id: {volunteerId}", volunteerId);
-            
+
             return (Guid)volunteer.Id;
         }
     }

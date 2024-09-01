@@ -3,14 +3,14 @@ using PetHome.Application.Validation;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
 
-namespace PetHome.Application.Volunteers.CreateVolunteer
+namespace PetHome.Application.Volunteers.Create
 {
     public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteerRequest>
     {
         public CreateVolunteerRequestValidator()
         {
             RuleFor(c => c.fullName).MustBeValueObject(x =>
-                FullName.Create(x.firstName, x.secondName, x.surname));
+                FullName.Create(x.FirstName, x.SecondName, x.Surname));
 
             RuleFor(c => c.email).MustBeValueObject(Email.Create);
 
@@ -19,10 +19,10 @@ namespace PetHome.Application.Volunteers.CreateVolunteer
             RuleFor(c => c.description).MustBeValueObject(VolunteerDescription.Create);
 
             RuleForEach(c => c.requisiteDtos)
-                .MustBeValueObject(x => Requisite.Create(x.name, x.description));
+                .MustBeValueObject(x => Requisite.Create(x.Name, x.Description));
 
             RuleForEach(c => c.socialNetworkDtos)
-                .MustBeValueObject(x => SocialNetwork.Create(x.name, x.path));
+                .MustBeValueObject(x => SocialNetwork.Create(x.Name, x.Path));
         }
     }
 }
