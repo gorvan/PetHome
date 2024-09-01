@@ -5,7 +5,6 @@ using PetHome.API.Validation;
 using PetHome.Application;
 using PetHome.Infrastructure;
 using Serilog;
-using Serilog.Events;
 using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace PetHome.API
@@ -16,15 +15,7 @@ namespace PetHome.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            Log.Logger = new LoggerConfiguration()
-                .WriteTo.Console()
-                .Enrich.WithEnvironmentName()
-                .Enrich.WithThreadId()
-                .WriteTo.Seq(builder.Configuration.GetConnectionString("Seq")
-                        ?? throw new ArgumentNullException("Seq"))
-                .MinimumLevel.Override("Microsoft.AspNetCore.Hosting", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore.Mvc", LogEventLevel.Warning)
-                .MinimumLevel.Override("Microsoft.AspNetCore.Routing", LogEventLevel.Warning).CreateLogger();
+            builder.ConfigureLogging();
 
             builder.Services.AddControllers();
             builder.Services.AddEndpointsApiExplorer();

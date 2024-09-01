@@ -18,7 +18,6 @@ namespace PetHome.API.Middleware
         {
             try
             {
-
                 await _next(context);
             }
             catch (Exception ex)
