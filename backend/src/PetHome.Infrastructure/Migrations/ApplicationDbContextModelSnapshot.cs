@@ -29,6 +29,16 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
+                    b.Property<string>("Requisites")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("requisites");
+
+                    b.Property<string>("SocialNetworks")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("social_networks");
+
                     b.Property<bool>("_isDeleted")
                         .HasColumnType("boolean")
                         .HasColumnName("is_delete");
@@ -120,6 +130,10 @@ namespace PetHome.Infrastructure.Migrations
                     b.Property<double>("Weight")
                         .HasColumnType("double precision")
                         .HasColumnName("weight");
+
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_delete");
 
                     b.Property<Guid?>("volunteer_id")
                         .HasColumnType("uuid")
@@ -311,107 +325,6 @@ namespace PetHome.Infrastructure.Migrations
                         .HasDatabaseName("ix_breeds_species_id");
 
                     b.ToTable("breeds", (string)null);
-                });
-
-            modelBuilder.Entity("PetHome.Domain.PetManadgement.AggregateRoot.Volunteer", b =>
-                {
-                    b.OwnsOne("PetHome.Domain.PetManadgement.ValueObjects.SocialNetworks", "SocialNetworks", b1 =>
-                        {
-                            b1.Property<Guid>("VolunteerId")
-                                .HasColumnType("uuid")
-                                .HasColumnName("id");
-
-                            b1.HasKey("VolunteerId");
-
-                            b1.ToTable("volunteers");
-
-                            b1.ToJson("social_networks");
-
-                            b1.WithOwner()
-                                .HasForeignKey("VolunteerId")
-                                .HasConstraintName("fk_volunteers_volunteers_id");
-
-                            b1.OwnsMany("PetHome.Domain.PetManadgement.ValueObjects.SocialNetwork", "Networks", b2 =>
-                                {
-                                    b2.Property<Guid>("SocialNetworksVolunteerId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Link")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("SocialNetworksVolunteerId", "Id")
-                                        .HasName("pk_volunteers");
-
-                                    b2.ToTable("volunteers");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("SocialNetworksVolunteerId")
-                                        .HasConstraintName("fk_volunteers_volunteers_social_networks_volunteer_id");
-                                });
-
-                            b1.Navigation("Networks");
-                        });
-
-                    b.OwnsOne("PetHome.Domain.PetManadgement.ValueObjects.VolunteersRequisites", "Requisites", b1 =>
-                        {
-                            b1.Property<Guid>("VolunteerId")
-                                .HasColumnType("uuid")
-                                .HasColumnName("id");
-
-                            b1.HasKey("VolunteerId");
-
-                            b1.ToTable("volunteers");
-
-                            b1.ToJson("requisites");
-
-                            b1.WithOwner()
-                                .HasForeignKey("VolunteerId")
-                                .HasConstraintName("fk_volunteers_volunteers_id");
-
-                            b1.OwnsMany("PetHome.Domain.Shared.Requisite", "Requisites", b2 =>
-                                {
-                                    b2.Property<Guid>("VolunteersRequisitesVolunteerId")
-                                        .HasColumnType("uuid");
-
-                                    b2.Property<int>("Id")
-                                        .ValueGeneratedOnAdd()
-                                        .HasColumnType("integer");
-
-                                    b2.Property<string>("Description")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.Property<string>("Name")
-                                        .IsRequired()
-                                        .HasColumnType("text");
-
-                                    b2.HasKey("VolunteersRequisitesVolunteerId", "Id")
-                                        .HasName("pk_volunteers");
-
-                                    b2.ToTable("volunteers");
-
-                                    b2.WithOwner()
-                                        .HasForeignKey("VolunteersRequisitesVolunteerId")
-                                        .HasConstraintName("fk_volunteers_volunteers_volunteers_requisites_volunteer_id");
-                                });
-
-                            b1.Navigation("Requisites");
-                        });
-
-                    b.Navigation("Requisites")
-                        .IsRequired();
-
-                    b.Navigation("SocialNetworks")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("PetHome.Domain.PetManadgement.Entities.Pet", b =>
