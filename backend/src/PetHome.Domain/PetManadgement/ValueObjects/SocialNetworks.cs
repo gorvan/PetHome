@@ -8,6 +8,6 @@
             Networks = socialNets.ToList();
         }
 
-        public IReadOnlyList<SocialNetwork> Networks { get; } = [];
+        public IReadOnlyList<SocialNetwork> Networks { get; }
     }
 }

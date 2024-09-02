@@ -8,24 +8,44 @@ namespace PetHome.Infrastructure.Repositories
 {
     public class VolunteersRepository : IVolunteerRepository
     {
-        private readonly ApplicationDbContext _context;
+        private readonly ApplicationDbContext _dbContext;
         public VolunteersRepository(ApplicationDbContext dbContext)
         {
-            _context = dbContext;
+            _dbContext = dbContext;
         }
 
         public async Task<Result<Guid>> Add(Volunteer volunteer, CancellationToken token)
         {
-            await _context.Volunteers.AddAsync(volunteer, token);
-            await _context.SaveChangesAsync(token);
+            await _dbContext.Volunteers.AddAsync(volunteer, token);
+            await _dbContext.SaveChangesAsync(token);
             return Result<Guid>.Success(volunteer.Id);
+        }
+
+        public async Task<Result<Guid>> Update(Volunteer volunteer, CancellationToken token)
+        {
+            _dbContext.Volunteers.Attach(volunteer);
+            await _dbContext.SaveChangesAsync();
+            return Result<Guid>.Success(volunteer.Id);
+        }
+
+        public async Task<Result<Guid>> Delete(Volunteer volunteer, CancellationToken token)
+        {
+            _dbContext.Volunteers.Remove(volunteer);
+            await _dbContext.SaveChangesAsync(token);
+            return Result<Guid>.Success(volunteer.Id);
+        }
+
+        public Task<Result<Guid>> Restore(Volunteer volunteer, CancellationToken token)
+        {
+            volunteer.Restore();
+            return Update(volunteer, token);
         }
 
         public async Task<Result<Volunteer>> GetById(VolunteerId id, CancellationToken token)
         {
-            var volunteer = await _context.Volunteers
-                .Include(v => v.Requisites)
-                .FirstOrDefaultAsync(v => v.Id == id);
+            var volunteer = await _dbContext
+                .Volunteers
+                .FirstOrDefaultAsync(v => v.Id == id, token);
 
             if (volunteer is null)
             {
@@ -37,10 +57,10 @@ namespace PetHome.Infrastructure.Repositories
 
         public async Task<Result<Volunteer>> GetByPhone(Phone phone, CancellationToken token)
         {
-            var volunteer = await _context
+            var volunteer = await _dbContext
                 .Volunteers
                 .FirstOrDefaultAsync(v => v.Phone == phone, token);
-            
+
             if (volunteer == null)
             {
                 return Errors.General.NotFound();

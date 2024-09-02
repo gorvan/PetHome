@@ -3,10 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.SpeciesManagement.Entities;
+using PetHome.Infrastructure.Interceptors;
 
 namespace PetHome.Infrastructure
 {
-    public class ApplicationDbContext(IConfiguration configuration) : DbContext
+    public class ApplicationDbContext(
+        IConfiguration configuration) : DbContext
     {
         private const string DATABASE = "Database";
 
@@ -17,8 +19,9 @@ namespace PetHome.Infrastructure
         {
             optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));
             optionsBuilder.UseSnakeCaseNamingConvention();
+            optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
-            optionsBuilder.EnableDetailedErrors();
+            optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

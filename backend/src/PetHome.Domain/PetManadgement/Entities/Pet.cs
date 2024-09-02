@@ -5,7 +5,7 @@ using PetHome.Domain.SpeciesManagement.AggregateRoot;
 
 namespace PetHome.Domain.PetManadgement.Entities
 {
-    public class Pet : Entity<PetId>
+    public class Pet : Entity<PetId>, ISoftDeletable
     {
         private Pet(PetId id) : base(id)
         {
@@ -48,6 +48,7 @@ namespace PetHome.Domain.PetManadgement.Entities
         }
 
         private readonly List<PetPhoto> _photo = [];
+        private bool _isDeleted = false;
 
         public PetNickname Nickname { get; } = default!;
         public SpeciesBreedValue SpeciesBreed { get; } = default!;
@@ -65,5 +66,21 @@ namespace PetHome.Domain.PetManadgement.Entities
         public double Weight { get; } = 0;
         public double Height { get; } = 0;
         public IReadOnlyList<PetPhoto> Photos => _photo;
+
+        public void Delete()
+        {
+            if (_isDeleted == false)
+            {
+                _isDeleted = true;
+            }
+        }
+
+        public void Restore()
+        {
+            if (_isDeleted)
+            {
+                _isDeleted = false;
+            }
+        }
     }
 }

@@ -13,7 +13,7 @@ using PetHome.Infrastructure;
 namespace PetHome.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240828194341_Initial")]
+    [Migration("20240901181727_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -31,6 +31,10 @@ namespace PetHome.Infrastructure.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
                         .HasColumnName("id");
+
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_delete");
 
                     b.ComplexProperty<Dictionary<string, object>>("Description", "PetHome.Domain.PetManadgement.AggregateRoot.Volunteer.Description#VolunteerDescription", b1 =>
                         {
@@ -314,7 +318,7 @@ namespace PetHome.Infrastructure.Migrations
 
             modelBuilder.Entity("PetHome.Domain.PetManadgement.AggregateRoot.Volunteer", b =>
                 {
-                    b.OwnsOne("PetHome.Domain.PetManadgement.ValueObjects.SocialNetworks", "SocialNets", b1 =>
+                    b.OwnsOne("PetHome.Domain.PetManadgement.ValueObjects.SocialNetworks", "SocialNetworks", b1 =>
                         {
                             b1.Property<Guid>("VolunteerId")
                                 .HasColumnType("uuid")
@@ -409,7 +413,7 @@ namespace PetHome.Infrastructure.Migrations
                     b.Navigation("Requisites")
                         .IsRequired();
 
-                    b.Navigation("SocialNets")
+                    b.Navigation("SocialNetworks")
                         .IsRequired();
                 });
 
