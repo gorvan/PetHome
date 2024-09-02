@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
+using PetHome.Infrastructure.Extensions;
 
 namespace PetHome.Infrastructure.Configurations
 {
@@ -67,31 +68,13 @@ namespace PetHome.Infrastructure.Configurations
                     .HasColumnName("phone");
                 });
 
-            builder.OwnsOne(v => v.SocialNetworks,
-                vb =>
-                {
-                    vb.ToJson("social_networks");
+            builder.Property(v => v.SocialNetworks)
+                .HasValueJsonConverter()
+                .HasColumnName("social_networks");
 
-                    vb.OwnsMany(s => s.Networks,
-                        sb =>
-                        {
-                            sb.Property(s => s.Name);
-                            sb.Property(s => s.Link);
-                        });
-                });
-
-            builder.OwnsOne(v => v.Requisites,
-                vb =>
-                {
-                    vb.ToJson("requisites");
-                    vb.OwnsMany(r => r.Requisites,
-                        rb =>
-                        {
-                            rb.Property(r => r.Name);
-                            rb.Property(r => r.Description);
-                        });
-
-                });
+            builder.Property(v => v.Requisites)
+                .HasValueJsonConverter()
+                .HasColumnName("requisites");
 
             builder.HasMany(v => v.Pets)
                 .WithOne()

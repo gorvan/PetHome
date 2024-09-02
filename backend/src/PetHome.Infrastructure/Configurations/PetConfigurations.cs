@@ -156,6 +156,10 @@ namespace PetHome.Infrastructure.Configurations
             builder.HasMany(p => p.Photos)
             .WithOne()
             .HasForeignKey("pet_id");
+
+            builder.Property<bool>("_isDeleted")
+                .UsePropertyAccessMode(PropertyAccessMode.Field)
+                .HasColumnName("is_delete");
         }
     }
 }
