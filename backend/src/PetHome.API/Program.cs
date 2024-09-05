@@ -23,7 +23,7 @@ namespace PetHome.API
             builder.Services.AddSerilog();
 
             builder.Services
-                .AddInfrastructure()
+                .AddInfrastructure(builder.Configuration)
                 .AddApplication();
 
             builder.Services.AddFluentValidationAutoValidation(configuration =>
