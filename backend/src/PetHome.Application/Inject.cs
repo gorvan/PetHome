@@ -1,5 +1,9 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using PetHome.Application.Pets.AddFiles;
+using PetHome.Application.Pets.Delete;
+using PetHome.Application.Pets.GetFile;
+using PetHome.Application.Pets.GetFiles;
 using PetHome.Application.Volunteers.Create;
 using PetHome.Application.Volunteers.Delete;
 using PetHome.Application.Volunteers.Restore;
@@ -19,6 +23,10 @@ namespace PetHome.Application
             services.AddScoped<RestoreVolunteerHandler>();
             services.AddScoped<UpdateRequisitesHandler>();
             services.AddScoped<UpdateSocialNetworksHandler>();
+            services.AddScoped<AddFilesHandler>();
+            services.AddScoped<GetFileHandler>();
+            services.AddScoped<GetFilesHandler>();
+            services.AddScoped<DeleteFileHandler>();
 
             services.AddValidatorsFromAssembly(typeof(Inject).Assembly);
 

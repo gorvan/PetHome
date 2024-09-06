@@ -2,7 +2,7 @@
 
 namespace PetHome.Application.Volunteers.Delete
 {
-    internal class DeleteVolunteerRequestValidator
+    public class DeleteVolunteerRequestValidator
         : AbstractValidator<DeleteVolunteerRequest>
     {
         public DeleteVolunteerRequestValidator()
