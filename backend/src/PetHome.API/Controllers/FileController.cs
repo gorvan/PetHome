@@ -33,6 +33,8 @@ namespace PetHome.API.Controllers
 
             var command = new AddFileCommand(stream, filePath, bucketName);
 
+            _logger.LogInformation("Add file request");
+
             var result = await handler.Execute(command, token);
 
             return result.ToResponse();
@@ -50,6 +52,8 @@ namespace PetHome.API.Controllers
 
             var command = new GetFileCommand(filePath, bucketName);
 
+            _logger.LogInformation("Get file request");
+
             var result = await handler.Execute(command, token);
 
             return result.ToResponse();
@@ -64,6 +68,8 @@ namespace PetHome.API.Controllers
             )
         {
             var command = new GetFilesCommand(filePrefix, bucketName);
+
+            _logger.LogInformation("Add files request");
 
             var result = await handler.Execute(command, token);
 
@@ -81,6 +87,8 @@ namespace PetHome.API.Controllers
             var filePath = id.ToString();
 
             var command = new DeleteFileCommand(filePath, bucketName);
+
+            _logger.LogInformation("Delete file request");
 
             var result = await handler.Execute(command, token);
 

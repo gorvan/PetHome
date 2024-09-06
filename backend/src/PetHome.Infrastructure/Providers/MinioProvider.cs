@@ -13,8 +13,10 @@ namespace PetHome.Infrastructure.Providers
 {
     public class MinioProvider : IFileProvider
     {
+        private int DEFAULT_EXPIRY = 604800;
         private readonly IMinioClient _minioClient;
         private readonly ILogger<MinioProvider> _logger;
+
 
         public MinioProvider(IMinioClient minioClient,
             ILogger<MinioProvider> logger)
@@ -28,21 +30,21 @@ namespace PetHome.Infrastructure.Providers
             try
             {
                 var checkBucketsArgs = new BucketExistsArgs()
-               .WithBucket("photos");
+               .WithBucket(fileData.BucketName);
 
                 var checkResult =
                     await _minioClient.BucketExistsAsync(checkBucketsArgs, token);
 
                 if (checkResult == false)
                 {
-                    var newBacket = new MakeBucketArgs().WithBucket("photos");
+                    var newBacket = new MakeBucketArgs().WithBucket(fileData.BucketName);
                     await _minioClient.MakeBucketAsync(newBacket, token);
                 }
 
                 var path = Guid.NewGuid();
 
                 var args = new PutObjectArgs()
-                    .WithBucket("photos")
+                    .WithBucket(fileData.BucketName)
                     .WithStreamData(fileData.Stream)
                     .WithObjectSize(fileData.Stream.Length)
                     .WithObject(path.ToString());
@@ -64,7 +66,7 @@ namespace PetHome.Infrastructure.Providers
                 var bucketArgs = new PresignedGetObjectArgs()
                     .WithBucket(fileData.BucketName)
                     .WithObject(fileData.FilePath)
-                    .WithExpiry(604800);
+                    .WithExpiry(DEFAULT_EXPIRY);
 
                 var getResult = await _minioClient.PresignedGetObjectAsync(bucketArgs)
                     .ConfigureAwait(false);
