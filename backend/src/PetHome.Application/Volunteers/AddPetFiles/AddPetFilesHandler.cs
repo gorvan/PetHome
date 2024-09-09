@@ -14,6 +14,7 @@ namespace PetHome.Application.Volunteers.AddPetFiles
         private readonly ILogger<AddPetFilesHandler> _logger;
 
         public const string BUCKET_NAME = "photos";
+        public const int MAX_SEMAPHORE_TASKS = 5;
 
         public AddPetFilesHandler(
             IVolunteerRepository volunteerRepository,
@@ -57,7 +58,7 @@ namespace PetHome.Application.Volunteers.AddPetFiles
             CancellationToken token)
         {
             List<PetPhoto> petPhotos = [];
-            var semaphore = new SemaphoreSlim(2);
+            var semaphore = new SemaphoreSlim(MAX_SEMAPHORE_TASKS);
             foreach (var file in command.FilesList)
             {
                 var extension = Path.GetExtension(file.FileName);
