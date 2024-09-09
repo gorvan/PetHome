@@ -1,6 +1,9 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PetHome.API.Extensions;
+using PetHome.API.Processors;
+using PetHome.Application.Volunteers.AddPet;
+using PetHome.Application.Volunteers.AddPetFiles;
 using PetHome.Application.Volunteers.Create;
 using PetHome.Application.Volunteers.Delete;
 using PetHome.Application.Volunteers.Restore;
@@ -123,6 +126,55 @@ namespace PetHome.API.Controllers
 
             var result = await handler.Execute(request, token);
             return result.ToResponse();
+        }
+
+        [HttpPost("{id:guid}/pet")]
+        public async Task<ActionResult<Guid>> CreatePet(
+           [FromRoute] Guid id,
+           [FromServices] AddPetHandler handler,
+           [FromBody] AddPetRequest request,
+           CancellationToken token)
+        {
+            var command = new AddPetCommand(
+                id,
+                request.Nickname,
+                request.Description,
+                request.Color,
+                request.Health,
+                request.Address,
+                request.Phone,
+                request.Requisites,
+                request.BirthDay,
+                request.IsNeutered,
+                request.IsVaccinated,
+                request.HelpStatus,
+                request.Weight,
+                request.Height);
+
+            _logger.LogInformation("Create pet request");
+
+            var result = await handler.Execute(command, token);
+            return result.ToResponse<Guid>();
+        }
+
+        [HttpPut("{volunteerid:guid}/pet/{petid:guid}/files")]
+        public async Task<ActionResult<int>> AddFile(
+           [FromRoute] Guid volunteerid,
+           [FromRoute] Guid petid,
+           IFormFileCollection files,
+           [FromServices] AddPetFilesHandler handler,
+           CancellationToken token)
+        {
+            await using var fileProcessor = new FormFileProcessor();
+            var filesDto = fileProcessor.Process(files);
+
+            var command = new AddPetFilesCommand(volunteerid, petid, filesDto);
+
+            _logger.LogInformation("Add pet photos request");
+
+            var result = await handler.Execute(command, token);
+
+            return result.ToResponse<int>();
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using Microsoft.Extensions.Logging;
-using PetHome.Application.Pets.GetFile;
 using PetHome.Application.Providers;
 using PetHome.Domain.Shared;
 
-namespace PetHome.Application.Pets.GetFiles
+namespace PetHome.Application.Pets.Files.GetFiles
 {
     public class GetFilesHandler
     {
@@ -21,7 +20,7 @@ namespace PetHome.Application.Pets.GetFiles
            GetFilesCommand command,
            CancellationToken token)
         {
-            var result = await _fileProvider.Get(command, token);
+            var result = await _fileProvider.GetFiles(command, token);
             if (result.IsFailure)
             {
                 return result.Error;

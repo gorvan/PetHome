@@ -23,9 +23,16 @@ namespace PetHome.Infrastructure.Repositories
 
         public async Task<Result<Guid>> Update(Volunteer volunteer, CancellationToken token)
         {
-            _dbContext.Volunteers.Attach(volunteer);
-            await _dbContext.SaveChangesAsync();
-            return Result<Guid>.Success(volunteer.Id);
+            try
+            {
+                _dbContext.Volunteers.Attach(volunteer);
+                await _dbContext.SaveChangesAsync();
+                return Result<Guid>.Success(volunteer.Id);
+            }
+            catch (Exception ex)
+            {
+            }
+            return null;
         }
 
         public async Task<Result<Guid>> Delete(Volunteer volunteer, CancellationToken token)

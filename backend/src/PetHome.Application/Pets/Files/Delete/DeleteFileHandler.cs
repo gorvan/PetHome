@@ -2,25 +2,25 @@
 using PetHome.Application.Providers;
 using PetHome.Domain.Shared;
 
-namespace PetHome.Application.Pets.GetFile
+namespace PetHome.Application.Pets.Files.Delete
 {
-    public class GetFileHandler
+    public class DeleteFileHandler
     {
         private readonly IFileProvider _fileProvider;
-        private readonly ILogger<GetFileHandler> _logger;
+        private readonly ILogger<DeleteFileHandler> _logger;
 
-        public GetFileHandler(IFileProvider fileProvider,
-            ILogger<GetFileHandler> logger)
+        public DeleteFileHandler(IFileProvider fileProvider,
+            ILogger<DeleteFileHandler> logger)
         {
             _fileProvider = fileProvider;
             _logger = logger;
         }
 
-        public async Task<Result<string>> Execute(
-           GetFileCommand command,
+        public async Task<Result> Execute(
+           DeleteFileCommand command,
            CancellationToken token)
         {
-            var result = await _fileProvider.Get(command);
+            var result = await _fileProvider.DeleteFile(command, token);
             if (result.IsFailure)
             {
                 return result.Error;

@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace PetHome.Application.Pets.Delete
+namespace PetHome.Application.Pets.Files.Delete
 {
     public class DeleteFileCommandValidator : AbstractValidator<DeleteFileCommand>
     {
