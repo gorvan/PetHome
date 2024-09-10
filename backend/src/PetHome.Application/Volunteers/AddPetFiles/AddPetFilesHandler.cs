@@ -50,6 +50,8 @@ namespace PetHome.Application.Volunteers.AddPetFiles
 
             await _volunteerRepository.Update(volunteerResult.Value, token);
 
+            _logger.LogInformation("Add pet photos, Id: {petId}", petResult.Id);
+
             return result;
         }
 

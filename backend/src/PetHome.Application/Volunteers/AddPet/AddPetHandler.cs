@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.PetManadgement.Entities;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
@@ -25,7 +26,7 @@ namespace PetHome.Application.Volunteers.AddPet
             CancellationToken token)
         {
             var volunteerResult = await _volunteerRepository
-                .GetById(VolunteerId.Create(command.volunteerId), token);
+                .GetById(VolunteerId.Create(command.VolunteerId), token);
 
             if (volunteerResult.IsFailure)
             {
@@ -37,6 +38,8 @@ namespace PetHome.Application.Volunteers.AddPet
             volunteerResult.Value.AddPet(pet);
 
             await _volunteerRepository.Update(volunteerResult.Value, token);
+
+            _logger.LogInformation("Add new pet, Id: {petId}", pet.Id);
 
             return pet.Id.Id;
         }

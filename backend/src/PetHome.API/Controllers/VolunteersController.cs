@@ -104,9 +104,17 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult<Guid>> Delete(
             [FromServices] DeleteVolunteerHandler handler,
             [FromRoute] Guid id,
+            [FromServices] IValidator<DeleteVolunteerRequest> validator,
             CancellationToken token)
         {
             var request = new DeleteVolunteerRequest(id);
+
+            var validateResult =
+                await validator.ValidateAsync(request, token);
+            if (validateResult.IsValid == false)
+            {
+                return validateResult.ToErrorValidationResponse();
+            }
 
             _logger.LogInformation("Delete volunteer request");
 
@@ -118,9 +126,17 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult<Guid>> Restore(
             [FromServices] RestoreVolunteerHandler handler,
             [FromRoute] Guid id,
+            [FromServices] IValidator<RestoreVolunteerRequest> validator,
             CancellationToken token)
         {
             var request = new RestoreVolunteerRequest(id);
+
+            var validateResult =
+               await validator.ValidateAsync(request, token);
+            if (validateResult.IsValid == false)
+            {
+                return validateResult.ToErrorValidationResponse();
+            }
 
             _logger.LogInformation("Restore volunteer request");
 
@@ -133,6 +149,7 @@ namespace PetHome.API.Controllers
            [FromRoute] Guid id,
            [FromServices] AddPetHandler handler,
            [FromBody] AddPetRequest request,
+           [FromServices] IValidator<AddPetCommand> validator,
            CancellationToken token)
         {
             var command = new AddPetCommand(
@@ -151,6 +168,13 @@ namespace PetHome.API.Controllers
                 request.Weight,
                 request.Height);
 
+            var validateResult =
+              await validator.ValidateAsync(command, token);
+            if (validateResult.IsValid == false)
+            {
+                return validateResult.ToErrorValidationResponse();
+            }
+
             _logger.LogInformation("Create pet request");
 
             var result = await handler.Execute(command, token);
@@ -163,12 +187,20 @@ namespace PetHome.API.Controllers
            [FromRoute] Guid petid,
            IFormFileCollection files,
            [FromServices] AddPetFilesHandler handler,
+           [FromServices] IValidator<AddPetFilesCommand> validator,
            CancellationToken token)
         {
             await using var fileProcessor = new FormFileProcessor();
             var filesDto = fileProcessor.Process(files);
 
             var command = new AddPetFilesCommand(volunteerid, petid, filesDto);
+
+            var validateResult =
+              await validator.ValidateAsync(command, token);
+            if (validateResult.IsValid == false)
+            {
+                return validateResult.ToErrorValidationResponse();
+            }
 
             _logger.LogInformation("Add pet photos request");
 

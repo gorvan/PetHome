@@ -12,7 +12,7 @@ namespace PetHome.API.Processors
             {
                 var stream = file.OpenReadStream();
 
-                var fileDto = FileDto.Create(
+                var fileDto = new FileDto(
                         stream,
                         file.FileName,
                         file.ContentType);
