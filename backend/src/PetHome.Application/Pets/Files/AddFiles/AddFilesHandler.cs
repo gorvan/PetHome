@@ -1,10 +1,11 @@
 ﻿using Microsoft.Extensions.Logging;
 using PetHome.Application.FileProvider;
 using PetHome.Application.Providers;
+using PetHome.Application.Volunteers.AddPetFiles;
 using PetHome.Domain.Shared;
 
 
-namespace PetHome.Application.Pets.AddFiles
+namespace PetHome.Application.Pets.Files.AddFiles
 {
     public class AddFilesHandler
     {
@@ -24,11 +25,11 @@ namespace PetHome.Application.Pets.AddFiles
         {
             var fileData =
                 new FileData(
-                    command.FileStraem,
-                    command.BucketName,
+                    command.FileStream,
+                    AddPetFilesHandler.BUCKET_NAME,
                     command.FilePath);
 
-            var result = await _fileProvider.Upload(fileData, token);
+            var result = await _fileProvider.UploadFile(fileData, token);
             if (result.IsFailure)
             {
                 return result.Error;

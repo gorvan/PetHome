@@ -113,5 +113,12 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
                 _isDeleted = false;
             }            
         }
+
+        public Result<Guid> AddPet(Pet pet)
+        {
+            _pets.Add(pet);
+
+            return pet.Id.Id;
+        }
     }    
 }

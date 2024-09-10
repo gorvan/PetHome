@@ -2,9 +2,9 @@
 using Minio;
 using Minio.DataModel.Args;
 using PetHome.Application.FileProvider;
-using PetHome.Application.Pets.Delete;
-using PetHome.Application.Pets.GetFile;
-using PetHome.Application.Pets.GetFiles;
+using PetHome.Application.Pets.Files.Delete;
+using PetHome.Application.Pets.Files.GetFile;
+using PetHome.Application.Pets.Files.GetFiles;
 using PetHome.Application.Providers;
 using PetHome.Domain.Shared;
 using System.Reactive.Linq;
@@ -25,7 +25,7 @@ namespace PetHome.Infrastructure.Providers
             _logger = logger;
         }
 
-        public async Task<Result<string>> Upload(FileData fileData, CancellationToken token)
+        public async Task<Result<string>> UploadFile(FileData fileData, CancellationToken token)
         {
             try
             {
@@ -41,13 +41,13 @@ namespace PetHome.Infrastructure.Providers
                     await _minioClient.MakeBucketAsync(newBacket, token);
                 }
 
-                var path = Guid.NewGuid();
+                ////var path = Guid.NewGuid();
 
                 var args = new PutObjectArgs()
                     .WithBucket(fileData.BucketName)
                     .WithStreamData(fileData.Stream)
                     .WithObjectSize(fileData.Stream.Length)
-                    .WithObject(path.ToString());
+                    .WithObject(fileData.ObjectName);
 
                 var result = await _minioClient.PutObjectAsync(args, token);
                 return result.ObjectName;
@@ -59,7 +59,7 @@ namespace PetHome.Infrastructure.Providers
             }
         }
 
-        public async Task<Result<string>> Get(GetFileCommand fileData)
+        public async Task<Result<string>> GetFile(GetFileCommand fileData)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace PetHome.Infrastructure.Providers
             }
         }
 
-        public async Task<Result<List<string>>> Get(
+        public async Task<Result<List<string>>> GetFiles(
             GetFilesCommand fileData,
             CancellationToken token)
         {
@@ -111,7 +111,7 @@ namespace PetHome.Infrastructure.Providers
             }
         }
 
-        public async Task<Result<bool>> Delete(
+        public async Task<Result<bool>> DeleteFile(
             DeleteFileCommand fileData,
             CancellationToken token)
         {
@@ -130,6 +130,6 @@ namespace PetHome.Infrastructure.Providers
                 _logger.LogError(ex, "Fail to delete file in minio");
                 return Error.Failure("file.delete", "Fail to delete file in minio");
             }
-        }
+        }        
     }
 }

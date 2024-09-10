@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace PetHome.Application.Pets.GetFile
+namespace PetHome.Application.Pets.Files.GetFile
 {
     public class GetFileCommandValidator : AbstractValidator<GetFileCommand>
     {

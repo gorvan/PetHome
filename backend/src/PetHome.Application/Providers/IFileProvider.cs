@@ -1,26 +1,26 @@
 ﻿using PetHome.Application.FileProvider;
-using PetHome.Application.Pets.Delete;
-using PetHome.Application.Pets.GetFile;
-using PetHome.Application.Pets.GetFiles;
+using PetHome.Application.Pets.Files.Delete;
+using PetHome.Application.Pets.Files.GetFile;
+using PetHome.Application.Pets.Files.GetFiles;
 using PetHome.Domain.Shared;
 
 namespace PetHome.Application.Providers
 {
     public interface IFileProvider
     {
-        Task<Result<string>> Upload(
-            FileData fileData, 
-            CancellationToken token);
+        Task<Result<string>> UploadFile(
+            FileData fileData,
+            CancellationToken token);       
 
-        Task<Result<string>> Get(
+        Task<Result<string>> GetFile(
             GetFileCommand fileData);
 
-        Task<Result<List<string>>> Get(
+        Task<Result<List<string>>> GetFiles(
             GetFilesCommand fileData,
             CancellationToken token);
 
-        Task<Result<bool>> Delete(
-            DeleteFileCommand fileData, 
+        Task<Result<bool>> DeleteFile(
+            DeleteFileCommand fileData,
             CancellationToken token);
     }
 }

@@ -103,9 +103,9 @@ namespace PetHome.Infrastructure.Migrations
                 columns: table => new
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
-                    path = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     is_main = table.Column<bool>(type: "boolean", nullable: false),
-                    pet_id = table.Column<Guid>(type: "uuid", nullable: true)
+                    pet_id = table.Column<Guid>(type: "uuid", nullable: true),
+                    path = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {

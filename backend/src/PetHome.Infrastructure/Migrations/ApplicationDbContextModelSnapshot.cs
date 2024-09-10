@@ -265,15 +265,19 @@ namespace PetHome.Infrastructure.Migrations
                         .HasColumnType("boolean")
                         .HasColumnName("is_main");
 
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasMaxLength(2000)
-                        .HasColumnType("character varying(2000)")
-                        .HasColumnName("path");
-
                     b.Property<Guid?>("pet_id")
                         .HasColumnType("uuid")
                         .HasColumnName("pet_id");
+
+                    b.ComplexProperty<Dictionary<string, object>>("Path", "PetHome.Domain.PetManadgement.Entities.PetPhoto.Path#FilePath", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<string>("Path")
+                                .IsRequired()
+                                .HasColumnType("text")
+                                .HasColumnName("path");
+                        });
 
                     b.HasKey("Id")
                         .HasName("pk_pet_photos");

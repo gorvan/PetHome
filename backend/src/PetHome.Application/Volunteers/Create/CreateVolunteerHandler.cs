@@ -31,6 +31,17 @@ namespace PetHome.Application.Volunteers.Create
             if (existVolunteerResult.IsSuccess)
                 return Errors.General.AlreadyExist();
 
+            var volunteer = CreateVolunteer(request, phone);
+
+            await _volunteerRepository.Add(volunteer, token);
+
+            _logger.LogInformation("Add new volunteer, Id: {volunteerId}", volunteer.Id);
+
+            return (Guid)volunteer.Id;
+        }
+
+        private Volunteer CreateVolunteer(CreateVolunteerRequest request, Phone phone)
+        {
             var volunteerId = VolunteerId.NewVolunteerId();
 
             var fullName = FullName.Create(
@@ -57,7 +68,7 @@ namespace PetHome.Application.Volunteers.Create
 
             var requisiteCollection = new VolunteersRequisites(requisiteColl);
 
-            var volunteer = new Volunteer(
+            return new Volunteer(
                 volunteerId,
                 fullName,
                 email,
@@ -65,12 +76,6 @@ namespace PetHome.Application.Volunteers.Create
                 phone,
                 socialNetworkCollection,
                 requisiteCollection);
-
-            await _volunteerRepository.Add(volunteer, token);
-
-            _logger.LogInformation("Add new volunteer, Id: {volunteerId}", volunteerId);
-
-            return (Guid)volunteer.Id;
         }
     }
 }

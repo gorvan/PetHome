@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Minio;
 using PetHome.API.Extensions;
-using PetHome.Application.Pets.AddFiles;
-using PetHome.Application.Pets.Delete;
-using PetHome.Application.Pets.GetFile;
-using PetHome.Application.Pets.GetFiles;
+using PetHome.Application.Pets.Files.AddFiles;
+using PetHome.Application.Pets.Files.Delete;
+using PetHome.Application.Pets.Files.GetFile;
+using PetHome.Application.Pets.Files.GetFiles;
 
 namespace PetHome.API.Controllers
 {
@@ -31,7 +31,7 @@ namespace PetHome.API.Controllers
 
             var filePath = Guid.NewGuid().ToString();
 
-            var command = new AddFileCommand(stream, filePath, bucketName);
+            var command = new AddFileCommand(stream, filePath);
 
             _logger.LogInformation("Add file request");
 
@@ -61,7 +61,7 @@ namespace PetHome.API.Controllers
 
         [HttpGet]
         public async Task<ActionResult<List<string>>> GetFiles(
-            [FromServices] GetFilesHandler handler,            
+            [FromServices] GetFilesHandler handler,
             string bucketName,
             string filePrefix,
             CancellationToken token

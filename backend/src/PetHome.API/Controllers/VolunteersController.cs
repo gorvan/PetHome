@@ -1,6 +1,9 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using PetHome.API.Extensions;
+using PetHome.API.Processors;
+using PetHome.Application.Volunteers.AddPet;
+using PetHome.Application.Volunteers.AddPetFiles;
 using PetHome.Application.Volunteers.Create;
 using PetHome.Application.Volunteers.Delete;
 using PetHome.Application.Volunteers.Restore;
@@ -101,9 +104,17 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult<Guid>> Delete(
             [FromServices] DeleteVolunteerHandler handler,
             [FromRoute] Guid id,
+            [FromServices] IValidator<DeleteVolunteerRequest> validator,
             CancellationToken token)
         {
             var request = new DeleteVolunteerRequest(id);
+
+            var validateResult =
+                await validator.ValidateAsync(request, token);
+            if (validateResult.IsValid == false)
+            {
+                return validateResult.ToErrorValidationResponse();
+            }
 
             _logger.LogInformation("Delete volunteer request");
 
@@ -115,14 +126,87 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult<Guid>> Restore(
             [FromServices] RestoreVolunteerHandler handler,
             [FromRoute] Guid id,
+            [FromServices] IValidator<RestoreVolunteerRequest> validator,
             CancellationToken token)
         {
             var request = new RestoreVolunteerRequest(id);
+
+            var validateResult =
+               await validator.ValidateAsync(request, token);
+            if (validateResult.IsValid == false)
+            {
+                return validateResult.ToErrorValidationResponse();
+            }
 
             _logger.LogInformation("Restore volunteer request");
 
             var result = await handler.Execute(request, token);
             return result.ToResponse();
+        }
+
+        [HttpPost("{id:guid}/pet")]
+        public async Task<ActionResult<Guid>> CreatePet(
+           [FromRoute] Guid id,
+           [FromServices] AddPetHandler handler,
+           [FromBody] AddPetRequest request,
+           [FromServices] IValidator<AddPetCommand> validator,
+           CancellationToken token)
+        {
+            var command = new AddPetCommand(
+                id,
+                request.Nickname,
+                request.Description,
+                request.Color,
+                request.Health,
+                request.Address,
+                request.Phone,
+                request.Requisites,
+                request.BirthDay,
+                request.IsNeutered,
+                request.IsVaccinated,
+                request.HelpStatus,
+                request.Weight,
+                request.Height);
+
+            var validateResult =
+              await validator.ValidateAsync(command, token);
+            if (validateResult.IsValid == false)
+            {
+                return validateResult.ToErrorValidationResponse();
+            }
+
+            _logger.LogInformation("Create pet request");
+
+            var result = await handler.Execute(command, token);
+            return result.ToResponse<Guid>();
+        }
+
+        [HttpPut("{volunteerid:guid}/pet/{petid:guid}/files")]
+        public async Task<ActionResult<int>> AddFile(
+           [FromRoute] Guid volunteerid,
+           [FromRoute] Guid petid,
+           IFormFileCollection files,
+           [FromServices] AddPetFilesHandler handler,
+           [FromServices] IValidator<AddPetFilesCommand> validator,
+           CancellationToken token)
+        {
+            await using var fileProcessor = new FormFileProcessor();
+            var filesDto = fileProcessor.Process(files);
+
+            var command = new AddPetFilesCommand(volunteerid, petid, filesDto);
+
+            var validateResult =
+              await validator.ValidateAsync(command, token);
+            if (validateResult.IsValid == false)
+            {
+                return validateResult.ToErrorValidationResponse();
+            }
+
+            _logger.LogInformation("Add pet photos request");
+
+            var result = await handler.Execute(command, token);
+
+            return result.ToResponse<int>();
         }
     }
 }

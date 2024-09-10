@@ -47,7 +47,7 @@ namespace PetHome.Domain.PetManadgement.Entities
             Height = height;
         }
 
-        private readonly List<PetPhoto> _photo = [];
+        private List<PetPhoto> _photo = [];
         private bool _isDeleted = false;
 
         public PetNickname Nickname { get; } = default!;
@@ -66,6 +66,14 @@ namespace PetHome.Domain.PetManadgement.Entities
         public double Weight { get; } = 0;
         public double Height { get; } = 0;
         public IReadOnlyList<PetPhoto> Photos => _photo;
+
+        public Result<int> SetPhotos(IEnumerable<PetPhoto> petPhotos)
+        {
+            _photo = petPhotos.ToList();
+            return _photo.Count;
+        }
+
+
 
         public void Delete()
         {
