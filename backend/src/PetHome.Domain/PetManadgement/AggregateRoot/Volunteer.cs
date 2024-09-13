@@ -41,7 +41,7 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
         public SocialNetworks SocialNetworks { get; private set; } = default!;
         public VolunteersRequisites Requisites { get; private set; } = default!;
         public IReadOnlyList<Pet> Pets => _pets;
-        
+
         public int Experience => GetExperience();
 
         public int FoundHomePets =>
@@ -61,24 +61,24 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
 
         private int GetExperience()
         {
-            var firstPet = 
+            var firstPet =
                 _pets
                 .OrderBy(p => p.CreateDate.Date)
                 .FirstOrDefault();
-            
+
             if (firstPet == null)
             {
                 return 0;
             }
 
             return DateTime.Now.Year - firstPet.CreateDate.Date.Year;
-        }  
-        
+        }
+
         public void UpdateMainInfo(
-            FullName fullName, 
-            Email email, 
-            Phone phone, 
-            VolunteerDescription description )
+            FullName fullName,
+            Email email,
+            Phone phone,
+            VolunteerDescription description)
         {
             Name = fullName;
             Email = email;
@@ -108,17 +108,50 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
 
         public void Restore()
         {
-            if(_isDeleted)
+            if (_isDeleted)
             {
                 _isDeleted = false;
-            }            
+            }
         }
 
         public Result<Guid> AddPet(Pet pet)
         {
             _pets.Add(pet);
 
+            var serialNumberResult = SerialNumber.Create(_pets.Count);
+            if (serialNumberResult.IsFailure)
+                return serialNumberResult.Error;
+
+            pet.SetSerialNumber(serialNumberResult.Value);
+
             return pet.Id.Id;
         }
-    }    
+
+        public void MovePet(Pet pet, SerialNumber serialNumber)
+        {
+            if (pet.SerialNumber == serialNumber || _pets.Count < 2)
+            {
+                return;
+            }
+
+            var sortedPets = _pets.OrderBy(p => p.SerialNumber.Value).ToList();
+
+            if (pet.SerialNumber.Value > serialNumber.Value) 
+            {
+                for (int i = pet.SerialNumber.Value - 2; i >= serialNumber.Value - 1; i--)
+                {
+                    sortedPets[i].MoveUp();
+                }
+            }
+            else
+            {
+                for (int i = pet.SerialNumber.Value - 1; i < serialNumber.Value; i++)
+                {
+                    sortedPets[i].MoveDown();
+                }
+            }
+           
+            pet.SetSerialNumber(serialNumber);
+        }
+    }
 }

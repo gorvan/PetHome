@@ -2,7 +2,7 @@
 
 namespace PetHome.Application.Volunteers.UpdateMainInfo
 {
-    public record UpdateMainInfoDto(
+    public record UpdateMainInfoRequest(
     FullNameDto FullName,
     string Email,
     string Phone,

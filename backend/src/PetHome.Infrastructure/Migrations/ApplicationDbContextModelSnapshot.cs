@@ -233,6 +233,15 @@ namespace PetHome.Infrastructure.Migrations
                                 .HasColumnName("phone");
                         });
 
+                    b.ComplexProperty<Dictionary<string, object>>("SerialNumber", "PetHome.Domain.PetManadgement.Entities.Pet.SerialNumber#SerialNumber", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("serial_number");
+                        });
+
                     b.ComplexProperty<Dictionary<string, object>>("SpeciesBreed", "PetHome.Domain.PetManadgement.Entities.Pet.SpeciesBreed#SpeciesBreedValue", b1 =>
                         {
                             b1.IsRequired();

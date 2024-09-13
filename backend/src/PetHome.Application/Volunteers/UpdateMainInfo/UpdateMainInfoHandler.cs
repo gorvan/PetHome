@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
@@ -7,21 +8,22 @@ namespace PetHome.Application.Volunteers.UpdateMainInfo
 {
     public class UpdateMainInfoHandler
     {
-        private readonly IVolunteerRepository _volunteerRepository;
+        private readonly IVolunteerRepository _volunteerRepository;       
         private readonly ILogger<UpdateMainInfoHandler> _logger;
 
-        public UpdateMainInfoHandler(IVolunteerRepository volunteerRepository,
+        public UpdateMainInfoHandler(
+            IVolunteerRepository volunteerRepository,            
             ILogger<UpdateMainInfoHandler> logger)
         {
-            _volunteerRepository = volunteerRepository;
+            _volunteerRepository = volunteerRepository;            
             _logger = logger;
         }
 
         public async Task<Result<Guid>> Execute(
-            UpdateMainInfoRequest request,
+            UpdateMainInfoCommand command,
             CancellationToken token)
-        {
-            var volunteerId = VolunteerId.Create(request.VolunteerId);
+        { 
+            var volunteerId = VolunteerId.Create(command.VolunteerId);
             var volunteerResult =
                 await _volunteerRepository.GetById(volunteerId, token);
 
@@ -29,16 +31,16 @@ namespace PetHome.Application.Volunteers.UpdateMainInfo
                 return volunteerResult.Error;
 
             var fullName = FullName.Create(
-                request.MainInfoDto.FullName.FirstName,
-                request.MainInfoDto.FullName.SecondName,
-                request.MainInfoDto.FullName.Surname).Value;
+                command.FullName.FirstName,
+                command.FullName.SecondName,
+                command.FullName.Surname).Value;
 
-            var email = Email.Create(request.MainInfoDto.Email).Value;
+            var email = Email.Create(command.Email).Value;
 
-            var phone = Phone.Create(request.MainInfoDto.Phone).Value;
+            var phone = Phone.Create(command.Phone).Value;
 
             var description = VolunteerDescription
-                .Create(request.MainInfoDto.Description).Value;
+                .Create(command.Description).Value;
 
             volunteerResult.Value.UpdateMainInfo(
                 fullName,

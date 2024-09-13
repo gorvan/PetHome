@@ -2,7 +2,7 @@
 
 namespace PetHome.Application.Volunteers.UpdateSocialNetworks
 {
-    public record UpdateSocialNetworksRequest(
+    public record UpdateSocialNetworksCommand(
         Guid VolunteerId, 
         List<SocialNetworkDto> SocialNetworks);
 }

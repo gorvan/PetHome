@@ -3,31 +3,41 @@
     public record Error
     {
         public const string SEPARATOR = "||";
+        
         public static readonly Error None
-            = new Error(string.Empty, string.Empty, ErrorType.None);
+            = new(string.Empty, string.Empty, ErrorType.None);
 
         public string Code { get; }
         public string Message { get; }
         public ErrorType Type { get; }
+        public string? InvalidField { get; } = null;
 
-        private Error(string code, string message, ErrorType type)
+        private Error(
+            string code, 
+            string message, 
+            ErrorType type,
+            string? invalidField = null)
         {
             Code = code;
             Message = message;
             Type = type;
+            InvalidField = invalidField;
         }
 
-        public static Error Validation(string code, string message) =>
-            new Error(code, message, ErrorType.Validation);
+        public static Error Validation(
+            string code, 
+            string message, 
+            string? InvalidField = null) =>
+            new(code, message, ErrorType.Validation, InvalidField);
 
         public static Error NotFound(string code, string message) =>
-            new Error(code, message, ErrorType.NotFound);
+            new(code, message, ErrorType.NotFound);
 
         public static Error Failure(string code, string message) =>
-            new Error(code, message, ErrorType.Failure);
+            new(code, message, ErrorType.Failure);
 
         public static Error Conflict(string code, string message) =>
-            new Error(code, message, ErrorType.Conflict);
+            new(code, message, ErrorType.Conflict);
 
         public string Serialize()
         {
@@ -48,7 +58,7 @@
                 throw new ArgumentException("Invalid serialized format");
             }
 
-            return new Error(parts[0], parts[1], type);
+            return new(parts[0], parts[1], type);
         }
     }
 

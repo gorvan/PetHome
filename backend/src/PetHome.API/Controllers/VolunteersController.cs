@@ -25,12 +25,13 @@ namespace PetHome.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
             [FromServices] CreateVolunteerHandler handler,
-            [FromBody] CreateVolunteerRequest request,
+            [FromBody] CreateVolunteerCommand request,
             CancellationToken token)
         {
             _logger.LogInformation("Create volunteer request");
 
             var result = await handler.Execute(request, token);
+
             return result.ToResponse<Guid>();
         }
 
@@ -38,21 +39,21 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult<Guid>> UpdateMainInfo(
             [FromServices] UpdateMainInfoHandler handler,
             [FromRoute] Guid id,
-            [FromBody] UpdateMainInfoDto updateMainInfoDto,
-            [FromServices] IValidator<UpdateMainInfoRequest> validator,
+            [FromBody] UpdateMainInfoRequest request,
+            [FromServices] IValidator<UpdateMainInfoCommand> validator,
             CancellationToken token)
         {
-            var request = new UpdateMainInfoRequest(id, updateMainInfoDto);
-
-            var validateResult =
-                await validator.ValidateAsync(request, token);
-            if (validateResult.IsValid == false)
-            {
-                return validateResult.ToErrorValidationResponse();
-            }
+            var command = new UpdateMainInfoCommand(
+                id, 
+                request.FullName, 
+                request.Email, 
+                request.Phone, 
+                request.Description);
 
             _logger.LogInformation("Update volunteer request");
-            var result = await handler.Execute(request, token);
+
+            var result = await handler.Execute(command, token);            
+
             return result.ToResponse();
         }
 
@@ -61,10 +62,10 @@ namespace PetHome.API.Controllers
             [FromServices] UpdateRequisitesHandler handler,
             [FromRoute] Guid id,
             [FromBody] List<RequisiteDto> requisiteDtos,
-            [FromServices] IValidator<UpdateRequisitesRequest> validator,
+            [FromServices] IValidator<UpdateRequisitesCommand> validator,
             CancellationToken token)
         {
-            var request = new UpdateRequisitesRequest(id, requisiteDtos);
+            var request = new UpdateRequisitesCommand(id, requisiteDtos);
 
             var validateResult =
                 await validator.ValidateAsync(request, token);
@@ -83,10 +84,10 @@ namespace PetHome.API.Controllers
             [FromServices] UpdateSocialNetworksHandler handler,
             [FromRoute] Guid id,
             [FromBody] List<SocialNetworkDto> socialNetworkDtos,
-            [FromServices] IValidator<UpdateSocialNetworksRequest> validator,
+            [FromServices] IValidator<UpdateSocialNetworksCommand> validator,
             CancellationToken token)
         {
-            var request = new UpdateSocialNetworksRequest(id, socialNetworkDtos);
+            var request = new UpdateSocialNetworksCommand(id, socialNetworkDtos);
 
             var validateResult =
                 await validator.ValidateAsync(request, token);
@@ -104,10 +105,10 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult<Guid>> Delete(
             [FromServices] DeleteVolunteerHandler handler,
             [FromRoute] Guid id,
-            [FromServices] IValidator<DeleteVolunteerRequest> validator,
+            [FromServices] IValidator<DeleteVolunteerCommand> validator,
             CancellationToken token)
         {
-            var request = new DeleteVolunteerRequest(id);
+            var request = new DeleteVolunteerCommand(id);
 
             var validateResult =
                 await validator.ValidateAsync(request, token);
@@ -126,10 +127,10 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult<Guid>> Restore(
             [FromServices] RestoreVolunteerHandler handler,
             [FromRoute] Guid id,
-            [FromServices] IValidator<RestoreVolunteerRequest> validator,
+            [FromServices] IValidator<RestoreVolunteerCommand> validator,
             CancellationToken token)
         {
-            var request = new RestoreVolunteerRequest(id);
+            var request = new RestoreVolunteerCommand(id);
 
             var validateResult =
                await validator.ValidateAsync(request, token);

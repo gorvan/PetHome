@@ -13,7 +13,7 @@ using PetHome.Infrastructure;
 namespace PetHome.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240908171947_Initial")]
+    [Migration("20240912195709_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -234,6 +234,15 @@ namespace PetHome.Infrastructure.Migrations
                                 .IsRequired()
                                 .HasColumnType("text")
                                 .HasColumnName("phone");
+                        });
+
+                    b.ComplexProperty<Dictionary<string, object>>("SerialNumber", "PetHome.Domain.PetManadgement.Entities.Pet.SerialNumber#SerialNumber", b1 =>
+                        {
+                            b1.IsRequired();
+
+                            b1.Property<int>("Value")
+                                .HasColumnType("integer")
+                                .HasColumnName("serial_number");
                         });
 
                     b.ComplexProperty<Dictionary<string, object>>("SpeciesBreed", "PetHome.Domain.PetManadgement.Entities.Pet.SpeciesBreed#SpeciesBreedValue", b1 =>

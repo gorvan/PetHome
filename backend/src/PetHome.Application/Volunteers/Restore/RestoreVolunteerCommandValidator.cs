@@ -2,10 +2,10 @@
 
 namespace PetHome.Application.Volunteers.Restore
 {
-    public class RestoreVolunteerRequestValidator
-        : AbstractValidator<RestoreVolunteerRequest>
+    public class RestoreVolunteerCommandValidator
+        : AbstractValidator<RestoreVolunteerCommand>
     {
-        public RestoreVolunteerRequestValidator()
+        public RestoreVolunteerCommandValidator()
         {
             RuleFor(d => d.VolunteerId).NotEmpty();
         }

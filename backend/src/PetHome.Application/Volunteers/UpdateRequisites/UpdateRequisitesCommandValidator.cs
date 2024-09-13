@@ -4,9 +4,9 @@ using PetHome.Domain.Shared;
 
 namespace PetHome.Application.Volunteers.UpdateRequisites
 {
-    public class UpdateRequisitesRequestValidator : AbstractValidator<UpdateRequisitesRequest>
+    public class UpdateRequisitesCommandValidator : AbstractValidator<UpdateRequisitesCommand>
     {
-        public UpdateRequisitesRequestValidator()
+        public UpdateRequisitesCommandValidator()
         {
             RuleFor(ur => ur.VolunteerId).NotEmpty()
                 .WithError(Errors.General.ValueIsRequeired());

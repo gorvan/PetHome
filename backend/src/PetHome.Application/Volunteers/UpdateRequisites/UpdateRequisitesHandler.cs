@@ -18,7 +18,7 @@ namespace PetHome.Application.Volunteers.UpdateRequisites
         }
 
         public async Task<Result<Guid>> Execute(
-            UpdateRequisitesRequest request,
+            UpdateRequisitesCommand request,
             CancellationToken token)
         {
             var volunteerId = VolunteerId.Create(request.VolunteerId);
