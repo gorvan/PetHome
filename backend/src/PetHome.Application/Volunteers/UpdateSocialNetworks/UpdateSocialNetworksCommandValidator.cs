@@ -5,10 +5,10 @@ using PetHome.Domain.Shared;
 
 namespace PetHome.Application.Volunteers.UpdateSocialNetworks
 {
-    public class UpdateSocialNetworksRequestValidator 
-        : AbstractValidator<UpdateSocialNetworksRequest>
+    public class UpdateSocialNetworksCommandValidator 
+        : AbstractValidator<UpdateSocialNetworksCommand>
     {
-        public UpdateSocialNetworksRequestValidator()
+        public UpdateSocialNetworksCommandValidator()
         {
             RuleFor(ur => ur.VolunteerId).NotEmpty()
                 .WithError(Errors.General.ValueIsRequeired());

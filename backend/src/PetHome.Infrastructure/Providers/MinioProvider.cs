@@ -41,8 +41,6 @@ namespace PetHome.Infrastructure.Providers
                     await _minioClient.MakeBucketAsync(newBacket, token);
                 }
 
-                ////var path = Guid.NewGuid();
-
                 var args = new PutObjectArgs()
                     .WithBucket(fileData.BucketName)
                     .WithStreamData(fileData.Stream)

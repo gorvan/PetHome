@@ -18,7 +18,7 @@ namespace PetHome.Application.Volunteers.Delete
         }
 
         public async Task<Result<Guid>> Execute(
-            DeleteVolunteerRequest request,
+            DeleteVolunteerCommand request,
             CancellationToken token)
         {
             var volunteerId = VolunteerId.Create(request.VolunteerId);

@@ -83,7 +83,7 @@ namespace PetHome.Application.Volunteers.AddPet
 
             var birthday = DateValue.Create(command.BirthDay).Value;
 
-            var createDate = DateValue.Create(DateTime.UtcNow).Value;
+            var createDate = DateValue.Create(DateTime.UtcNow).Value;            
 
             return new Pet(
                 petId,

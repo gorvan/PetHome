@@ -5,9 +5,9 @@ using PetHome.Domain.Shared;
 
 namespace PetHome.Application.Volunteers.Create
 {
-    public class CreateVolunteerRequestValidator : AbstractValidator<CreateVolunteerRequest>
+    public class CreateVolunteerCommandValidator : AbstractValidator<CreateVolunteerCommand>
     {
-        public CreateVolunteerRequestValidator()
+        public CreateVolunteerCommandValidator()
         {
             RuleFor(c => c.fullName).MustBeValueObject(x =>
                 FullName.Create(x.FirstName, x.SecondName, x.Surname));

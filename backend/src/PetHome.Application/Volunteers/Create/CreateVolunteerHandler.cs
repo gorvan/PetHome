@@ -20,7 +20,7 @@ namespace PetHome.Application.Volunteers.Create
         }
 
         public async Task<Result<Guid>> Execute(
-            CreateVolunteerRequest request,
+            CreateVolunteerCommand request,
             CancellationToken token)
         {
             var phone = Phone.Create(request.phone).Value;
@@ -40,7 +40,7 @@ namespace PetHome.Application.Volunteers.Create
             return (Guid)volunteer.Id;
         }
 
-        private Volunteer CreateVolunteer(CreateVolunteerRequest request, Phone phone)
+        private Volunteer CreateVolunteer(CreateVolunteerCommand request, Phone phone)
         {
             var volunteerId = VolunteerId.NewVolunteerId();
 

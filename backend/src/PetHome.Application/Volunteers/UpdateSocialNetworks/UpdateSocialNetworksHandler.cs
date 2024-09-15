@@ -18,7 +18,7 @@ namespace PetHome.Application.Volunteers.UpdateSocialNetworks
         }
 
         public async Task<Result<Guid>> Execute(
-            UpdateSocialNetworksRequest request,
+            UpdateSocialNetworksCommand request,
             CancellationToken token)
         {
             var volunteerId = VolunteerId.Create(request.VolunteerId);

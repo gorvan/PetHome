@@ -121,6 +121,14 @@ namespace PetHome.Infrastructure.Configurations
                    .HasColumnName("birthday");
                });
 
+            builder.ComplexProperty(p => p.SerialNumber,
+               pb =>
+               {
+                   pb.Property(s => s.Value)
+                   .IsRequired()
+                   .HasColumnName("serial_number");
+               });
+
             builder.ComplexProperty(p => p.CreateDate,
                pb =>
                {

@@ -4,10 +4,10 @@ using PetHome.Domain.Shared;
 
 namespace PetHome.Application.Volunteers.UpdateMainInfo
 {
-    public class UpdateMainInfoRequestValidator
-        : AbstractValidator<UpdateMainInfoRequest>
+    public class UpdateMainInfoCommandValidator
+        : AbstractValidator<UpdateMainInfoCommand>
     {
-        public UpdateMainInfoRequestValidator()
+        public UpdateMainInfoCommandValidator()
         {
             RuleFor(v => v.VolunteerId).NotEmpty()
                 .WithError(Errors.General.ValueIsRequeired());

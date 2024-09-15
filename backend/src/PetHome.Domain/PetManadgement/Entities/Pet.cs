@@ -22,7 +22,7 @@ namespace PetHome.Domain.PetManadgement.Entities
             Phone phone,
             PetRequisites requisites,
             DateValue birthDay,
-            DateValue createDate,
+            DateValue createDate,            
             bool isNeutered,
             bool isVaccinated,
             HelpStatus helpStatus,
@@ -39,7 +39,7 @@ namespace PetHome.Domain.PetManadgement.Entities
             Phone = phone;
             Requisites = requisites;
             BirthDay = birthDay;
-            CreateDate = createDate;
+            CreateDate = createDate;           
             IsNeutered = isNeutered;
             IsVaccinated = isVaccinated;
             HelpStatus = helpStatus;
@@ -65,15 +65,20 @@ namespace PetHome.Domain.PetManadgement.Entities
         public HelpStatus HelpStatus { get; }
         public double Weight { get; } = 0;
         public double Height { get; } = 0;
-        public IReadOnlyList<PetPhoto> Photos => _photo;
+        public SerialNumber SerialNumber { get; private set; }
 
+        public IReadOnlyList<PetPhoto> Photos => _photo;
+           
         public Result<int> SetPhotos(IEnumerable<PetPhoto> petPhotos)
         {
             _photo = petPhotos.ToList();
             return _photo.Count;
         }
 
-
+        public void SetSerialNumber(SerialNumber serialNumber)
+        {
+            SerialNumber = serialNumber;
+        }
 
         public void Delete()
         {
@@ -89,6 +94,19 @@ namespace PetHome.Domain.PetManadgement.Entities
             {
                 _isDeleted = false;
             }
+        }
+
+        public void MoveUp()
+        {
+            SerialNumber = SerialNumber.Create(SerialNumber.Value + 1).Value;
+        }
+
+        public void MoveDown()
+        {
+            var newNumber = SerialNumber.Value - 1;
+            if (newNumber < 1) 
+                return;
+            SerialNumber = SerialNumber.Create(newNumber).Value;
         }
     }
 }

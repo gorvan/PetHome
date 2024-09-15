@@ -2,7 +2,7 @@
 
 namespace PetHome.Application.Volunteers.Create
 {
-    public record CreateVolunteerRequest(
+    public record CreateVolunteerCommand(
         FullNameDto fullName,
         string email,
         string description,
