@@ -3,14 +3,16 @@ using Microsoft.AspNetCore.Mvc;
 using PetHome.API.Extensions;
 using PetHome.API.Processors;
 using PetHome.Application.Volunteers.AddPet;
-using PetHome.Application.Volunteers.AddPetFiles;
-using PetHome.Application.Volunteers.Create;
-using PetHome.Application.Volunteers.Delete;
-using PetHome.Application.Volunteers.Restore;
 using PetHome.Application.Volunteers.Shared;
 using PetHome.Application.Volunteers.UpdateMainInfo;
-using PetHome.Application.Volunteers.UpdateRequisites;
-using PetHome.Application.Volunteers.UpdateSocialNetworks;
+using PetHome.Application.VolunteersManagement.Create;
+using PetHome.Application.VolunteersManagement.Delete;
+using PetHome.Application.VolunteersManagement.PetManagement.AddPet;
+using PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles;
+using PetHome.Application.VolunteersManagement.Restore;
+using PetHome.Application.VolunteersManagement.UpdateMainInfo;
+using PetHome.Application.VolunteersManagement.UpdateRequisites;
+using PetHome.Application.VolunteersManagement.UpdateSocialNetworks;
 
 namespace PetHome.API.Controllers
 {
@@ -44,15 +46,15 @@ namespace PetHome.API.Controllers
             CancellationToken token)
         {
             var command = new UpdateMainInfoCommand(
-                id, 
-                request.FullName, 
-                request.Email, 
-                request.Phone, 
+                id,
+                request.FullName,
+                request.Email,
+                request.Phone,
                 request.Description);
 
             _logger.LogInformation("Update volunteer request");
 
-            var result = await handler.Execute(command, token);            
+            var result = await handler.Execute(command, token);
 
             return result.ToResponse();
         }

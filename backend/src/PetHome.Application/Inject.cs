@@ -4,14 +4,14 @@ using PetHome.Application.Pets.Files.AddFiles;
 using PetHome.Application.Pets.Files.Delete;
 using PetHome.Application.Pets.Files.GetFile;
 using PetHome.Application.Pets.Files.GetFiles;
-using PetHome.Application.Volunteers.AddPet;
-using PetHome.Application.Volunteers.AddPetFiles;
-using PetHome.Application.Volunteers.Create;
-using PetHome.Application.Volunteers.Delete;
-using PetHome.Application.Volunteers.Restore;
-using PetHome.Application.Volunteers.UpdateMainInfo;
-using PetHome.Application.Volunteers.UpdateRequisites;
-using PetHome.Application.Volunteers.UpdateSocialNetworks;
+using PetHome.Application.VolunteersManagement.Create;
+using PetHome.Application.VolunteersManagement.Delete;
+using PetHome.Application.VolunteersManagement.PetManagement.AddPet;
+using PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles;
+using PetHome.Application.VolunteersManagement.Restore;
+using PetHome.Application.VolunteersManagement.UpdateMainInfo;
+using PetHome.Application.VolunteersManagement.UpdateRequisites;
+using PetHome.Application.VolunteersManagement.UpdateSocialNetworks;
 
 namespace PetHome.Application
 {
