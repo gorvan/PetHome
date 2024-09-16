@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using PetHome.Application.FileProvider;
-using PetHome.Application.Providers;
-using PetHome.Application.Volunteers.AddPetFiles;
+using PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles;
 using PetHome.Domain.Shared;
 
 

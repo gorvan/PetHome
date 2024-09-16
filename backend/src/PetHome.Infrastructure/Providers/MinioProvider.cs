@@ -5,7 +5,6 @@ using PetHome.Application.FileProvider;
 using PetHome.Application.Pets.Files.Delete;
 using PetHome.Application.Pets.Files.GetFile;
 using PetHome.Application.Pets.Files.GetFiles;
-using PetHome.Application.Providers;
 using PetHome.Domain.Shared;
 using System.Reactive.Linq;
 

@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using PetHome.Application.Providers;
+using PetHome.Application.FileProvider;
 using PetHome.Domain.Shared;
 
 namespace PetHome.Application.Pets.Files.Delete
