@@ -2,11 +2,9 @@
 using Minio;
 using Minio.DataModel.Args;
 using PetHome.Application.FileProvider;
-using PetHome.Application.Pets.Files.Delete;
-using PetHome.Application.Pets.Files.GetFile;
-using PetHome.Application.Pets.Files.GetFiles;
 using PetHome.Domain.Shared;
 using System.Reactive.Linq;
+using FileInfo = PetHome.Application.FileProvider.FileInfo;
 
 namespace PetHome.Infrastructure.Providers
 {
@@ -29,22 +27,22 @@ namespace PetHome.Infrastructure.Providers
             try
             {
                 var checkBucketsArgs = new BucketExistsArgs()
-               .WithBucket(fileData.BucketName);
+               .WithBucket(fileData.Info.BucketName);
 
                 var checkResult =
                     await _minioClient.BucketExistsAsync(checkBucketsArgs, token);
 
                 if (checkResult == false)
                 {
-                    var newBacket = new MakeBucketArgs().WithBucket(fileData.BucketName);
+                    var newBacket = new MakeBucketArgs().WithBucket(fileData.Info.BucketName);
                     await _minioClient.MakeBucketAsync(newBacket, token);
                 }
 
                 var args = new PutObjectArgs()
-                    .WithBucket(fileData.BucketName)
+                    .WithBucket(fileData.Info.BucketName)
                     .WithStreamData(fileData.Stream)
                     .WithObjectSize(fileData.Stream.Length)
-                    .WithObject(fileData.ObjectName);
+                    .WithObject(fileData.Info.FilePath);
 
                 var result = await _minioClient.PutObjectAsync(args, token);
                 return result.ObjectName;
@@ -56,13 +54,13 @@ namespace PetHome.Infrastructure.Providers
             }
         }
 
-        public async Task<Result<string>> GetFile(GetFileCommand fileData)
+        public async Task<Result<string>> GetFile(FileInfo fileInfo)
         {
             try
             {
                 var bucketArgs = new PresignedGetObjectArgs()
-                    .WithBucket(fileData.BucketName)
-                    .WithObject(fileData.FilePath)
+                    .WithBucket(fileInfo.BucketName)
+                    .WithObject(fileInfo.FilePath)
                     .WithExpiry(DEFAULT_EXPIRY);
 
                 var getResult = await _minioClient.PresignedGetObjectAsync(bucketArgs)
@@ -83,13 +81,13 @@ namespace PetHome.Infrastructure.Providers
         }
 
         public async Task<Result<List<string>>> GetFiles(
-            GetFilesCommand fileData,
+            FileInfo fileInfo,
             CancellationToken token)
         {
             try
             {
                 var bucketArgs = new ListObjectsArgs()
-                .WithBucket(fileData.BucketName);
+                .WithBucket(fileInfo.BucketName);
 
                 var getResult = await _minioClient.ListObjectsAsync(bucketArgs, token).ToList();
 
@@ -108,25 +106,56 @@ namespace PetHome.Infrastructure.Providers
             }
         }
 
-        public async Task<Result<bool>> DeleteFile(
-            DeleteFileCommand fileData,
+        public async Task<Result> RemoveFile(
+            FileInfo fileInfo,
             CancellationToken token)
         {
             try
             {
+                await IfBacketsNotExistCreateBucket(fileInfo.BucketName, token);
+
+                var statArgs = new StatObjectArgs()
+                    .WithBucket(fileInfo.BucketName)
+                    .WithObject(fileInfo.FilePath);
+
+                var objectStat = await _minioClient.StatObjectAsync(statArgs, token);
+                if (objectStat is null)
+                {
+                    return Result.Success();
+                }
+
                 var removeArgs = new RemoveObjectArgs()
-                .WithBucket(fileData.BucketName)
-                .WithObject(fileData.FilePath);
+                    .WithBucket(fileInfo.BucketName)
+                    .WithObject(fileInfo.FilePath);
 
                 await _minioClient.RemoveObjectAsync(removeArgs, token)
                     .ConfigureAwait(false);
-                return true;
+                return Result.Success();
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Fail to delete file in minio");
-                return Error.Failure("file.delete", "Fail to delete file in minio");
+                _logger.LogError(ex, "Fail to remove file in minio");
+                return Error.Failure("file.remove", "Fail to remove file in minio");
             }
-        }        
+        }
+
+        private async Task IfBacketsNotExistCreateBucket(
+            string bucketName,
+            CancellationToken token)
+        {
+            var bucketArgs = new BucketExistsArgs()
+                .WithBucket(bucketName);
+
+            var checkResult =
+                    await _minioClient.BucketExistsAsync(bucketArgs, token);
+
+            if (checkResult == false)
+            {
+                var newBacket = new MakeBucketArgs()
+                    .WithBucket(bucketName);
+
+                await _minioClient.MakeBucketAsync(newBacket, token);
+            }
+        }
     }
 }

@@ -15,4 +15,8 @@
     <ProjectReference Include="..\PetHome.Domain\PetHome.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pets\" />
+  </ItemGroup>
+
 </Project>

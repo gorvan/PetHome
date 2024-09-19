@@ -1,7 +1,4 @@
-﻿using PetHome.Application.Pets.Files.Delete;
-using PetHome.Application.Pets.Files.GetFile;
-using PetHome.Application.Pets.Files.GetFiles;
-using PetHome.Domain.Shared;
+﻿using PetHome.Domain.Shared;
 
 namespace PetHome.Application.FileProvider
 {
@@ -12,14 +9,14 @@ namespace PetHome.Application.FileProvider
             CancellationToken token);
 
         Task<Result<string>> GetFile(
-            GetFileCommand fileData);
+            FileInfo fileInfo);
 
         Task<Result<List<string>>> GetFiles(
-            GetFilesCommand fileData,
+            FileInfo fileInfo,
             CancellationToken token);
 
-        Task<Result<bool>> DeleteFile(
-            DeleteFileCommand fileData,
+        Task<Result> RemoveFile(
+            FileInfo fileInfo,
             CancellationToken token);
     }
 }
