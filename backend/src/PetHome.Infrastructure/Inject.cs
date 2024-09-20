@@ -2,10 +2,14 @@
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
 using PetHome.Application.FileProvider;
+using PetHome.Application.Messaging;
 using PetHome.Application.VolunteersManagement;
+using PetHome.Infrastructure.BackgroundServices;
+using PetHome.Infrastructure.MessageQueues;
 using PetHome.Infrastructure.Options;
 using PetHome.Infrastructure.Providers;
 using PetHome.Infrastructure.Repositories;
+using FileInfo = PetHome.Application.FileProvider.FileInfo;
 
 namespace PetHome.Infrastructure
 {
@@ -19,6 +23,8 @@ namespace PetHome.Infrastructure
             services.AddScoped<IVolunteerRepository, VolunteersRepository>();
             services.AddScoped<IFileProvider, MinioProvider>();
             services.AddMinio(configuration);
+            services.AddHostedService<FilesCleanerBackgroundService>();
+            services.AddSingleton<IMessageQueue<FileInfo>, MemoryCleanerQueue<FileInfo>>();
             return services;
         }
 

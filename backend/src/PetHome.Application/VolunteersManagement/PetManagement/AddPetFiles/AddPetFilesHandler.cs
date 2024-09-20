@@ -1,8 +1,10 @@
 ﻿using Microsoft.Extensions.Logging;
 using PetHome.Application.FileProvider;
+using PetHome.Application.Messaging;
 using PetHome.Domain.PetManadgement.Entities;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
+using FileInfo = PetHome.Application.FileProvider.FileInfo;
 
 namespace PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles
 {
@@ -10,6 +12,7 @@ namespace PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles
     {
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly IFileProvider _fileProvider;
+        private readonly IMessageQueue<FileInfo> _messageQueue;
         private readonly ILogger<AddPetFilesHandler> _logger;
 
         public const string BUCKET_NAME = "photos";
@@ -18,10 +21,12 @@ namespace PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles
         public AddPetFilesHandler(
             IVolunteerRepository volunteerRepository,
             IFileProvider fileProvider,
+            IMessageQueue<FileInfo> messageQueue,
             ILogger<AddPetFilesHandler> logger)
         {
             _volunteerRepository = volunteerRepository;
             _fileProvider = fileProvider;
+            _messageQueue = messageQueue;
             _logger = logger;
         }
 
@@ -60,6 +65,7 @@ namespace PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles
         {
             List<PetPhoto> petPhotos = [];
             var semaphore = new SemaphoreSlim(MAX_SEMAPHORE_TASKS);
+            var fileInfoCollection = new List<FileInfo>();
             foreach (var file in command.FilesList)
             {
                 var extension = Path.GetExtension(file.FileName);
@@ -68,10 +74,15 @@ namespace PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles
                 if (filePath.IsFailure)
                     return filePath.Error;
 
+                var fileInfo = new FileInfo(
+                        filePath.Value.Path,
+                        BUCKET_NAME);
+
                 var filedata = new FileData(
                     file.Stream,
-                    BUCKET_NAME,
-                    filePath.Value.Path);
+                    fileInfo);
+
+                fileInfoCollection.Add(fileInfo);
 
                 try
                 {
@@ -80,7 +91,13 @@ namespace PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles
                     await _fileProvider.UploadFile(filedata, token);
 
                     if (uploadResult.IsFailure)
+                    {
+                        await _messageQueue.WriteAsync(
+                            fileInfoCollection,
+                            token);
+
                         return uploadResult.Error;
+                    }
                 }
                 finally
                 {

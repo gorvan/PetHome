@@ -1,12 +1,14 @@
 ﻿using Microsoft.Extensions.Logging;
 using Moq;
 using PetHome.Application.FileProvider;
+using PetHome.Application.Messaging;
 using PetHome.Application.Volunteers.Shared;
 using PetHome.Application.VolunteersManagement;
 using PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles;
 using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
+using FileInfo = PetHome.Application.FileProvider.FileInfo;
 
 namespace PetHome.UnitTests
 {
@@ -32,11 +34,14 @@ namespace PetHome.UnitTests
             fileProviderMock.Setup(p => p.UploadFile(It.IsAny<FileData>(), token))
             .Returns(Task.Run(() => new Result<string>("test", true, Error.None)));
 
+            var messageQueueMock = new Mock<IMessageQueue<FileInfo>>();
+
             var loggerMock = new Mock<ILogger<AddPetFilesHandler>>();
 
             var addPetFilesHandler = new AddPetFilesHandler(
                 volunteerRepsitoryMock.Object,
                 fileProviderMock.Object,
+                messageQueueMock.Object,
                 loggerMock.Object);
 
             var volunteerId = Guid.NewGuid();
@@ -69,11 +74,14 @@ namespace PetHome.UnitTests
             var fileProviderMock = new Mock<IFileProvider>();
 
             var token = new CancellationTokenSource().Token;
+            var messageQueueMock = new Mock<IMessageQueue<FileInfo>>();
+
             var loggerMock = new Mock<ILogger<AddPetFilesHandler>>();
 
             var addPetFilesHandler = new AddPetFilesHandler(
                 volunteerRepsitoryMock.Object,
                 fileProviderMock.Object,
+                messageQueueMock.Object,
                 loggerMock.Object);
 
             var volunteerId = Guid.NewGuid();
@@ -112,12 +120,13 @@ namespace PetHome.UnitTests
             var fileProviderMock = new Mock<IFileProvider>();
             fileProviderMock.Setup(p => p.UploadFile(It.IsAny<FileData>(), token))
             .Returns(Task.Run(() => new Result<string>("", false, Error.Failure("test", "test"))));
-
+            var messageQueueMock = new Mock<IMessageQueue<FileInfo>>();
             var loggerMock = new Mock<ILogger<AddPetFilesHandler>>();
 
             var addPetFilesHandler = new AddPetFilesHandler(
                 volunteerRepsitoryMock.Object,
                 fileProviderMock.Object,
+                messageQueueMock.Object,
                 loggerMock.Object);
 
             var volunteerId = Guid.NewGuid();
@@ -157,12 +166,13 @@ namespace PetHome.UnitTests
             var fileProviderMock = new Mock<IFileProvider>();
             fileProviderMock.Setup(p => p.UploadFile(It.IsAny<FileData>(), token))
             .Returns(Task.Run(() => new Result<string>("test", true, Error.None)));
-
+            var messageQueueMock = new Mock<IMessageQueue<FileInfo>>();
             var loggerMock = new Mock<ILogger<AddPetFilesHandler>>();
 
             var addPetFilesHandler = new AddPetFilesHandler(
                 volunteerRepsitoryMock.Object,
                 fileProviderMock.Object,
+                messageQueueMock.Object,
                 loggerMock.Object);
 
             var filesCount = 10;

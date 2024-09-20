@@ -1,6 +1,4 @@
-﻿using FluentValidation;
-using Microsoft.Extensions.Logging;
-using PetHome.Application.Volunteers;
+﻿using Microsoft.Extensions.Logging;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
@@ -9,21 +7,21 @@ namespace PetHome.Application.VolunteersManagement.UpdateMainInfo
 {
     public class UpdateMainInfoHandler
     {
-        private readonly IVolunteerRepository _volunteerRepository;       
+        private readonly IVolunteerRepository _volunteerRepository;
         private readonly ILogger<UpdateMainInfoHandler> _logger;
 
         public UpdateMainInfoHandler(
-            IVolunteerRepository volunteerRepository,            
+            IVolunteerRepository volunteerRepository,
             ILogger<UpdateMainInfoHandler> logger)
         {
-            _volunteerRepository = volunteerRepository;            
+            _volunteerRepository = volunteerRepository;
             _logger = logger;
         }
 
         public async Task<Result<Guid>> Execute(
             UpdateMainInfoCommand command,
             CancellationToken token)
-        { 
+        {
             var volunteerId = VolunteerId.Create(command.VolunteerId);
             var volunteerResult =
                 await _volunteerRepository.GetById(volunteerId, token);

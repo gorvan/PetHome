@@ -18,6 +18,7 @@ namespace PetHome.Domain.PetManadgement.Entities
 
         public FilePath Path { get; } = default!;
         public bool IsMain { get; }
+        public bool IsUploaded { get; } = false;
 
         public static Result<PetPhoto> Create(
             PetPhotoId id,
