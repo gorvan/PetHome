@@ -19,10 +19,10 @@ namespace PetHome.Application.VolunteersManagement.Restore
         }
 
         public async Task<Result<Guid>> Execute(
-            RestoreVolunteerCommand request,
+            RestoreVolunteerCommand command,
             CancellationToken token)
         {
-            var volunteerId = VolunteerId.Create(request.VolunteerId);
+            var volunteerId = VolunteerId.Create(command.VolunteerId);
             var volunteerResult =
                 await _volunteerRepository.GetById(volunteerId, token);
 

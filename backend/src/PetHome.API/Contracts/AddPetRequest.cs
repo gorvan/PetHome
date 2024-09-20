@@ -1,4 +1,5 @@
 ﻿using PetHome.Application.Volunteers.Shared;
+using PetHome.Application.VolunteersManagement.PetManagement.AddPet;
 using PetHome.Domain.Shared;
 
 namespace PetHome.Application.Volunteers.AddPet
@@ -16,5 +17,23 @@ namespace PetHome.Application.Volunteers.AddPet
             bool IsVaccinated,
             HelpStatus HelpStatus,
             double Weight,
-            double Height);
+            double Height)
+    {
+        public AddPetCommand ToCommand(Guid id) =>
+            new AddPetCommand(
+                id,
+                Nickname,
+                Description,
+                Color,
+                Health,
+                Address,
+                Phone,
+                Requisites,
+                BirthDay,
+                IsNeutered,
+                IsVaccinated,
+                HelpStatus,
+                Weight,
+                Height);
+    }
 }

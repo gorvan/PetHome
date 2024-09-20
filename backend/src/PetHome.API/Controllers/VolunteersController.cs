@@ -1,9 +1,9 @@
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using PetHome.API.Contracts;
 using PetHome.API.Extensions;
 using PetHome.API.Processors;
 using PetHome.Application.Volunteers.AddPet;
-using PetHome.Application.Volunteers.Shared;
 using PetHome.Application.Volunteers.UpdateMainInfo;
 using PetHome.Application.VolunteersManagement.Create;
 using PetHome.Application.VolunteersManagement.Delete;
@@ -27,12 +27,12 @@ namespace PetHome.API.Controllers
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
             [FromServices] CreateVolunteerHandler handler,
-            [FromBody] CreateVolunteerCommand request,
+            [FromBody] CreateVolunteerRequest request,
             CancellationToken token)
         {
             _logger.LogInformation("Create volunteer request");
-
-            var result = await handler.Execute(request, token);
+            var command = request.ToCommand();
+            var result = await handler.Execute(command, token);
 
             return result.ToResponse<Guid>();
         }
@@ -45,15 +45,8 @@ namespace PetHome.API.Controllers
             [FromServices] IValidator<UpdateMainInfoCommand> validator,
             CancellationToken token)
         {
-            var command = new UpdateMainInfoCommand(
-                id,
-                request.FullName,
-                request.Email,
-                request.Phone,
-                request.Description);
-
             _logger.LogInformation("Update volunteer request");
-
+            var command = request.ToCommand(id);
             var result = await handler.Execute(command, token);
 
             return result.ToResponse();
@@ -63,21 +56,21 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult<Guid>> UpdateRequisites(
             [FromServices] UpdateRequisitesHandler handler,
             [FromRoute] Guid id,
-            [FromBody] List<RequisiteDto> requisiteDtos,
+            [FromBody] UpdateRequisitesRequest request,
             [FromServices] IValidator<UpdateRequisitesCommand> validator,
             CancellationToken token)
         {
-            var request = new UpdateRequisitesCommand(id, requisiteDtos);
+            var command = request.ToCommand(id);
 
             var validateResult =
-                await validator.ValidateAsync(request, token);
+                await validator.ValidateAsync(command, token);
             if (validateResult.IsValid == false)
             {
                 return validateResult.ToErrorValidationResponse();
             }
 
             _logger.LogInformation("Update volunteer requisites request");
-            var result = await handler.Execute(request, token);
+            var result = await handler.Execute(command, token);
             return result.ToResponse();
         }
 
@@ -85,21 +78,21 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult<Guid>> UpdateSocialNetworks(
             [FromServices] UpdateSocialNetworksHandler handler,
             [FromRoute] Guid id,
-            [FromBody] List<SocialNetworkDto> socialNetworkDtos,
+            [FromBody] UpdateSocialNetworksRequest request,
             [FromServices] IValidator<UpdateSocialNetworksCommand> validator,
             CancellationToken token)
         {
-            var request = new UpdateSocialNetworksCommand(id, socialNetworkDtos);
+            var command = request.ToCommand(id);
 
             var validateResult =
-                await validator.ValidateAsync(request, token);
+                await validator.ValidateAsync(command, token);
             if (validateResult.IsValid == false)
             {
                 return validateResult.ToErrorValidationResponse();
             }
 
             _logger.LogInformation("Update volunteer social networks request");
-            var result = await handler.Execute(request, token);
+            var result = await handler.Execute(command, token);
             return result.ToResponse();
         }
 
@@ -110,10 +103,10 @@ namespace PetHome.API.Controllers
             [FromServices] IValidator<DeleteVolunteerCommand> validator,
             CancellationToken token)
         {
-            var request = new DeleteVolunteerCommand(id);
+            var command = new DeleteVolunteerCommand(id);
 
             var validateResult =
-                await validator.ValidateAsync(request, token);
+                await validator.ValidateAsync(command, token);
             if (validateResult.IsValid == false)
             {
                 return validateResult.ToErrorValidationResponse();
@@ -121,7 +114,7 @@ namespace PetHome.API.Controllers
 
             _logger.LogInformation("Delete volunteer request");
 
-            var result = await handler.Execute(request, token);
+            var result = await handler.Execute(command, token);
             return result.ToResponse();
         }
 
@@ -132,10 +125,10 @@ namespace PetHome.API.Controllers
             [FromServices] IValidator<RestoreVolunteerCommand> validator,
             CancellationToken token)
         {
-            var request = new RestoreVolunteerCommand(id);
+            var command = new RestoreVolunteerCommand(id);
 
             var validateResult =
-               await validator.ValidateAsync(request, token);
+               await validator.ValidateAsync(command, token);
             if (validateResult.IsValid == false)
             {
                 return validateResult.ToErrorValidationResponse();
@@ -143,7 +136,7 @@ namespace PetHome.API.Controllers
 
             _logger.LogInformation("Restore volunteer request");
 
-            var result = await handler.Execute(request, token);
+            var result = await handler.Execute(command, token);
             return result.ToResponse();
         }
 
@@ -155,21 +148,7 @@ namespace PetHome.API.Controllers
            [FromServices] IValidator<AddPetCommand> validator,
            CancellationToken token)
         {
-            var command = new AddPetCommand(
-                id,
-                request.Nickname,
-                request.Description,
-                request.Color,
-                request.Health,
-                request.Address,
-                request.Phone,
-                request.Requisites,
-                request.BirthDay,
-                request.IsNeutered,
-                request.IsVaccinated,
-                request.HelpStatus,
-                request.Weight,
-                request.Height);
+            var command = request.ToCommand(id);
 
             var validateResult =
               await validator.ValidateAsync(command, token);
@@ -195,7 +174,6 @@ namespace PetHome.API.Controllers
         {
             await using var fileProcessor = new FormFileProcessor();
             var filesDto = fileProcessor.Process(files);
-
             var command = new AddPetFilesCommand(volunteerid, petid, filesDto);
 
             var validateResult =
