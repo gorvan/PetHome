@@ -5,7 +5,7 @@ using PetHome.Domain.Shared;
 
 namespace PetHome.Application.VolunteersManagement.UpdateSocialNetworks
 {
-    public class UpdateSocialNetworksCommandValidator 
+    public class UpdateSocialNetworksCommandValidator
         : AbstractValidator<UpdateSocialNetworksCommand>
     {
         public UpdateSocialNetworksCommandValidator()

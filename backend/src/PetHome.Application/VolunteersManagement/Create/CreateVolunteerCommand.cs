@@ -7,6 +7,6 @@ namespace PetHome.Application.VolunteersManagement.Create
         string email,
         string description,
         string phone,
-        List<SocialNetworkDto> socialNetworkDtos,
-        List<RequisiteDto> requisiteDtos);
+        IEnumerable<SocialNetworkDto> socialNetworkDtos,
+        IEnumerable<RequisiteDto> requisiteDtos);
 }

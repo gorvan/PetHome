@@ -4,7 +4,7 @@ using PetHome.Application.VolunteersManagement.UpdateSocialNetworks;
 namespace PetHome.API.Contracts
 {
     public record UpdateSocialNetworksRequest(
-        List<SocialNetworkDto> socialNetworkDtos)
+        IEnumerable<SocialNetworkDto> socialNetworkDtos)
     {
         public UpdateSocialNetworksCommand ToCommand(Guid id) =>
             new UpdateSocialNetworksCommand(id, socialNetworkDtos);

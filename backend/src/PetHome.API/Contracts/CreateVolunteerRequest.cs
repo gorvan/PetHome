@@ -9,10 +9,10 @@ namespace PetHome.API.Contracts
         string email,
         string description,
         string phone,
-        List<SocialNetworkDto> socialNetworkDtos,
-        List<RequisiteDto> requisiteDtos)
+        IEnumerable<SocialNetworkDto> socialNetworkDtos,
+        IEnumerable<RequisiteDto> requisiteDtos)
     {
-        public CreateVolunteerCommand ToCommand() =>            
+        public CreateVolunteerCommand ToCommand() =>
                 new CreateVolunteerCommand(
                      fullName,
                      email,

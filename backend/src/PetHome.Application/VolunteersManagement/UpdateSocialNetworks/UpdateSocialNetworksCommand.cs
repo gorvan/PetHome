@@ -3,6 +3,6 @@
 namespace PetHome.Application.VolunteersManagement.UpdateSocialNetworks
 {
     public record UpdateSocialNetworksCommand(
-        Guid VolunteerId, 
-        List<SocialNetworkDto> SocialNetworks);
+        Guid VolunteerId,
+        IEnumerable<SocialNetworkDto> SocialNetworks);
 }
