@@ -3,5 +3,5 @@
 namespace PetHome.Application.VolunteersManagement.UpdateRequisites
 {
     public record UpdateRequisitesCommand(Guid VolunteerId,
-        List<RequisiteDto> Requisites);
+        IEnumerable<RequisiteDto> Requisites);
 }

@@ -1,4 +1,5 @@
 ﻿using PetHome.Application.Volunteers.Shared;
+using PetHome.Application.VolunteersManagement.UpdateMainInfo;
 
 namespace PetHome.Application.Volunteers.UpdateMainInfo
 {
@@ -6,5 +7,14 @@ namespace PetHome.Application.Volunteers.UpdateMainInfo
     FullNameDto FullName,
     string Email,
     string Phone,
-    string Description);
+    string Description)
+    {
+        public UpdateMainInfoCommand ToCommand(Guid id) =>
+              new UpdateMainInfoCommand(
+                id,
+                FullName,
+                Email,
+                Phone,
+                Description);
+    }
 }

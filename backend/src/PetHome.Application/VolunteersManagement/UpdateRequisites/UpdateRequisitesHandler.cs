@@ -19,17 +19,17 @@ namespace PetHome.Application.VolunteersManagement.UpdateRequisites
         }
 
         public async Task<Result<Guid>> Execute(
-            UpdateRequisitesCommand request,
+            UpdateRequisitesCommand command,
             CancellationToken token)
         {
-            var volunteerId = VolunteerId.Create(request.VolunteerId);
+            var volunteerId = VolunteerId.Create(command.VolunteerId);
             var volunteerResult =
                 await _volunteerRepository.GetById(volunteerId, token);
 
             if (volunteerResult.IsFailure)
                 return volunteerResult.Error;
 
-            var requisiteColl = (from item in request.Requisites
+            var requisiteColl = (from item in command.Requisites
                                  let requisite = Requisite
                                     .Create(item.Name, item.Description).Value
                                  select requisite).ToList();

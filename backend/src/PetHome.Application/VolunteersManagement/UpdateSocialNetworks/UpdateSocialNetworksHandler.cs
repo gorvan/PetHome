@@ -18,17 +18,17 @@ namespace PetHome.Application.VolunteersManagement.UpdateSocialNetworks
         }
 
         public async Task<Result<Guid>> Execute(
-            UpdateSocialNetworksCommand request,
+            UpdateSocialNetworksCommand command,
             CancellationToken token)
         {
-            var volunteerId = VolunteerId.Create(request.VolunteerId);
+            var volunteerId = VolunteerId.Create(command.VolunteerId);
             var volunteerResult =
                 await _volunteerRepository.GetById(volunteerId, token);
 
             if (volunteerResult.IsFailure)
                 return volunteerResult.Error;
 
-            var socialColl = (from item in request.SocialNetworks
+            var socialColl = (from item in command.SocialNetworks
                               let socialNetwork = SocialNetwork
                                     .Create(item.Name, item.Path).Value
                               select socialNetwork).ToList();

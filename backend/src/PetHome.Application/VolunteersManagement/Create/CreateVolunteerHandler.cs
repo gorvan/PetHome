@@ -12,7 +12,8 @@ namespace PetHome.Application.VolunteersManagement.Create
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly ILogger<CreateVolunteerHandler> _logger;
 
-        public CreateVolunteerHandler(IVolunteerRepository volunteerRepository,
+        public CreateVolunteerHandler(
+            IVolunteerRepository volunteerRepository,
             ILogger<CreateVolunteerHandler> logger)
         {
             _volunteerRepository = volunteerRepository;
@@ -20,10 +21,10 @@ namespace PetHome.Application.VolunteersManagement.Create
         }
 
         public async Task<Result<Guid>> Execute(
-            CreateVolunteerCommand request,
+            CreateVolunteerCommand command,
             CancellationToken token)
         {
-            var phone = Phone.Create(request.phone).Value;
+            var phone = Phone.Create(command.phone).Value;
 
             var existVolunteerResult = await _volunteerRepository
                 .GetByPhone(phone, token);
@@ -31,7 +32,7 @@ namespace PetHome.Application.VolunteersManagement.Create
             if (existVolunteerResult.IsSuccess)
                 return Errors.General.AlreadyExist();
 
-            var volunteer = CreateVolunteer(request, phone);
+            var volunteer = CreateVolunteer(command, phone);
 
             await _volunteerRepository.Add(volunteer, token);
 
