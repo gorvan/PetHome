@@ -1,11 +1,8 @@
-using FluentValidation.AspNetCore;
 using PetHome.API.Extensions;
 using PetHome.API.Middleware;
-using PetHome.API.Validation;
 using PetHome.Application;
 using PetHome.Infrastructure;
 using Serilog;
-using SharpGrip.FluentValidation.AutoValidation.Mvc.Extensions;
 
 namespace PetHome.API
 {
@@ -25,11 +22,6 @@ namespace PetHome.API
             builder.Services
                 .AddInfrastructure(builder.Configuration)
                 .AddApplication();
-
-            builder.Services.AddFluentValidationAutoValidation(configuration =>
-            {
-                configuration.OverrideDefaultResultFactoryWith<CustomResultFactory>();
-            });
 
             var app = builder.Build();
 

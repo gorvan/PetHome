@@ -1,6 +1,8 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
 using PetHome.Application.FileProvider;
 using PetHome.Application.Messaging;
+using PetHome.Application.Validation;
 using PetHome.Domain.PetManadgement.Entities;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
@@ -14,6 +16,7 @@ namespace PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles
         private readonly IFileProvider _fileProvider;
         private readonly IMessageQueue<FileInfo> _messageQueue;
         private readonly ILogger<AddPetFilesHandler> _logger;
+        private readonly IValidator<AddPetFilesCommand> _validator;
 
         public const string BUCKET_NAME = "photos";
         public const int MAX_SEMAPHORE_TASKS = 5;
@@ -22,18 +25,26 @@ namespace PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles
             IVolunteerRepository volunteerRepository,
             IFileProvider fileProvider,
             IMessageQueue<FileInfo> messageQueue,
-            ILogger<AddPetFilesHandler> logger)
+            ILogger<AddPetFilesHandler> logger,
+            IValidator<AddPetFilesCommand> validator)
         {
             _volunteerRepository = volunteerRepository;
             _fileProvider = fileProvider;
             _messageQueue = messageQueue;
             _logger = logger;
+            _validator = validator;
         }
 
         public async Task<Result<int>> Execute(
             AddPetFilesCommand command,
             CancellationToken token)
         {
+            var validationResult = await _validator.ValidateAsync(command, token);
+            if (validationResult.IsValid == false)
+            {
+                return validationResult.ToErrorList();
+            }
+
             var volunteerResult = await _volunteerRepository
                 .GetById(VolunteerId.Create(command.VolunteerId), token);
             if (volunteerResult.IsFailure)

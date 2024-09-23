@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using PetHome.Application.Volunteers;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
+using PetHome.Application.Validation;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
 
@@ -9,19 +10,28 @@ namespace PetHome.Application.VolunteersManagement.Restore
     {
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly ILogger<RestoreVolunteerHandler> _logger;
+        private readonly IValidator<RestoreVolunteerCommand> _validator;
 
         public RestoreVolunteerHandler(
             IVolunteerRepository volunteerRepository,
-            ILogger<RestoreVolunteerHandler> logger)
+            ILogger<RestoreVolunteerHandler> logger,
+            IValidator<RestoreVolunteerCommand> validator)
         {
             _volunteerRepository = volunteerRepository;
             _logger = logger;
+            _validator = validator;
         }
 
         public async Task<Result<Guid>> Execute(
             RestoreVolunteerCommand command,
             CancellationToken token)
         {
+            var validationResult = await _validator.ValidateAsync(command, token);
+            if (validationResult.IsValid == false)
+            {
+                return validationResult.ToErrorList();
+            }
+
             var volunteerId = VolunteerId.Create(command.VolunteerId);
             var volunteerResult =
                 await _volunteerRepository.GetById(volunteerId, token);
