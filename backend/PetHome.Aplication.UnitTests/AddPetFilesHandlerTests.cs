@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
 using Moq;
 using PetHome.Application.FileProvider;
 using PetHome.Application.Messaging;
@@ -37,12 +39,16 @@ namespace PetHome.UnitTests
             var messageQueueMock = new Mock<IMessageQueue<FileInfo>>();
 
             var loggerMock = new Mock<ILogger<AddPetFilesHandler>>();
+            var validatorMock = new Mock<IValidator<AddPetFilesCommand>>();
+            validatorMock.Setup(v => v.ValidateAsync(It.IsAny<AddPetFilesCommand>(), token))
+                .Returns(Task.Run(() => new ValidationResult { Errors = [] }));
 
             var addPetFilesHandler = new AddPetFilesHandler(
                 volunteerRepsitoryMock.Object,
                 fileProviderMock.Object,
                 messageQueueMock.Object,
-                loggerMock.Object);
+                loggerMock.Object,
+                validatorMock.Object);
 
             var volunteerId = Guid.NewGuid();
             var petId = pet.Id.Id;
@@ -78,11 +84,16 @@ namespace PetHome.UnitTests
 
             var loggerMock = new Mock<ILogger<AddPetFilesHandler>>();
 
+            var validatorMock = new Mock<IValidator<AddPetFilesCommand>>();
+            validatorMock.Setup(v => v.ValidateAsync(It.IsAny<AddPetFilesCommand>(), token))
+                .Returns(Task.Run(() => new ValidationResult { Errors = [] }));
+
             var addPetFilesHandler = new AddPetFilesHandler(
                 volunteerRepsitoryMock.Object,
                 fileProviderMock.Object,
                 messageQueueMock.Object,
-                loggerMock.Object);
+                loggerMock.Object,
+                validatorMock.Object);
 
             var volunteerId = Guid.NewGuid();
             var petId = Guid.NewGuid();
@@ -122,12 +133,16 @@ namespace PetHome.UnitTests
             .Returns(Task.Run(() => new Result<string>("", false, Error.Failure("test", "test"))));
             var messageQueueMock = new Mock<IMessageQueue<FileInfo>>();
             var loggerMock = new Mock<ILogger<AddPetFilesHandler>>();
+            var validatorMock = new Mock<IValidator<AddPetFilesCommand>>();
+            validatorMock.Setup(v => v.ValidateAsync(It.IsAny<AddPetFilesCommand>(), token))
+                .Returns(Task.Run(() => new ValidationResult { Errors = [] }));
 
             var addPetFilesHandler = new AddPetFilesHandler(
                 volunteerRepsitoryMock.Object,
                 fileProviderMock.Object,
                 messageQueueMock.Object,
-                loggerMock.Object);
+                loggerMock.Object,
+                validatorMock.Object);
 
             var volunteerId = Guid.NewGuid();
             var petId = pet.Id.Id;
@@ -168,12 +183,16 @@ namespace PetHome.UnitTests
             .Returns(Task.Run(() => new Result<string>("test", true, Error.None)));
             var messageQueueMock = new Mock<IMessageQueue<FileInfo>>();
             var loggerMock = new Mock<ILogger<AddPetFilesHandler>>();
+            var validatorMock = new Mock<IValidator<AddPetFilesCommand>>();
+            validatorMock.Setup(v => v.ValidateAsync(It.IsAny<AddPetFilesCommand>(), token))
+                .Returns(Task.Run(() => new ValidationResult { Errors = [] }));
 
             var addPetFilesHandler = new AddPetFilesHandler(
                 volunteerRepsitoryMock.Object,
                 fileProviderMock.Object,
                 messageQueueMock.Object,
-                loggerMock.Object);
+                loggerMock.Object,
+                validatorMock.Object);
 
             var filesCount = 10;
             var filesList = new List<FileDto>();

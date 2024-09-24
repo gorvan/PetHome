@@ -22,12 +22,44 @@ namespace PetHome.API.Extensions
             };
         }
 
+        public static ActionResult ToResponse(this IEnumerable<Error> errors)
+        {
+            if (!errors.Any())
+                return new ObjectResult(Envelope.Error(errors))
+                {
+                    StatusCode = StatusCodes.Status500InternalServerError
+                };
+
+            var distinctErrorTypes = errors
+                .Select(x => x.Type)
+                .Distinct()
+                .ToList();
+
+            var statusCode = distinctErrorTypes.Count > 1
+                ? StatusCodes.Status500InternalServerError
+                : GetStatusCode(distinctErrorTypes.First());
+
+
+            var envelope = Envelope.Error(errors);
+
+            return new ObjectResult(envelope)
+            {
+                StatusCode = statusCode
+            };
+        }
+
         public static ActionResult ToResponse(this Result result)
         {
             if (result.IsSuccess)
             {
                 return new OkObjectResult(Envelope.Ok(result));
             }
+
+            if (result.Errors.Count > 0)
+            {
+                return result.Errors.ToResponse();
+            }
+
             var statusCode = GetStatusCode(result.Error.Type);
 
             var responseError = new ResponseError(result.Error.Code, result.Error.Message, string.Empty);
@@ -47,12 +79,16 @@ namespace PetHome.API.Extensions
                 return new OkObjectResult(Envelope.Ok(result.Value));
             }
 
+            if (result.Errors.Count > 0)
+            {
+                return result.Errors.ToResponse();
+            }
+
             var statusCode = GetStatusCode(result.Error.Type);
 
             var responseError = new ResponseError(result.Error.Code, result.Error.Message, string.Empty);
 
             var envelope = Envelope.Error([responseError]);
-
 
             return new ObjectResult(envelope)
             {

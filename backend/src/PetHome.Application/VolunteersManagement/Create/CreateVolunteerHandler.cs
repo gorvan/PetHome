@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
+using PetHome.Application.Validation;
 using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
@@ -11,19 +13,28 @@ namespace PetHome.Application.VolunteersManagement.Create
     {
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly ILogger<CreateVolunteerHandler> _logger;
+        private readonly IValidator<CreateVolunteerCommand> _validator;
 
         public CreateVolunteerHandler(
             IVolunteerRepository volunteerRepository,
-            ILogger<CreateVolunteerHandler> logger)
+            ILogger<CreateVolunteerHandler> logger,
+            IValidator<CreateVolunteerCommand> validator)
         {
             _volunteerRepository = volunteerRepository;
             _logger = logger;
+            _validator = validator;
         }
 
         public async Task<Result<Guid>> Execute(
             CreateVolunteerCommand command,
             CancellationToken token)
         {
+            var validationResult = await _validator.ValidateAsync(command, token);
+            if (validationResult.IsValid == false)
+            {
+                return validationResult.ToErrorList();
+            }
+
             var phone = Phone.Create(command.phone).Value;
 
             var existVolunteerResult = await _volunteerRepository

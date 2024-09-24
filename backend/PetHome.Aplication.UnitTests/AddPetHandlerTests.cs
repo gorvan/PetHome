@@ -1,4 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using FluentValidation;
+using FluentValidation.Results;
+using Microsoft.Extensions.Logging;
 using Moq;
 using PetHome.Application.Volunteers.Shared;
 using PetHome.Application.VolunteersManagement;
@@ -44,9 +46,14 @@ namespace PetHome.UnitTests
                 new Result<Volunteer>(VolunteerTests.CreateVolunteer(), true, Error.None)));
             var loggerMock = new Mock<ILogger<AddPetHandler>>();
 
+            var validatorMock = new Mock<IValidator<AddPetCommand>>();
+            validatorMock.Setup(v => v.ValidateAsync(It.IsAny<AddPetCommand>(), token))
+                .Returns(Task.Run(() => new ValidationResult { Errors = [] }));
+
             var addPetHandler = new AddPetHandler(
                 volunteerRepsitoryMock.Object,
-                loggerMock.Object);
+                loggerMock.Object,
+                validatorMock.Object);
 
             var command = CreatePetCommand();
 
@@ -72,9 +79,14 @@ namespace PetHome.UnitTests
                 testResult)));
             var loggerMock = new Mock<ILogger<AddPetHandler>>();
 
+            var validatorMock = new Mock<IValidator<AddPetCommand>>();
+            validatorMock.Setup(v => v.ValidateAsync(It.IsAny<AddPetCommand>(), token))
+                .Returns(Task.Run(() => new ValidationResult { Errors = [] }));
+
             var addPetHandler = new AddPetHandler(
                 volunteerRepsitoryMock.Object,
-                loggerMock.Object);
+                loggerMock.Object,
+                validatorMock.Object);
 
             var command = CreatePetCommand();
 

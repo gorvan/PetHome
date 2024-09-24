@@ -1,5 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
-using PetHome.Application.Volunteers;
+﻿using FluentValidation;
+using Microsoft.Extensions.Logging;
+using PetHome.Application.Validation;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
@@ -10,18 +11,28 @@ namespace PetHome.Application.VolunteersManagement.UpdateRequisites
     {
         private readonly IVolunteerRepository _volunteerRepository;
         private readonly ILogger<UpdateRequisitesHandler> _logger;
+        private readonly IValidator<UpdateRequisitesCommand> _validator;
 
-        public UpdateRequisitesHandler(IVolunteerRepository volunteerRepository,
-            ILogger<UpdateRequisitesHandler> logger)
+        public UpdateRequisitesHandler(
+            IVolunteerRepository volunteerRepository,
+            ILogger<UpdateRequisitesHandler> logger,
+            IValidator<UpdateRequisitesCommand> validator)
         {
             _volunteerRepository = volunteerRepository;
             _logger = logger;
+            _validator = validator;
         }
 
         public async Task<Result<Guid>> Execute(
             UpdateRequisitesCommand command,
             CancellationToken token)
         {
+            var validationResult = await _validator.ValidateAsync(command, token);
+            if (validationResult.IsValid == false)
+            {
+                return validationResult.ToErrorList();
+            }
+
             var volunteerId = VolunteerId.Create(command.VolunteerId);
             var volunteerResult =
                 await _volunteerRepository.GetById(volunteerId, token);
