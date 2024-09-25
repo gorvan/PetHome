@@ -1,4 +1,4 @@
-﻿using PetHome.Application.Volunteers.Shared;
+﻿using PetHome.Application.Dtos;
 
 namespace PetHome.API.Processors
 {

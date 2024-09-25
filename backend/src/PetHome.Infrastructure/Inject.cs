@@ -1,10 +1,12 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Minio;
+using PetHome.Application.Database;
 using PetHome.Application.FileProvider;
 using PetHome.Application.Messaging;
 using PetHome.Application.VolunteersManagement;
 using PetHome.Infrastructure.BackgroundServices;
+using PetHome.Infrastructure.DbContexts;
 using PetHome.Infrastructure.MessageQueues;
 using PetHome.Infrastructure.Options;
 using PetHome.Infrastructure.Providers;
@@ -19,12 +21,39 @@ namespace PetHome.Infrastructure
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            services.AddScoped<ApplicationDbContext>();
-            services.AddScoped<IVolunteerRepository, VolunteersRepository>();
-            services.AddScoped<IFileProvider, MinioProvider>();
-            services.AddMinio(configuration);
-            services.AddHostedService<FilesCleanerBackgroundService>();
+            return services.AddDbContexts()
+                .AddMinio(configuration)
+                .AddRepositories()
+                .AddHostedServices()
+                .AddMessaging();
+        }
+
+        private static IServiceCollection AddMessaging(this IServiceCollection services)
+        {
             services.AddSingleton<IMessageQueue<FileInfo>, MemoryCleanerQueue<FileInfo>>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddHostedServices(this IServiceCollection services)
+        {
+            services.AddHostedService<FilesCleanerBackgroundService>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddRepositories(this IServiceCollection services)
+        {
+            services.AddScoped<IVolunteerRepository, VolunteersRepository>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddDbContexts(this IServiceCollection services)
+        {
+            services.AddScoped<WriteDbContext>();
+            services.AddScoped<IReadDbContext, ReadDbContext>();
+
             return services;
         }
 
@@ -45,6 +74,7 @@ namespace PetHome.Infrastructure
                     minioOptions.SecretKey);
                 options.WithSSL(minioOptions.WithSsl);
             });
+            services.AddScoped<IFileProvider, MinioProvider>();
             return services;
         }
     }

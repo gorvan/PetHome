@@ -1,5 +1,5 @@
-﻿using PetHome.Application.Volunteers.Shared;
-using PetHome.Application.VolunteersManagement.UpdateMainInfo;
+﻿using PetHome.Application.Dtos;
+using PetHome.Application.VolunteersManagement.Commands.UpdateMainInfo;
 
 namespace PetHome.Application.Volunteers.UpdateMainInfo
 {

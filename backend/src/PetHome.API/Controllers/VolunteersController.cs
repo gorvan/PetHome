@@ -4,14 +4,15 @@ using PetHome.API.Extensions;
 using PetHome.API.Processors;
 using PetHome.Application.Volunteers.AddPet;
 using PetHome.Application.Volunteers.UpdateMainInfo;
-using PetHome.Application.VolunteersManagement.Create;
-using PetHome.Application.VolunteersManagement.Delete;
-using PetHome.Application.VolunteersManagement.PetManagement.AddPet;
-using PetHome.Application.VolunteersManagement.PetManagement.AddPetFiles;
-using PetHome.Application.VolunteersManagement.Restore;
-using PetHome.Application.VolunteersManagement.UpdateMainInfo;
-using PetHome.Application.VolunteersManagement.UpdateRequisites;
-using PetHome.Application.VolunteersManagement.UpdateSocialNetworks;
+using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPagination;
+using PetHome.Application.VolunteersManagement.Commands.Create;
+using PetHome.Application.VolunteersManagement.Commands.Delete;
+using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
+using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPetFiles;
+using PetHome.Application.VolunteersManagement.Commands.Restore;
+using PetHome.Application.VolunteersManagement.Commands.UpdateMainInfo;
+using PetHome.Application.VolunteersManagement.Commands.UpdateRequisites;
+using PetHome.Application.VolunteersManagement.Commands.UpdateSocialNetworks;
 
 namespace PetHome.API.Controllers
 {
@@ -21,6 +22,18 @@ namespace PetHome.API.Controllers
         public VolunteersController(ILogger<VolunteersController> logger)
             : base(logger)
         {
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> Get(
+            [FromQuery] GetVolunteersWithPaginationRequest request,
+            [FromServices] GetVolunteersWithPaginationHandler handler,
+            CancellationToken token)
+        {
+            _logger.LogInformation("Get all volunteers query with paginations");
+            var query = request.ToQuery();
+            var response = await handler.Execute(query, token);
+            return Ok(response);
         }
 
         [HttpPost]

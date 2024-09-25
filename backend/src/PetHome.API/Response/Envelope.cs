@@ -10,8 +10,8 @@ namespace PetHome.API.Response
     public record Envelope
     {
         public object? Result { get; }
-        public List<ResponseError> ResponceErrors { get; }
-        public List<Error> Errors { get; }
+        public List<ResponseError>? ResponceErrors { get; }
+        public List<Error>? Errors { get; }
         public DateTime TimeGenerated { get; }
 
         private Envelope(
@@ -31,7 +31,7 @@ namespace PetHome.API.Response
             Result = result;
             Errors = errors.ToList();
             TimeGenerated = DateTime.Now;
-            ResponceErrors= [];
+            ResponceErrors = [];
         }
 
         public static Envelope Ok(object? result = null) =>

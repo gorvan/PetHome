@@ -3,13 +3,14 @@ using PetHome.Application.VolunteersManagement;
 using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
+using PetHome.Infrastructure.DbContexts;
 
 namespace PetHome.Infrastructure.Repositories
 {
     public class VolunteersRepository : IVolunteerRepository
     {
-        private readonly ApplicationDbContext _dbContext;
-        public VolunteersRepository(ApplicationDbContext dbContext)
+        private readonly WriteDbContext _dbContext;
+        public VolunteersRepository(WriteDbContext dbContext)
         {
             _dbContext = dbContext;
         }

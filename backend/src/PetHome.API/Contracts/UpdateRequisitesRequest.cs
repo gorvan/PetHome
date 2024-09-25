@@ -1,5 +1,5 @@
-﻿using PetHome.Application.Volunteers.Shared;
-using PetHome.Application.VolunteersManagement.UpdateRequisites;
+﻿using PetHome.Application.Dtos;
+using PetHome.Application.VolunteersManagement.Commands.UpdateRequisites;
 
 namespace PetHome.API.Contracts
 {
