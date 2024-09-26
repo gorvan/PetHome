@@ -11,7 +11,7 @@ namespace PetHome.Application.Dtos
         public Guid BreedId { get; init; }
         public string Description { get; init; } = string.Empty;
         public string Color { get; init; } = string.Empty;
-        public string Health { get; init; } = string.Empty;        
+        public string Health { get; init; } = string.Empty;
         public string City { get; init; } = string.Empty;
         public string Street { get; init; } = string.Empty;
         public string House { get; init; } = string.Empty;
@@ -19,13 +19,13 @@ namespace PetHome.Application.Dtos
         public string Phone { get; } = string.Empty;
         public DateTime BirthDay { get; } = default!;
         public DateTime CreateDate { get; } = default!;
-        public string Requisites { get; } = string.Empty;        
+        public string Requisites { get; } = string.Empty;
         public bool IsNeutered { get; }
         public bool IsVaccinated { get; }
         public HelpStatus HelpStatus { get; }
         public double Weight { get; } = 0;
         public double Height { get; } = 0;
         public int SerialNumber { get; private set; }
-        public string Photos { get; init; } = string.Empty;
+        public PhotoDto[] Photos { get; init; } = [];
     }
 }

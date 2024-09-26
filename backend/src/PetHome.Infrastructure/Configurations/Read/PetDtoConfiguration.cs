@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHome.Application.Dtos;
+using PetHome.Infrastructure.Extensions;
 
 namespace PetHome.Infrastructure.Configurations.Read
 {
@@ -12,6 +13,8 @@ namespace PetHome.Infrastructure.Configurations.Read
 
             builder.HasKey(v => v.Id);
 
+            builder.Property(v => v.Photos)
+                .HasValueJsonConverter();
         }
     }
 }
