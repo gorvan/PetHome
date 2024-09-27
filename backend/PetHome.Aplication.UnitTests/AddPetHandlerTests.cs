@@ -2,9 +2,9 @@
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Moq;
-using PetHome.Application.Volunteers.Shared;
+using PetHome.Application.Dtos;
 using PetHome.Application.VolunteersManagement;
-using PetHome.Application.VolunteersManagement.PetManagement.AddPet;
+using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
 using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;

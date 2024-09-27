@@ -1,5 +1,5 @@
-﻿using PetHome.Application.Volunteers.Shared;
-using PetHome.Application.VolunteersManagement.Create;
+﻿using PetHome.Application.Dtos;
+using PetHome.Application.VolunteersManagement.Commands.Create;
 
 namespace PetHome.API.Contracts
 {

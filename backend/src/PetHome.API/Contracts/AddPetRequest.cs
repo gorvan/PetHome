@@ -1,5 +1,5 @@
-﻿using PetHome.Application.Volunteers.Shared;
-using PetHome.Application.VolunteersManagement.PetManagement.AddPet;
+﻿using PetHome.Application.Dtos;
+using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
 using PetHome.Domain.Shared;
 
 namespace PetHome.Application.Volunteers.AddPet

@@ -1,5 +1,5 @@
-﻿using PetHome.Application.Volunteers.Shared;
-using PetHome.Application.VolunteersManagement.UpdateSocialNetworks;
+﻿using PetHome.Application.Dtos;
+using PetHome.Application.VolunteersManagement.Commands.UpdateSocialNetworks;
 
 namespace PetHome.API.Contracts
 {
