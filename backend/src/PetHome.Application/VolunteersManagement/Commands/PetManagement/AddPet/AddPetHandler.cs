@@ -89,8 +89,8 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
                 command.Requisites.Name,
                 command.Requisites.Description);
 
-            var petRequisites =
-                new PetRequisites([requisite.Value]);
+            //var petRequisites =
+            //    new PetRequisites([requisite.Value]);
 
             var birthday = DateValue.Create(command.BirthDay).Value;
 
@@ -105,7 +105,7 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
                 healthInfo,
                 address,
                 phone,
-                petRequisites,
+                [requisite.Value],
                 birthday,
                 createDate,
                 command.IsNeutered,

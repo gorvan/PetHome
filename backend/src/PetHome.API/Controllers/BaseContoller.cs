@@ -8,11 +8,7 @@ namespace PetHome.API.Controllers
     [Route("[controller]")]
     public abstract class BaseContoller : ControllerBase
     {
-        protected ILogger<BaseContoller> _logger;
-        public BaseContoller(ILogger<BaseContoller> logger)
-        {
-            _logger = logger;
-        }
+        public BaseContoller() { }
 
         public override OkObjectResult Ok([ActionResultObjectValue] object? value)
         {

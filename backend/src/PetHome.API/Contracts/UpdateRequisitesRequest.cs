@@ -4,12 +4,10 @@ using PetHome.Application.VolunteersManagement.Commands.UpdateRequisites;
 namespace PetHome.API.Contracts
 {
     public record UpdateRequisitesRequest(
-        IEnumerable<RequisiteDto> requisitesList
+        IEnumerable<RequisiteDto> RequisitesList
     )
     {
         public UpdateRequisitesCommand ToCommand(Guid id) =>
-            new UpdateRequisitesCommand(
-                id,
-                requisitesList);
+                new UpdateRequisitesCommand(id, RequisitesList);
     }
 }

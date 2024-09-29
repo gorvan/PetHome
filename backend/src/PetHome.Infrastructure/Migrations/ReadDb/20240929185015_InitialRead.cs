@@ -22,7 +22,9 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                     email = table.Column<string>(type: "text", nullable: false),
                     description = table.Column<string>(type: "text", nullable: false),
                     phone = table.Column<string>(type: "text", nullable: false),
-                    social_networks = table.Column<string>(type: "text", nullable: false)
+                    experience = table.Column<int>(type: "integer", nullable: false),
+                    social_networks = table.Column<string>(type: "text", nullable: false),
+                    requisites = table.Column<string>(type: "text", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -45,6 +47,7 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                     street = table.Column<string>(type: "text", nullable: false),
                     house = table.Column<string>(type: "text", nullable: false),
                     appartment = table.Column<string>(type: "text", nullable: false),
+                    requisites = table.Column<string>(type: "text", nullable: false),
                     serial_number = table.Column<int>(type: "integer", nullable: false),
                     photos = table.Column<string>(type: "text", nullable: false)
                 },

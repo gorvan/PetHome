@@ -73,6 +73,11 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                         .HasColumnType("text")
                         .HasColumnName("photos");
 
+                    b.Property<string>("Requisites")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("requisites");
+
                     b.Property<int>("SerialNumber")
                         .HasColumnType("integer")
                         .HasColumnName("serial_number");
@@ -116,6 +121,10 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                         .HasColumnType("text")
                         .HasColumnName("email");
 
+                    b.Property<int>("Experience")
+                        .HasColumnType("integer")
+                        .HasColumnName("experience");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("text")
@@ -125,6 +134,11 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("phone");
+
+                    b.Property<string>("Requisites")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("requisites");
 
                     b.Property<string>("SecondName")
                         .IsRequired()

@@ -20,7 +20,7 @@ namespace PetHome.Domain.PetManadgement.Entities
             HealthInfo health,
             Address address,
             Phone phone,
-            PetRequisites requisites,
+            IEnumerable<Requisite> requisites,
             DateValue birthDay,
             DateValue createDate,            
             bool isNeutered,
@@ -37,7 +37,7 @@ namespace PetHome.Domain.PetManadgement.Entities
             Health = health;
             Address = address;
             Phone = phone;
-            Requisites = requisites;
+            Requisites = requisites.ToList();
             BirthDay = birthDay;
             CreateDate = createDate;           
             IsNeutered = isNeutered;
@@ -59,13 +59,13 @@ namespace PetHome.Domain.PetManadgement.Entities
         public Phone Phone { get; } = default!;
         public DateValue BirthDay { get; } = default!;
         public DateValue CreateDate { get; } = default!;
-        public PetRequisites Requisites { get; } = default!;
+        public IReadOnlyList<Requisite> Requisites { get; } = default!;
         public bool IsNeutered { get; }
         public bool IsVaccinated { get; }
         public HelpStatus HelpStatus { get; }
         public double Weight { get; } = 0;
         public double Height { get; } = 0;
-        public SerialNumber SerialNumber { get; private set; }
+        public SerialNumber SerialNumber { get; private set; } = default!;
 
         public IReadOnlyList<PetPhoto> Photos => _photo;
            
@@ -104,8 +104,11 @@ namespace PetHome.Domain.PetManadgement.Entities
         public void MoveDown()
         {
             var newNumber = SerialNumber.Value - 1;
-            if (newNumber < 1) 
+            if (newNumber < 1)
+            {
                 return;
+            }
+                
             SerialNumber = SerialNumber.Create(newNumber).Value;
         }
     }

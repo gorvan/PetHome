@@ -9,8 +9,9 @@
         public string Email { get; init; } = string.Empty;
         public string Description { get; init; } = string.Empty;
         public string Phone { get; init; } = string.Empty;
-        public string SocialNetworks { get; init; } = string.Empty;       
-        public string Requisites { get; } = string.Empty;        
+        public int Experience { get; init; } = 0;
+        public SocialNetworkDto[] SocialNetworks { get; init; } = [];       
+        public RequisiteDto[] Requisites { get; } = [];        
         public PetDto[] Pets { get; init; } = [];
     }
 }

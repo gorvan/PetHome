@@ -62,7 +62,8 @@ namespace PetHome.API.Extensions
 
             var statusCode = GetStatusCode(result.Error.Type);
 
-            var responseError = new ResponseError(result.Error.Code, result.Error.Message, string.Empty);
+            var responseError = 
+                new ResponseError(result.Error.Code, result.Error.Message, string.Empty);
 
             var envelope = Envelope.Error([responseError]);
 
@@ -86,7 +87,8 @@ namespace PetHome.API.Extensions
 
             var statusCode = GetStatusCode(result.Error.Type);
 
-            var responseError = new ResponseError(result.Error.Code, result.Error.Message, string.Empty);
+            var responseError = 
+                new ResponseError(result.Error.Code, result.Error.Message, string.Empty);
 
             var envelope = Envelope.Error([responseError]);
 

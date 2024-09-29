@@ -9,8 +9,7 @@ namespace PetHome.API.Extensions
         {
             await using var scope = app.Services.CreateAsyncScope();
 
-            var dbContext =
-                scope.ServiceProvider.GetRequiredService<WriteDbContext>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<WriteDbContext>();
             try
             {
                 await dbContext.Database.MigrateAsync();
