@@ -23,7 +23,7 @@ namespace PetHome.API.Middleware
             catch (Exception ex)
             {
                 _logger.LogError("InternalServerError: {ex.Message}", ex.Message);
-                var responseError = new ResponseError("server.internal", ex.Message, null);
+                var responseError = new ResponseError("server.internal", ex.Message, string.Empty);
                 var envelope = Envelope.Error([responseError]);
                 context.Response.ContentType = "application/json";
                 context.Response.StatusCode = StatusCodes.Status500InternalServerError;

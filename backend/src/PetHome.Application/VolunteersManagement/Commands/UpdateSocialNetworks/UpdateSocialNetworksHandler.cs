@@ -47,10 +47,9 @@ namespace PetHome.Application.VolunteersManagement.Commands.UpdateSocialNetworks
                                     .Create(item.Name, item.Path).Value
                               select socialNetwork).ToList();
 
-            var socialNetworkCollection = new SocialNetworks(socialColl);
+            //var socialNetworkCollection = new SocialNetworks(socialColl);
 
-            volunteerResult.Value.UpdateSocialNetworks(
-               socialNetworkCollection);
+            volunteerResult.Value.UpdateSocialNetworks(socialColl);
 
             var result =
                 await _volunteerRepository.Update(volunteerResult.Value, token);

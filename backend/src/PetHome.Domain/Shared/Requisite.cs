@@ -2,7 +2,6 @@
 {
     public record Requisite
     {
-        private Requisite() { }
         private Requisite(string name, string description)
         {
             Name = name;

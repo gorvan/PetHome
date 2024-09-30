@@ -1,8 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PetHome.Application.Dtos;
 using PetHome.Domain.PetManadgement.Entities;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
+using System.Text.Json;
 
 namespace PetHome.Infrastructure.Configurations.Write
 {
@@ -99,19 +101,12 @@ namespace PetHome.Infrastructure.Configurations.Write
                    .HasColumnName("phone");
                });
 
-            builder.OwnsOne(p => p.Requisites,
-               pb =>
-               {
-                   pb.ToJson("requisites");
-
-                   pb.OwnsMany(r => r.Requisites,
-                       rb =>
-                       {
-                           rb.Property(i => i.Name);
-                           rb.Property(i => i.Description);
-                       });
-               });
-
+            builder.Property(p => p.Requisites)
+                .HasConversion(
+                    r => JsonSerializer.Serialize(
+                        r.Select(x => new RequisiteDto(x.Name, x.Description)), JsonSerializerOptions.Default),
+                    json => JsonSerializer.Deserialize<List<RequisiteDto>>(json, JsonSerializerOptions.Default)!
+                        .Select(dto => Requisite.Create(dto.Name, dto.Description).Value).ToList());
 
             builder.ComplexProperty(p => p.BirthDay,
                pb =>

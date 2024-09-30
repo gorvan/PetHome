@@ -36,13 +36,15 @@ namespace PetHome.Application.VolunteersManagement.Commands.Create
                 return validationResult.ToErrorList();
             }
 
-            var phone = Phone.Create(command.phone).Value;
+            var phone = Phone.Create(command.Phone).Value;
 
             var existVolunteerResult = await _volunteerRepository
                 .GetByPhone(phone, token);
 
             if (existVolunteerResult.IsSuccess)
+            {
                 return Errors.General.AlreadyExist();
+            }
 
             var volunteer = CreateVolunteer(command, phone);
 
@@ -58,28 +60,24 @@ namespace PetHome.Application.VolunteersManagement.Commands.Create
             var volunteerId = VolunteerId.NewVolunteerId();
 
             var fullName = FullName.Create(
-                request.fullName.FirstName,
-                request.fullName.SecondName,
-                request.fullName.Surname).Value;
+                request.FullName.FirstName,
+                request.FullName.SecondName,
+                request.FullName.Surname).Value;
 
-            var email = Email.Create(request.email).Value;
+            var email = Email.Create(request.Email).Value;
 
             var description = VolunteerDescription
-                .Create(request.description).Value;
+                .Create(request.Description).Value;
 
-            var socialColl = (from item in request.socialNetworkDtos
+            var socialList = (from item in request.SocialNetworkDtos
                               let socialNetwork = SocialNetwork
                                     .Create(item.Name, item.Path).Value
                               select socialNetwork).ToList();
 
-            var socialNetworkCollection = new SocialNetworks(socialColl);
-
-            var requisiteColl = (from item in request.requisiteDtos
+            var requisiteList = (from item in request.RequisiteDtos
                                  let requisite = Requisite
                                     .Create(item.Name, item.Description).Value
                                  select requisite).ToList();
-
-            var requisiteCollection = new VolunteersRequisites(requisiteColl);
 
             return new Volunteer(
                 volunteerId,
@@ -87,8 +85,9 @@ namespace PetHome.Application.VolunteersManagement.Commands.Create
                 email,
                 description,
                 phone,
-                socialNetworkCollection,
-                requisiteCollection);
+                socialList,
+                requisiteList,
+                request.Experience);
         }
     }
 }

@@ -4,7 +4,6 @@ using PetHome.API.Extensions;
 using PetHome.API.Processors;
 using PetHome.Application.Volunteers.AddPet;
 using PetHome.Application.Volunteers.UpdateMainInfo;
-using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPagination;
 using PetHome.Application.VolunteersManagement.Commands.Create;
 using PetHome.Application.VolunteersManagement.Commands.Delete;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
@@ -13,25 +12,32 @@ using PetHome.Application.VolunteersManagement.Commands.Restore;
 using PetHome.Application.VolunteersManagement.Commands.UpdateMainInfo;
 using PetHome.Application.VolunteersManagement.Commands.UpdateRequisites;
 using PetHome.Application.VolunteersManagement.Commands.UpdateSocialNetworks;
+using PetHome.Application.VolunteersManagement.Queries.GetVolunteerById;
+using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPagination;
 
 namespace PetHome.API.Controllers
 {
 
-    public class VolunteersController : BaseContoller
+    public class VolunteersController : ApplicationContoller
     {
-        public VolunteersController(ILogger<VolunteersController> logger)
-            : base(logger)
-        {
-        }
-
         [HttpGet]
         public async Task<ActionResult> Get(
-            [FromQuery] GetVolunteersWithPaginationRequest request,
-            [FromServices] GetVolunteersWithPaginationHandler handler,
+            [FromQuery] GetVolunteersWithPaginationFilteredRequest request,
+            [FromServices] GetVolunteersWithPaginationFilteredHandler handler,
             CancellationToken token)
         {
-            _logger.LogInformation("Get all volunteers query with paginations");
             var query = request.ToQuery();
+            var response = await handler.Execute(query, token);
+            return Ok(response);
+        }
+
+        [HttpGet("{volunteerId:guid}")]
+        public async Task<ActionResult> GetById(
+            [FromRoute] Guid volunteerId,
+            [FromServices] GetVolunteerByIdHandler handler,
+            CancellationToken token)
+        {
+            var query = new GetVolunteerByIdQuery(volunteerId);
             var response = await handler.Execute(query, token);
             return Ok(response);
         }
@@ -42,10 +48,8 @@ namespace PetHome.API.Controllers
             [FromBody] CreateVolunteerRequest request,
             CancellationToken token)
         {
-            _logger.LogInformation("Create volunteer request");
             var command = request.ToCommand();
             var result = await handler.Execute(command, token);
-
             return result.ToResponse();
         }
 
@@ -56,10 +60,8 @@ namespace PetHome.API.Controllers
             [FromBody] UpdateMainInfoRequest request,
             CancellationToken token)
         {
-            _logger.LogInformation("Update volunteer request");
             var command = request.ToCommand(id);
             var result = await handler.Execute(command, token);
-
             return result.ToResponse();
         }
 
@@ -71,8 +73,6 @@ namespace PetHome.API.Controllers
             CancellationToken token)
         {
             var command = request.ToCommand(id);
-
-            _logger.LogInformation("Update volunteer requisites request");
             var result = await handler.Execute(command, token);
             return result.ToResponse();
         }
@@ -85,8 +85,6 @@ namespace PetHome.API.Controllers
             CancellationToken token)
         {
             var command = request.ToCommand(id);
-
-            _logger.LogInformation("Update volunteer social networks request");
             var result = await handler.Execute(command, token);
             return result.ToResponse();
         }
@@ -98,9 +96,6 @@ namespace PetHome.API.Controllers
             CancellationToken token)
         {
             var command = new DeleteVolunteerCommand(id);
-
-            _logger.LogInformation("Delete volunteer request");
-
             var result = await handler.Execute(command, token);
             return result.ToResponse();
         }
@@ -112,9 +107,6 @@ namespace PetHome.API.Controllers
             CancellationToken token)
         {
             var command = new RestoreVolunteerCommand(id);
-
-            _logger.LogInformation("Restore volunteer request");
-
             var result = await handler.Execute(command, token);
             return result.ToResponse();
         }
@@ -127,32 +119,27 @@ namespace PetHome.API.Controllers
            CancellationToken token)
         {
             var command = request.ToCommand(id);
-
-            _logger.LogInformation("Create pet request");
-
             var result = await handler.Execute(command, token);
-            return result.ToResponse<Guid>();
+            return result.ToResponse();
         }
 
-        [HttpPut("{volunteerid:guid}/pet/{petid:guid}/files")]
+        [HttpPut("{volunteerId:guid}/pet/{petId:guid}/files")]
         public async Task<ActionResult<int>> AddFile(
-           [FromRoute] Guid volunteerid,
-           [FromRoute] Guid petid,
+           [FromRoute] Guid volunteerId,
+           [FromRoute] Guid petId,
            IFormFileCollection files,
            [FromServices] AddPetFilesHandler handler,
            CancellationToken token)
         {
             await using var fileProcessor = new FormFileProcessor();
             var filesDto = fileProcessor.Process(files);
-            var command = new AddPetFilesCommand(volunteerid, petid, filesDto);
-
-            _logger.LogInformation("Add pet photos request");
-
+            var command = new AddPetFilesCommand(volunteerId, petId, filesDto);
             var result = await handler.Execute(command, token);
-
-            return result.ToResponse<int>();
+            return result.ToResponse();
         }
     }
 }
+
+
 
 

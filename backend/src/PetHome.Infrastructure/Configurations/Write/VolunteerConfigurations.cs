@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using PetHome.Application.Dtos;
 using PetHome.Domain.PetManadgement.AggregateRoot;
+using PetHome.Domain.PetManadgement.ValueObjects;
+using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
-using PetHome.Infrastructure.Extensions;
+using System.Text.Json;
 
 namespace PetHome.Infrastructure.Configurations.Write
 {
@@ -48,7 +51,6 @@ namespace PetHome.Infrastructure.Configurations.Write
                     .HasColumnName("email");
                 });
 
-
             builder.ComplexProperty(v => v.Description,
                 vb =>
                 {
@@ -67,17 +69,31 @@ namespace PetHome.Infrastructure.Configurations.Write
                     .HasColumnName("phone");
                 });
 
-            builder.Property(v => v.SocialNetworks)
-                .HasValueJsonConverter()
-                .HasColumnName("social_networks");
+            builder.Property(p => p.SocialNetworks)
+                .HasConversion(
+                    sn => JsonSerializer.Serialize(
+                        sn.Select(n =>
+                            new SocialNetworkDto(n.Name, n.Link)),
+                            JsonSerializerOptions.Default),
+                    json => JsonSerializer.Deserialize<List<SocialNetworkDto>>(json, JsonSerializerOptions.Default)!
+                        .Select(dto => SocialNetwork.Create(dto.Name, dto.Path).Value).ToList());
 
-            builder.Property(v => v.Requisites)
-                .HasValueJsonConverter()
-                .HasColumnName("requisites");
+            builder.Property(p => p.Requisites)
+                .HasConversion(
+                    r => JsonSerializer.Serialize(
+                        r.Select(x =>
+                            new RequisiteDto(x.Name, x.Description)),
+                            JsonSerializerOptions.Default),
+                    json => JsonSerializer.Deserialize<List<RequisiteDto>>(json, JsonSerializerOptions.Default)!
+                        .Select(dto => Requisite.Create(dto.Name, dto.Description).Value).ToList());
 
             builder.HasMany(v => v.Pets)
                 .WithOne()
                 .HasForeignKey("volunteer_id");
+
+            builder.Property(v => v.Experience)
+                .IsRequired()
+                .HasColumnName("experience");
 
             builder.Property<bool>("_isDeleted")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)

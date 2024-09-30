@@ -19,7 +19,7 @@ namespace PetHome.Application.Dtos
         public string Phone { get; } = string.Empty;
         public DateTime BirthDay { get; } = default!;
         public DateTime CreateDate { get; } = default!;
-        public string Requisites { get; } = string.Empty;
+        public RequisiteDto[] Requisites { get; } = [];
         public bool IsNeutered { get; }
         public bool IsVaccinated { get; }
         public HelpStatus HelpStatus { get; }

@@ -20,7 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{6B465ED6
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetHome.Domain.UnitTests", "PetHome.UnitTests\PetHome.Domain.UnitTests.csproj", "{8FB32834-CD90-4012-9FA5-ECE24EEFABDC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.Aplication.UnitTests", "PetHome.Aplication.UnitTests\PetHome.Aplication.UnitTests.csproj", "{56A7CF3B-4CF2-4DB7-A175-14A2D4431EBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetHome.Aplication.UnitTests", "PetHome.Aplication.UnitTests\PetHome.Aplication.UnitTests.csproj", "{56A7CF3B-4CF2-4DB7-A175-14A2D4431EBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

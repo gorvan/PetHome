@@ -5,20 +5,22 @@ namespace PetHome.API.Contracts
 {
     public record CreateVolunteerRequest
     (
-        FullNameDto fullName,
-        string email,
-        string description,
-        string phone,
-        IEnumerable<SocialNetworkDto> socialNetworkDtos,
-        IEnumerable<RequisiteDto> requisiteDtos)
+        FullNameDto FullName,
+        string Email,
+        string Description,
+        string Phone,
+        IEnumerable<SocialNetworkDto> SocialNetworkDtos,
+        IEnumerable<RequisiteDto> RequisiteDtos,
+        int Experience)
     {
         public CreateVolunteerCommand ToCommand() =>
                 new CreateVolunteerCommand(
-                     fullName,
-                     email,
-                     description,
-                     phone,
-                     socialNetworkDtos,
-                     requisiteDtos);
+                     FullName,
+                     Email,
+                     Description,
+                     Phone,
+                     SocialNetworkDtos,
+                     RequisiteDtos,
+                     Experience);
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetHome.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class InitialWrie : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -30,6 +30,7 @@ namespace PetHome.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     social_networks = table.Column<string>(type: "text", nullable: false),
                     requisites = table.Column<string>(type: "text", nullable: false),
+                    experience = table.Column<int>(type: "integer", nullable: false),
                     is_delete = table.Column<bool>(type: "boolean", nullable: false),
                     description = table.Column<string>(type: "character varying(2000)", maxLength: 2000, nullable: false),
                     email = table.Column<string>(type: "character varying(100)", maxLength: 100, nullable: false),
@@ -66,6 +67,7 @@ namespace PetHome.Infrastructure.Migrations
                 columns: table => new
                 {
                     pet_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    requisites = table.Column<string>(type: "text", nullable: false),
                     is_neutered = table.Column<bool>(type: "boolean", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
                     help_status = table.Column<int>(type: "integer", nullable: false),
@@ -86,8 +88,7 @@ namespace PetHome.Infrastructure.Migrations
                     phone = table.Column<string>(type: "text", nullable: false),
                     serial_number = table.Column<int>(type: "integer", nullable: false),
                     breed_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    species_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    requisites = table.Column<string>(type: "jsonb", nullable: false)
+                    species_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {

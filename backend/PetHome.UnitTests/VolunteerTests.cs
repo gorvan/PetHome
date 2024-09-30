@@ -16,8 +16,9 @@ namespace PetHome.UnitTests
             var email = Email.Create("test@ddd.ru").Value;
             var description = VolunteerDescription.Create("Test").Value;
             var phone = Phone.Create("+70952365484").Value;
-            var socialnetworks = new SocialNetworks();
-            var requisites = new VolunteersRequisites();
+            var socialnetworks = new List<SocialNetwork>();
+            var requisites = new List<Requisite>();
+            int experience = 1;
 
             return new Volunteer(
                 id,
@@ -26,7 +27,8 @@ namespace PetHome.UnitTests
                 description,
                 phone,
                 socialnetworks,
-                requisites);
+                requisites,
+                experience);
         }
 
         public static Pet CreatePet()
@@ -40,7 +42,7 @@ namespace PetHome.UnitTests
             var health = HealthInfo.Create("test").Value;
             var address = Address.Create("test", "test", "test", "test").Value;
             var phone = Phone.Create("+70952365484").Value;
-            var requisites = new PetRequisites();
+            var requisites = new List<Requisite>();
             var birthDay = DateValue.Create(DateTime.Now).Value;
             var createDate = DateValue.Create(DateTime.Now).Value;
             var isNeutered = true;

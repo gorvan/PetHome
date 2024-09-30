@@ -17,62 +17,40 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
             Email email,
             VolunteerDescription description,
             Phone phone,
-            SocialNetworks socialNets,
-            VolunteersRequisites requisites)
+            IEnumerable<SocialNetwork> socialNets,
+            IEnumerable<Requisite> requisites,
+            int experience)
             : base(id)
         {
             Name = name;
             Email = email;
             Description = description;
             Phone = phone;
-            SocialNetworks = socialNets;
-            Requisites = requisites;
+            SocialNetworks = socialNets.ToList();
+            Requisites = requisites.ToList();
+            Experience = experience;
         }
 
         private readonly List<Pet> _pets = [];
-
         private bool _isDeleted = false;
-
 
         public FullName Name { get; private set; } = default!;
         public Email Email { get; private set; } = default!;
         public VolunteerDescription Description { get; private set; } = default!;
         public Phone Phone { get; private set; } = default!;
-        public SocialNetworks SocialNetworks { get; private set; } = default!;
-        public VolunteersRequisites Requisites { get; private set; } = default!;
+        public IReadOnlyList<SocialNetwork> SocialNetworks { get; private set; } = default!;
+        public IReadOnlyList<Requisite> Requisites { get; private set; } = default!;
+        public int Experience { get; private set; } = default!;
         public IReadOnlyList<Pet> Pets => _pets;
 
-        public int Experience => GetExperience();
+        public int FoundHomePets => _pets
+            .Count(p => p.HelpStatus == HelpStatus.FoundHome);
 
-        public int FoundHomePets =>
-            _pets
-            .Where(p => p.HelpStatus == HelpStatus.FoundHome)
-            .Count();
+        public int NeedHomePets => _pets
+            .Count(p => p.HelpStatus == HelpStatus.NeeedHome);
 
-        public int NeedHomePets =>
-            _pets
-            .Where(p => p.HelpStatus == HelpStatus.NeeedHome)
-            .Count();
-
-        public int TreatPets =>
-            _pets
-            .Where(p => p.HelpStatus == HelpStatus.OnTreatment)
-            .Count();
-
-        private int GetExperience()
-        {
-            var firstPet =
-                _pets
-                .OrderBy(p => p.CreateDate.Date)
-                .FirstOrDefault();
-
-            if (firstPet == null)
-            {
-                return 0;
-            }
-
-            return DateTime.Now.Year - firstPet.CreateDate.Date.Year;
-        }
+        public int TreatPets => _pets
+            .Count(p => p.HelpStatus == HelpStatus.OnTreatment);
 
         public void UpdateMainInfo(
             FullName fullName,
@@ -86,16 +64,14 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
             Description = description;
         }
 
-        public void UpdateRequisites(
-            VolunteersRequisites requisites)
+        public void UpdateRequisites(IEnumerable<Requisite> requisites)
         {
-            Requisites = requisites;
+            Requisites = requisites.ToList();
         }
 
-        public void UpdateSocialNetworks(
-            SocialNetworks socialNetworks)
+        public void UpdateSocialNetworks(IEnumerable<SocialNetwork> socialNetworks)
         {
-            SocialNetworks = socialNetworks;
+            SocialNetworks = socialNetworks.ToList();
         }
 
         public void Delete()
@@ -120,7 +96,9 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
 
             var serialNumberResult = SerialNumber.Create(_pets.Count);
             if (serialNumberResult.IsFailure)
+            {
                 return serialNumberResult.Error;
+            }
 
             pet.SetSerialNumber(serialNumberResult.Value);
 
@@ -136,7 +114,7 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
 
             var sortedPets = _pets.OrderBy(p => p.SerialNumber.Value).ToList();
 
-            if (pet.SerialNumber.Value > serialNumber.Value) 
+            if (pet.SerialNumber.Value > serialNumber.Value)
             {
                 for (int i = pet.SerialNumber.Value - 2; i >= serialNumber.Value - 1; i--)
                 {
@@ -150,7 +128,7 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
                     sortedPets[i].MoveDown();
                 }
             }
-           
+
             pet.SetSerialNumber(serialNumber);
         }
     }
