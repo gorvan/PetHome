@@ -11,7 +11,7 @@
         public string Phone { get; init; } = string.Empty;
         public int Experience { get; init; } = 0;
         public SocialNetworkDto[] SocialNetworks { get; init; } = [];       
-        public RequisiteDto[] Requisites { get; } = [];        
+        public RequisiteDto[] Requisites { get; init; } = [];        
         public PetDto[] Pets { get; init; } = [];
     }
 }

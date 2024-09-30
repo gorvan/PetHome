@@ -18,12 +18,8 @@ using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPaginati
 namespace PetHome.API.Controllers
 {
 
-    public class VolunteersController : BaseContoller
+    public class VolunteersController : ApplicationContoller
     {
-        public VolunteersController() : base()
-        {
-        }
-
         [HttpGet]
         public async Task<ActionResult> Get(
             [FromQuery] GetVolunteersWithPaginationFilteredRequest request,
