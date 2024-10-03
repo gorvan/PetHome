@@ -47,8 +47,6 @@ namespace PetHome.Application.VolunteersManagement.Commands.UpdateSocialNetworks
                                     .Create(item.Name, item.Path).Value
                               select socialNetwork).ToList();
 
-            //var socialNetworkCollection = new SocialNetworks(socialColl);
-
             volunteerResult.Value.UpdateSocialNetworks(socialColl);
 
             var result =

@@ -37,5 +37,10 @@ namespace PetHome.Domain.SpeciesManagement.Entities
 
             return new Species(id, name, breeds);
         }
+
+        public void AddBreed(Breed breed)
+        {
+            _breeds.Add(breed);
+        }
     }
 }

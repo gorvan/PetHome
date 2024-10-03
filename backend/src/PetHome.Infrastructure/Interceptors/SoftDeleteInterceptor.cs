@@ -19,6 +19,7 @@ namespace PetHome.Infrastructure.Interceptors
             var entries = eventData.Context.ChangeTracker
                 .Entries()
                 .Where(e => e.State == EntityState.Deleted);
+
             foreach (var entry in entries)
             {
                 entry.State = EntityState.Modified;

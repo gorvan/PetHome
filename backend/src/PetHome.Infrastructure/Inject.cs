@@ -4,6 +4,7 @@ using Minio;
 using PetHome.Application.Database;
 using PetHome.Application.FileProvider;
 using PetHome.Application.Messaging;
+using PetHome.Application.SpeciesManagement;
 using PetHome.Application.VolunteersManagement;
 using PetHome.Infrastructure.BackgroundServices;
 using PetHome.Infrastructure.DbContexts;
@@ -45,6 +46,7 @@ namespace PetHome.Infrastructure
         private static IServiceCollection AddRepositories(this IServiceCollection services)
         {
             services.AddScoped<IVolunteerRepository, VolunteersRepository>();
+            services.AddScoped<ISpeciesRepository, SpeciesRepository>();
 
             return services;
         }
@@ -53,7 +55,8 @@ namespace PetHome.Infrastructure
         {
             services.AddScoped<WriteDbContext>();
             services.AddScoped<IReadDbContext, ReadDbContext>();
-
+            services.AddSingleton<ISqlConnectionFactory, SqlConnectionFactory>();
+            Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
             return services;
         }
 

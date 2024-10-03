@@ -22,6 +22,35 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
 
+            modelBuilder.Entity("PetHome.Application.Dtos.BreedDto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.Property<Guid?>("SpeciesDtoId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("species_dto_id");
+
+                    b.Property<Guid>("SpeciesId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("species_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_breeds");
+
+                    b.HasIndex("SpeciesDtoId")
+                        .HasDatabaseName("ix_breeds_species_dto_id");
+
+                    b.ToTable("breeds", (string)null);
+                });
+
             modelBuilder.Entity("PetHome.Application.Dtos.PetDto", b =>
                 {
                     b.Property<Guid>("Id")
@@ -104,6 +133,24 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                     b.ToTable("pets", (string)null);
                 });
 
+            modelBuilder.Entity("PetHome.Application.Dtos.SpeciesDto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("name");
+
+                    b.HasKey("Id")
+                        .HasName("pk_species");
+
+                    b.ToTable("species", (string)null);
+                });
+
             modelBuilder.Entity("PetHome.Application.Dtos.VolunteerDto", b =>
                 {
                     b.Property<Guid>("Id")
@@ -161,6 +208,14 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                     b.ToTable("volunteers", (string)null);
                 });
 
+            modelBuilder.Entity("PetHome.Application.Dtos.BreedDto", b =>
+                {
+                    b.HasOne("PetHome.Application.Dtos.SpeciesDto", null)
+                        .WithMany("Breeds")
+                        .HasForeignKey("SpeciesDtoId")
+                        .HasConstraintName("fk_breeds_species_dto_species_dto_id");
+                });
+
             modelBuilder.Entity("PetHome.Application.Dtos.PetDto", b =>
                 {
                     b.HasOne("PetHome.Application.Dtos.VolunteerDto", null)
@@ -169,6 +224,11 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
+                });
+
+            modelBuilder.Entity("PetHome.Application.Dtos.SpeciesDto", b =>
+                {
+                    b.Navigation("Breeds");
                 });
 
             modelBuilder.Entity("PetHome.Application.Dtos.VolunteerDto", b =>

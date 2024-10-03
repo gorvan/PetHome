@@ -76,7 +76,8 @@ namespace PetHome.Infrastructure.Configurations.Write
                             new SocialNetworkDto(n.Name, n.Link)),
                             JsonSerializerOptions.Default),
                     json => JsonSerializer.Deserialize<List<SocialNetworkDto>>(json, JsonSerializerOptions.Default)!
-                        .Select(dto => SocialNetwork.Create(dto.Name, dto.Path).Value).ToList());
+                        .Select(dto => SocialNetwork.Create(dto.Name, dto.Path).Value).ToList())
+                .HasColumnName("social_networks");
 
             builder.Property(p => p.Requisites)
                 .HasConversion(
@@ -85,7 +86,8 @@ namespace PetHome.Infrastructure.Configurations.Write
                             new RequisiteDto(x.Name, x.Description)),
                             JsonSerializerOptions.Default),
                     json => JsonSerializer.Deserialize<List<RequisiteDto>>(json, JsonSerializerOptions.Default)!
-                        .Select(dto => Requisite.Create(dto.Name, dto.Description).Value).ToList());
+                        .Select(dto => Requisite.Create(dto.Name, dto.Description).Value).ToList())
+                .HasColumnName("requisites");
 
             builder.HasMany(v => v.Pets)
                 .WithOne()

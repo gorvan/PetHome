@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
 using PetHome.Domain.SpeciesManagement.Entities;
 

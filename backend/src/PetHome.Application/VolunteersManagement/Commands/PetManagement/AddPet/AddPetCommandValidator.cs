@@ -2,6 +2,9 @@
 using PetHome.Application.Validation;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
+using PetHome.Domain.Shared.IDs;
+using PetHome.Domain.SpeciesManagement.Entities;
+using PetHome.Domain.SpeciesManagement.ValueObjects;
 
 namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
 {
@@ -12,19 +15,25 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
             RuleFor(v => v.VolunteerId).NotEmpty()
                 .WithError(Errors.General.ValueIsRequeired());
 
-            RuleFor(c => c.Nickname).MustBeValueObject(
+            RuleFor(p => p.Nickname).MustBeValueObject(
                 PetNickname.Create);
 
-            RuleFor(c => c.Description).MustBeValueObject(
+            RuleFor(p => p.Species).MustBeValueObject(x =>
+                Species.Create(SpeciesId.Empty(), x, []));
+
+            RuleFor(p => p.Breed).MustBeValueObject(x=>
+                Breed.Create(BreedId.Empty(), x));
+
+            RuleFor(p => p.Description).MustBeValueObject(
                 PetDescription.Create);
 
-            RuleFor(c => c.Color).MustBeValueObject(
+            RuleFor(p => p.Color).MustBeValueObject(
                 PetColor.Create);
 
             RuleFor(p => p.Health).MustBeValueObject(
                 HealthInfo.Create);
 
-            RuleFor(c => c.Address).MustBeValueObject(x =>
+            RuleFor(p => p.Address).MustBeValueObject(x =>
                 Address.Create(x.City, x.Street, x.HouseNumber, x.AppartmentNumber));
 
             RuleFor(p => p.Phone).MustBeValueObject(
