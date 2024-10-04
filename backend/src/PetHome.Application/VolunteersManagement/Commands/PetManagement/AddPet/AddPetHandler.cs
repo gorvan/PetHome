@@ -10,8 +10,6 @@ using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
 using PetHome.Domain.SpeciesManagement.AggregateRoot;
-using PetHome.Domain.SpeciesManagement.Entities;
-using PetHome.Domain.SpeciesManagement.ValueObjects;
 
 namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
 {
@@ -55,7 +53,7 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
                 return volunteerResult.Error;
             }
 
-            var petResult = await CreatePet(command, token);
+            var petResult = CreatePet(command);
 
             if (petResult.IsFailure)
             {
@@ -71,16 +69,14 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
             return petResult.Value.Id.Id;
         }
 
-        private async Task<Result<Pet>> CreatePet(
-            AddPetCommand command, 
-            CancellationToken token)
+        private Result<Pet> CreatePet(AddPetCommand command)
         {
             var petId = PetId.NewPetId();
 
             var petNickName =
                 PetNickname.Create(command.Nickname).Value;
 
-            var speciesBreedResult = await GetSpeciesAndBreed(command, token);
+            var speciesBreedResult = GetSpeciesAndBreed(command);
 
             if (speciesBreedResult.IsFailure)
             {
@@ -88,7 +84,7 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
             }
 
             var speciesBreedValue = new SpeciesBreedValue(
-                speciesBreedResult.Value.speciesId, 
+                speciesBreedResult.Value.speciesId,
                 speciesBreedResult.Value.breedId);
 
             var petDescription =
@@ -134,67 +130,29 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
                 command.Height);
         }
 
-        private async Task<Result<(SpeciesId speciesId, BreedId breedId)>> GetSpeciesAndBreed(
-            AddPetCommand command,
-            CancellationToken token)
+        private Result<(SpeciesId speciesId, BreedId breedId)> GetSpeciesAndBreed(
+            AddPetCommand command)
         {
-            SpeciesId speciesId;
-            BreedId breedId;
-
-            var speciesRequestResult = await _readDbContext.Species
-                .FirstOrDefaultAsync(s => s.Name == command.Species, token);
+            var speciesRequestResult = _readDbContext.Species
+                .FirstOrDefault(s => s.Id == command.SpeciesId);
 
             if (speciesRequestResult != null)
             {
-                speciesId = SpeciesId.Create(speciesRequestResult.Id);
+                var speciesId = SpeciesId.Create(speciesRequestResult.Id);
 
                 var breedResult = speciesRequestResult.Breeds
-                    .FirstOrDefault(b => b.Name == command.Breed);
+                    .FirstOrDefault(b => b.Id == command.BreedId);
 
                 if (breedResult == null)
                 {
-                    var speciesValue = await _speciesRepository
-                        .GetById(speciesId, token);
-
-                    if (speciesValue.IsFailure)
-                    {
-                        return Errors.General.NotFound(speciesId.Id);
-                    }
-
-                    breedId = BreedId.NewBreedId();
-                    var resultBreed = Breed.Create(breedId, command.Breed);
-
-                    if (resultBreed.IsFailure)
-                    {
-                        return resultBreed.Error;
-                    }
-
-                    speciesValue.Value.AddBreed(resultBreed.Value);
-
-                    var updateResult = await _speciesRepository
-                        .Update(speciesValue.Value, token);
+                    return Errors.General.NotFound(command.BreedId);
                 }
-                else
-                {
-                    breedId = BreedId.Create(breedResult.Id);
-                }
+
+                var breedId = BreedId.Create(command.BreedId);
+
+                return (speciesId, breedId);
             }
-            else
-            {
-                breedId = BreedId.NewBreedId();
-                var breedValue = Breed.Create(breedId, command.Breed);
-
-                speciesId = SpeciesId.NewSpeciesId();
-                var speciesValue = Species.Create(
-                    speciesId, 
-                    command.Species, 
-                    [breedValue.Value]);
-
-                var requestResult = await _speciesRepository
-                    .Add(speciesValue.Value, token);
-            }
-
-            return (speciesId, breedId);
+            return Errors.General.NotFound(command.SpeciesId);
         }
     }
 }

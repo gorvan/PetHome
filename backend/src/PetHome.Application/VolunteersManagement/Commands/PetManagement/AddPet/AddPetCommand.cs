@@ -7,8 +7,8 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
     public record AddPetCommand
             (Guid VolunteerId,
             string Nickname,
-            string Species,
-            string Breed,
+            Guid SpeciesId,
+            Guid BreedId,
             string Description,
             string Color,
             string Health,

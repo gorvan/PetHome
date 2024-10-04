@@ -2,9 +2,6 @@
 using PetHome.Application.Validation;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
-using PetHome.Domain.Shared.IDs;
-using PetHome.Domain.SpeciesManagement.Entities;
-using PetHome.Domain.SpeciesManagement.ValueObjects;
 
 namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
 {
@@ -18,11 +15,11 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
             RuleFor(p => p.Nickname).MustBeValueObject(
                 PetNickname.Create);
 
-            RuleFor(p => p.Species).MustBeValueObject(x =>
-                Species.Create(SpeciesId.Empty(), x, []));
+            RuleFor(v => v.SpeciesId).NotEmpty()
+                .WithError(Errors.General.ValueIsRequeired());
 
-            RuleFor(p => p.Breed).MustBeValueObject(x=>
-                Breed.Create(BreedId.Empty(), x));
+            RuleFor(v => v.BreedId).NotEmpty()
+                .WithError(Errors.General.ValueIsRequeired());
 
             RuleFor(p => p.Description).MustBeValueObject(
                 PetDescription.Create);

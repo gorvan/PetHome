@@ -20,8 +20,8 @@ namespace PetHome.UnitTests
         public static AddPetCommand CreatePetCommand()
         {
             var nick = "test";
-            var species = "test";
-            var breed = "test";
+            var speciesId = Guid.Empty;
+            var breedId = Guid.Empty;
             var description = "test";
             var color = "test";
             var health = "test";
@@ -36,7 +36,7 @@ namespace PetHome.UnitTests
             var height = 1.0;
 
             return new AddPetCommand(
-                Guid.NewGuid(), nick, species, breed, description, color, health, address, phone,
+                Guid.NewGuid(), nick, speciesId, breedId, description, color, health, address, phone,
                 requisites, birthday, isNeutered, isVacinated, helpStatus, weight, height);
         }
 
@@ -67,7 +67,23 @@ namespace PetHome.UnitTests
                 .Returns(Task.Run(() =>
                 new Result<Species>(GetSpecies(), true, Error.None)));
 
-            var readDbContextMock = new Mock<IReadDbContext>();           
+            var readDbContextMock = new Mock<IReadDbContext>();
+            readDbContextMock.Setup(r => r.Species).Returns(
+                new List<SpeciesDto>
+                {
+                    new SpeciesDto
+                    {
+                        Id = Guid.Empty,
+                        Name = "Test",
+                        Breeds = [
+                            new BreedDto
+                            {
+                                Id = Guid.Empty,
+                                Name = "Test",
+                                SpeciesId = Guid.Empty,
+                            }]
+                    }
+                }.AsQueryable());
 
             var loggerMock = new Mock<ILogger<AddPetHandler>>();
 
