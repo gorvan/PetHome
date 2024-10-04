@@ -27,6 +27,14 @@
                 return Error.NotFound("record.already.exist",
                     "Volunteer already exist");
             }
+
+            public static Error ValueIsUsed(Guid? id)
+            {
+                var forId = id == null ? "" : $" for id '{id}'";
+
+                return Error.NotFound("record.is.used",
+                    $"record is used{forId}");
+            }
         }
     }
 }

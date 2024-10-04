@@ -14,6 +14,7 @@ using PetHome.Application.VolunteersManagement.Commands.UpdateRequisites;
 using PetHome.Application.VolunteersManagement.Commands.UpdateSocialNetworks;
 using PetHome.Application.VolunteersManagement.Queries.GetVolunteerById;
 using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPagination;
+using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPaginationDapper;
 
 namespace PetHome.API.Controllers
 {
@@ -24,6 +25,17 @@ namespace PetHome.API.Controllers
         public async Task<ActionResult> Get(
             [FromQuery] GetVolunteersWithPaginationFilteredRequest request,
             [FromServices] GetVolunteersWithPaginationFilteredHandler handler,
+            CancellationToken token)
+        {
+            var query = request.ToQuery();
+            var response = await handler.Execute(query, token);
+            return Ok(response);
+        }
+
+        [HttpGet("dapper")]
+        public async Task<ActionResult> Get(
+            [FromQuery] GetVolunteersWithPaginationFilteredRequest request,
+            [FromServices] GetVolunteersWithPaginationFilteredDapperHandler handler,
             CancellationToken token)
         {
             var query = request.ToQuery();

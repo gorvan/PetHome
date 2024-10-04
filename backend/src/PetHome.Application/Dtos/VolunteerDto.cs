@@ -2,7 +2,7 @@
 {
     public class VolunteerDto
     {
-        public Guid Id { get; init; }        
+        public Guid Id { get; init; }
         public string FirstName { get; init; } = string.Empty;
         public string SecondName { get; init; } = string.Empty;
         public string Surname { get; init; } = string.Empty;
@@ -10,8 +10,8 @@
         public string Description { get; init; } = string.Empty;
         public string Phone { get; init; } = string.Empty;
         public int Experience { get; init; } = 0;
-        public SocialNetworkDto[] SocialNetworks { get; init; } = [];       
-        public RequisiteDto[] Requisites { get; init; } = [];        
-        public PetDto[] Pets { get; init; } = [];
+        public SocialNetworkDto[] SocialNetworks { get; set; } = [];
+        public RequisiteDto[] Requisites { get; set; } = [];
+        public PetDto[] Pets { get; set; } = [];
     }
 }

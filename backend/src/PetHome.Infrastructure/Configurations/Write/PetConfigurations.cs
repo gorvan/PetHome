@@ -106,7 +106,8 @@ namespace PetHome.Infrastructure.Configurations.Write
                     r => JsonSerializer.Serialize(
                         r.Select(x => new RequisiteDto(x.Name, x.Description)), JsonSerializerOptions.Default),
                     json => JsonSerializer.Deserialize<List<RequisiteDto>>(json, JsonSerializerOptions.Default)!
-                        .Select(dto => Requisite.Create(dto.Name, dto.Description).Value).ToList());
+                        .Select(dto => Requisite.Create(dto.Name, dto.Description).Value).ToList())
+                .HasColumnName("requisites");
 
             builder.ComplexProperty(p => p.BirthDay,
                pb =>

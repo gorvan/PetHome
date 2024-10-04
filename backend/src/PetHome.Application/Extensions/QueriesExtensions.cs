@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetHome.Application.Models;
+using System.Linq.Expressions;
 
 namespace PetHome.Application.Extensions
 {
@@ -25,6 +26,14 @@ namespace PetHome.Application.Extensions
                 Page = page,
                 TotalCount = totalCount
             };
+        }
+
+        public static IQueryable<T> WhereIf<T>(
+            this IQueryable<T> source,
+            bool condition,
+            Expression<Func<T, bool>> predicate)
+        {
+            return condition ? source.Where(predicate) : source;
         }
     }
 }

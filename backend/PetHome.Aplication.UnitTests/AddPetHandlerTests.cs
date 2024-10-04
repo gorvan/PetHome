@@ -2,12 +2,16 @@
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Moq;
+using PetHome.Application.Database;
 using PetHome.Application.Dtos;
+using PetHome.Application.SpeciesManagement;
 using PetHome.Application.VolunteersManagement;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
 using PetHome.Domain.PetManadgement.AggregateRoot;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
+using PetHome.Domain.SpeciesManagement.Entities;
+using PetHome.Domain.SpeciesManagement.ValueObjects;
 
 namespace PetHome.UnitTests
 {
@@ -16,6 +20,8 @@ namespace PetHome.UnitTests
         public static AddPetCommand CreatePetCommand()
         {
             var nick = "test";
+            var speciesId = Guid.Empty;
+            var breedId = Guid.Empty;
             var description = "test";
             var color = "test";
             var health = "test";
@@ -30,8 +36,18 @@ namespace PetHome.UnitTests
             var height = 1.0;
 
             return new AddPetCommand(
-                Guid.NewGuid(), nick, description, color, health, address, phone,
+                Guid.NewGuid(), nick, speciesId, breedId, description, color, health, address, phone,
                 requisites, birthday, isNeutered, isVacinated, helpStatus, weight, height);
+        }
+
+        public static Species GetSpecies()
+        {
+            var speciesId = SpeciesId.Empty();
+            var speciesName = "species";
+            var breedId = BreedId.Empty();
+            var breedName = "breed";
+            var breed = Breed.Create(breedId, breedName);
+            return Species.Create(speciesId, speciesName, [breed.Value]).Value;
         }
 
         [Fact]
@@ -39,11 +55,36 @@ namespace PetHome.UnitTests
         {
             //Arrange
             var token = new CancellationTokenSource().Token;
-            var volunteerRepsitoryMock = new Mock<IVolunteerRepository>();
-            volunteerRepsitoryMock
+            var volunteerRepositoryMock = new Mock<IVolunteerRepository>();
+            volunteerRepositoryMock
                 .Setup(v => v.GetById(It.IsAny<VolunteerId>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.Run(() =>
                 new Result<Volunteer>(VolunteerTests.CreateVolunteer(), true, Error.None)));
+
+            var speciesRepositoryMock = new Mock<ISpeciesRepository>();
+            speciesRepositoryMock
+                .Setup(v => v.GetById(It.IsAny<SpeciesId>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.Run(() =>
+                new Result<Species>(GetSpecies(), true, Error.None)));
+
+            var readDbContextMock = new Mock<IReadDbContext>();
+            readDbContextMock.Setup(r => r.Species).Returns(
+                new List<SpeciesDto>
+                {
+                    new SpeciesDto
+                    {
+                        Id = Guid.Empty,
+                        Name = "Test",
+                        Breeds = [
+                            new BreedDto
+                            {
+                                Id = Guid.Empty,
+                                Name = "Test",
+                                SpeciesId = Guid.Empty,
+                            }]
+                    }
+                }.AsQueryable());
+
             var loggerMock = new Mock<ILogger<AddPetHandler>>();
 
             var validatorMock = new Mock<IValidator<AddPetCommand>>();
@@ -51,7 +92,9 @@ namespace PetHome.UnitTests
                 .Returns(Task.Run(() => new ValidationResult { Errors = [] }));
 
             var addPetHandler = new AddPetHandler(
-                volunteerRepsitoryMock.Object,
+                volunteerRepositoryMock.Object,
+                speciesRepositoryMock.Object,
+                readDbContextMock.Object,
                 loggerMock.Object,
                 validatorMock.Object);
 
@@ -77,6 +120,15 @@ namespace PetHome.UnitTests
                 .Returns(Task.Run(() =>
                 new Result<Volunteer>(VolunteerTests.CreateVolunteer(), false,
                 testResult)));
+
+            var speciesRepositoryMock = new Mock<ISpeciesRepository>();
+            speciesRepositoryMock
+                .Setup(v => v.GetById(It.IsAny<SpeciesId>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.Run(() =>
+                new Result<Species>(GetSpecies(), true, Error.None)));
+
+            var readDbContextMock = new Mock<IReadDbContext>();
+
             var loggerMock = new Mock<ILogger<AddPetHandler>>();
 
             var validatorMock = new Mock<IValidator<AddPetCommand>>();
@@ -85,6 +137,8 @@ namespace PetHome.UnitTests
 
             var addPetHandler = new AddPetHandler(
                 volunteerRepsitoryMock.Object,
+                 speciesRepositoryMock.Object,
+                readDbContextMock.Object,
                 loggerMock.Object,
                 validatorMock.Object);
 

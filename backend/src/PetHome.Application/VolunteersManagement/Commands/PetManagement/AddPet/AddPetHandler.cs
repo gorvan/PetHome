@@ -1,7 +1,10 @@
 ﻿using FluentValidation;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PetHome.Application.Abstractions;
+using PetHome.Application.Database;
 using PetHome.Application.Extensions;
+using PetHome.Application.SpeciesManagement;
 using PetHome.Domain.PetManadgement.Entities;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
@@ -13,15 +16,21 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
     public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
     {
         private readonly IVolunteerRepository _volunteerRepository;
+        private readonly ISpeciesRepository _speciesRepository;
+        private readonly IReadDbContext _readDbContext;
         private readonly ILogger<AddPetHandler> _logger;
         private readonly IValidator<AddPetCommand> _validator;
 
         public AddPetHandler(
             IVolunteerRepository volunteerRepository,
+            ISpeciesRepository speciesRepository,
+            IReadDbContext readDbContext,
             ILogger<AddPetHandler> logger,
             IValidator<AddPetCommand> validator)
         {
             _volunteerRepository = volunteerRepository;
+            _speciesRepository = speciesRepository;
+            _readDbContext = readDbContext;
             _logger = logger;
             _validator = validator;
         }
@@ -44,30 +53,39 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
                 return volunteerResult.Error;
             }
 
-            var pet = CreatePet(command);
+            var petResult = CreatePet(command);
 
-            volunteerResult.Value.AddPet(pet);
+            if (petResult.IsFailure)
+            {
+                return petResult.Error;
+            }
+
+            volunteerResult.Value.AddPet(petResult.Value);
 
             await _volunteerRepository.Update(volunteerResult.Value, token);
 
-            _logger.LogInformation("Add new pet, Id: {petId}", pet.Id);
+            _logger.LogInformation("Add new pet, Id: {petId}", petResult.Value.Id);
 
-            return pet.Id.Id;
+            return petResult.Value.Id.Id;
         }
 
-        private Pet CreatePet(AddPetCommand command)
+        private Result<Pet> CreatePet(AddPetCommand command)
         {
             var petId = PetId.NewPetId();
 
             var petNickName =
                 PetNickname.Create(command.Nickname).Value;
 
-            var speciesId = SpeciesId.Empty();
+            var speciesBreedResult = GetSpeciesAndBreed(command);
 
-            var breedId = BreedId.Empty();
+            if (speciesBreedResult.IsFailure)
+            {
+                return speciesBreedResult.Error;
+            }
 
-            var speciesBreedValue =
-                new SpeciesBreedValue(speciesId, breedId);
+            var speciesBreedValue = new SpeciesBreedValue(
+                speciesBreedResult.Value.speciesId,
+                speciesBreedResult.Value.breedId);
 
             var petDescription =
                 PetDescription.Create(command.Description).Value;
@@ -88,9 +106,6 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
             var requisite = Requisite.Create(
                 command.Requisites.Name,
                 command.Requisites.Description);
-
-            //var petRequisites =
-            //    new PetRequisites([requisite.Value]);
 
             var birthday = DateValue.Create(command.BirthDay).Value;
 
@@ -113,6 +128,31 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
                 command.HelpStatus,
                 command.Weight,
                 command.Height);
+        }
+
+        private Result<(SpeciesId speciesId, BreedId breedId)> GetSpeciesAndBreed(
+            AddPetCommand command)
+        {
+            var speciesRequestResult = _readDbContext.Species
+                .FirstOrDefault(s => s.Id == command.SpeciesId);
+
+            if (speciesRequestResult != null)
+            {
+                var speciesId = SpeciesId.Create(speciesRequestResult.Id);
+
+                var breedResult = speciesRequestResult.Breeds
+                    .FirstOrDefault(b => b.Id == command.BreedId);
+
+                if (breedResult == null)
+                {
+                    return Errors.General.NotFound(command.BreedId);
+                }
+
+                var breedId = BreedId.Create(command.BreedId);
+
+                return (speciesId, breedId);
+            }
+            return Errors.General.NotFound(command.SpeciesId);
         }
     }
 }

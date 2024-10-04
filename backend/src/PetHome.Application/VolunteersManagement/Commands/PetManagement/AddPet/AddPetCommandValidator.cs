@@ -12,19 +12,25 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
             RuleFor(v => v.VolunteerId).NotEmpty()
                 .WithError(Errors.General.ValueIsRequeired());
 
-            RuleFor(c => c.Nickname).MustBeValueObject(
+            RuleFor(p => p.Nickname).MustBeValueObject(
                 PetNickname.Create);
 
-            RuleFor(c => c.Description).MustBeValueObject(
+            RuleFor(v => v.SpeciesId).NotEmpty()
+                .WithError(Errors.General.ValueIsRequeired());
+
+            RuleFor(v => v.BreedId).NotEmpty()
+                .WithError(Errors.General.ValueIsRequeired());
+
+            RuleFor(p => p.Description).MustBeValueObject(
                 PetDescription.Create);
 
-            RuleFor(c => c.Color).MustBeValueObject(
+            RuleFor(p => p.Color).MustBeValueObject(
                 PetColor.Create);
 
             RuleFor(p => p.Health).MustBeValueObject(
                 HealthInfo.Create);
 
-            RuleFor(c => c.Address).MustBeValueObject(x =>
+            RuleFor(p => p.Address).MustBeValueObject(x =>
                 Address.Create(x.City, x.Street, x.HouseNumber, x.AppartmentNumber));
 
             RuleFor(p => p.Phone).MustBeValueObject(

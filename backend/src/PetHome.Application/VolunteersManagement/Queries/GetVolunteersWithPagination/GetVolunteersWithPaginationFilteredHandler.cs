@@ -4,6 +4,7 @@ using PetHome.Application.Dtos;
 using PetHome.Application.Extensions;
 using PetHome.Application.Models;
 using PetHome.Domain.Shared;
+using System.Linq.Expressions;
 
 namespace PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPagination
 {
@@ -24,13 +25,29 @@ namespace PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPagi
         {
             var volunteerQuery = _readDbContext.Volunteers;
 
-            if (query.Experience > 0)
-            {
-                volunteerQuery = volunteerQuery
-                    .Where(v => v.Experience == query.Experience);
-            }
+            Expression<Func<VolunteerDto, object>> keySelector
+                = query.SortBy?.ToLower() switch
+                {
+                    "firstname" => (v) => v.FirstName,
+                    "secondname" => (v) => v.SecondName,
+                    "surname" => (v) => v.Surname,
+                    "email" => (v) => v.Email,
+                    "phone" => (v) => v.Phone,
+                    "description" => (v) => v.Description,
+                    "experience" => (v) => v.Experience,
+                    _ => (v) => v.FirstName,
+                };
 
-            return await volunteerQuery.ToPagedList(query.Page, query.PageSize, token);
+            volunteerQuery = query.SortDirection?.ToLower() == Constants.SORT_DESCENDING
+                ? volunteerQuery.OrderByDescending(keySelector)
+                : volunteerQuery.OrderBy(keySelector);
+
+            volunteerQuery = volunteerQuery.WhereIf(
+            query.Experience > 0,
+            v => v.Experience == query.Experience);
+
+            return await volunteerQuery
+                    .ToPagedList(query.Page, query.PageSize, token);
         }
     }
 }

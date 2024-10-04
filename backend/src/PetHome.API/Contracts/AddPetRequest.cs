@@ -6,6 +6,8 @@ namespace PetHome.Application.Volunteers.AddPet
 {
     public record AddPetRequest
             (string Nickname,
+            Guid SpeciesId,
+            Guid BreedId,            
             string Description,
             string Color,
             string Health,
@@ -23,6 +25,8 @@ namespace PetHome.Application.Volunteers.AddPet
             new AddPetCommand(
                 id,
                 Nickname,
+                SpeciesId,
+                BreedId,
                 Description,
                 Color,
                 Health,

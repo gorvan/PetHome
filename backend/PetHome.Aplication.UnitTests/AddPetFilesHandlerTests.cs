@@ -130,9 +130,12 @@ namespace PetHome.UnitTests
 
             var fileProviderMock = new Mock<IFileProvider>();
             fileProviderMock.Setup(p => p.UploadFile(It.IsAny<FileData>(), token))
-            .Returns(Task.Run(() => new Result<string>("", false, Error.Failure("test", "test"))));
+            .Returns(Task.Run(() => new Result<string>("", false, Error.NotFound("test", "test"))));
+
             var messageQueueMock = new Mock<IMessageQueue<FileInfo>>();
+
             var loggerMock = new Mock<ILogger<AddPetFilesHandler>>();
+
             var validatorMock = new Mock<IValidator<AddPetFilesCommand>>();
             validatorMock.Setup(v => v.ValidateAsync(It.IsAny<AddPetFilesCommand>(), token))
                 .Returns(Task.Run(() => new ValidationResult { Errors = [] }));
