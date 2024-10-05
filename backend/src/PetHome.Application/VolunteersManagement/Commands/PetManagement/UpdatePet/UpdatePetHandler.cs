@@ -3,40 +3,34 @@ using Microsoft.Extensions.Logging;
 using PetHome.Application.Abstractions;
 using PetHome.Application.Database;
 using PetHome.Application.Extensions;
-using PetHome.Application.SpeciesManagement;
 using PetHome.Domain.PetManadgement.Entities;
 using PetHome.Domain.PetManadgement.ValueObjects;
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
 using PetHome.Domain.SpeciesManagement.AggregateRoot;
 
-namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
+namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdatePet
 {
-    public class AddPetHandler : ICommandHandler<Guid, AddPetCommand>
+    public class UpdatePetHandler : ICommandHandler<Guid, UpdatePetCommand>
     {
         private readonly IVolunteerRepository _volunteerRepository;
-        private readonly ISpeciesRepository _speciesRepository;
         private readonly IReadDbContext _readDbContext;
-        private readonly ILogger<AddPetHandler> _logger;
-        private readonly IValidator<AddPetCommand> _validator;
+        private readonly ILogger<UpdatePetHandler> _logger;
+        private readonly IValidator<UpdatePetCommand> _validator;
 
-        public AddPetHandler(
+        public UpdatePetHandler(
             IVolunteerRepository volunteerRepository,
-            ISpeciesRepository speciesRepository,
             IReadDbContext readDbContext,
-            ILogger<AddPetHandler> logger,
-            IValidator<AddPetCommand> validator)
+            ILogger<UpdatePetHandler> logger,
+            IValidator<UpdatePetCommand> validator)
         {
             _volunteerRepository = volunteerRepository;
-            _speciesRepository = speciesRepository;
             _readDbContext = readDbContext;
             _logger = logger;
             _validator = validator;
         }
 
-        public async Task<Result<Guid>> Execute(
-            AddPetCommand command,
-            CancellationToken token)
+        public async Task<Result<Guid>> Execute(UpdatePetCommand command, CancellationToken token)
         {
             var validationResult = await _validator.ValidateAsync(command, token);
             if (validationResult.IsValid == false)
@@ -44,34 +38,35 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
                 return validationResult.ToErrorList();
             }
 
-            var volunteerResult = await _volunteerRepository
-                .GetById(VolunteerId.Create(command.VolunteerId), token);
+            var volunteerId = VolunteerId.Create(command.VolunteerId);
+            var volunteerResult =
+                await _volunteerRepository.GetById(volunteerId, token);
 
             if (volunteerResult.IsFailure)
             {
                 return volunteerResult.Error;
             }
 
-            var petResult = CreatePet(command);
+            var pet = volunteerResult.Value.Pets
+                .FirstOrDefault(p => p.Id.Id == command.PetId);
 
-            if (petResult.IsFailure)
+            if (pet == null)
             {
-                return petResult.Error;
+                return Errors.General.NotFound(command.PetId);
             }
 
-            volunteerResult.Value.AddPet(petResult.Value);
+            var petResult = UpdatePet(pet, command);
 
-            await _volunteerRepository.Update(volunteerResult.Value, token);
+            var result =
+                await _volunteerRepository.Update(volunteerResult.Value, token);
 
-            _logger.LogInformation("Add new pet, Id: {petId}", petResult.Value.Id);
+            _logger.LogInformation("Updated pet with id {pet.Id.Id}", pet.Id.Id);
 
-            return petResult.Value.Id.Id;
+            return result;
         }
 
-        private Result<Pet> CreatePet(AddPetCommand command)
+        private Result UpdatePet(Pet pet, UpdatePetCommand command)
         {
-            var petId = PetId.NewPetId();
-
             var petNickName =
                 PetNickname.Create(command.Nickname).Value;
 
@@ -110,27 +105,27 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
 
             var createDate = DateValue.Create(DateTime.UtcNow).Value;
 
-            return new Pet(
-                petId,
-                petNickName,
-                speciesBreedValue,
-                petDescription,
-                petColor,
-                healthInfo,
-                address,
-                phone,
-                [requisite.Value],
-                birthday,
-                createDate,
-                command.IsNeutered,
-                command.IsVaccinated,
-                command.HelpStatus,
-                command.Weight,
-                command.Height);
+            pet.Update(
+            petNickName,
+            speciesBreedValue,
+            petDescription,
+            petColor,
+            healthInfo,
+            address,
+            phone,
+            [requisite.Value],
+            birthday,
+            command.IsNeutered,
+            command.IsVaccinated,
+            command.HelpStatus,
+            command.Weight,
+            command.Height);
+
+            return Result.Success();
         }
 
         private Result<(SpeciesId speciesId, BreedId breedId)> GetSpeciesAndBreed(
-            AddPetCommand command)
+            UpdatePetCommand command)
         {
             var speciesRequestResult = _readDbContext.Species
                 .FirstOrDefault(s => s.Id == command.SpeciesId);

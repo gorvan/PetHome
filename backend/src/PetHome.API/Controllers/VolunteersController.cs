@@ -8,6 +8,8 @@ using PetHome.Application.VolunteersManagement.Commands.Create;
 using PetHome.Application.VolunteersManagement.Commands.Delete;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPetFiles;
+using PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdateFiles;
+using PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdatePet;
 using PetHome.Application.VolunteersManagement.Commands.Restore;
 using PetHome.Application.VolunteersManagement.Commands.UpdateMainInfo;
 using PetHome.Application.VolunteersManagement.Commands.UpdateRequisites;
@@ -135,6 +137,19 @@ namespace PetHome.API.Controllers
             return result.ToResponse();
         }
 
+        [HttpPut("{volunteerId:guid}/pet/{petId:guid}/edit")]
+        public async Task<ActionResult<Guid>> UpdatePet(
+            [FromServices] UpdatePetHandler handler,
+            [FromRoute] Guid volunteerId,
+            [FromRoute] Guid petId,
+            [FromBody] UpdatePetRequest request,
+            CancellationToken token)
+        {
+            var command = request.ToCommand(volunteerId, petId);
+            var result = await handler.Execute(command, token);
+            return result.ToResponse();
+        }
+
         [HttpPut("{volunteerId:guid}/pet/{petId:guid}/files")]
         public async Task<ActionResult<int>> AddFile(
            [FromRoute] Guid volunteerId,
@@ -146,6 +161,21 @@ namespace PetHome.API.Controllers
             await using var fileProcessor = new FormFileProcessor();
             var filesDto = fileProcessor.Process(files);
             var command = new AddPetFilesCommand(volunteerId, petId, filesDto);
+            var result = await handler.Execute(command, token);
+            return result.ToResponse();
+        }
+
+        [HttpPut("{volunteerId:guid}/pet/{petId:guid}/files/edit")]
+        public async Task<ActionResult<int>> UpdateFile(
+           [FromRoute] Guid volunteerId,
+           [FromRoute] Guid petId,
+           IFormFileCollection files,
+           [FromServices] UpdateFilesHandler handler,
+           CancellationToken token)
+        {
+            await using var fileProcessor = new FormFileProcessor();
+            var filesDto = fileProcessor.Process(files);
+            var command = new UpdateFilesCommand(volunteerId, petId, filesDto);
             var result = await handler.Execute(command, token);
             return result.ToResponse();
         }

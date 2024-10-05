@@ -164,6 +164,8 @@ namespace PetHome.Infrastructure.Configurations.Write
             builder.Property<bool>("_isDeleted")
                 .UsePropertyAccessMode(PropertyAccessMode.Field)
                 .HasColumnName("is_delete");
+
+            builder.Navigation(v => v.Photos).AutoInclude();
         }
     }
 }

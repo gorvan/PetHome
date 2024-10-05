@@ -1,4 +1,5 @@
-﻿using PetHome.Application.Dtos;
+﻿using PetHome.API.Extensions;
+using PetHome.Application.Dtos;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
 using PetHome.Domain.Shared;
 
@@ -17,7 +18,7 @@ namespace PetHome.Application.Volunteers.AddPet
             DateTime BirthDay,
             bool IsNeutered,
             bool IsVaccinated,
-            HelpStatus HelpStatus,
+            string HelpStatus,
             double Weight,
             double Height)
     {
@@ -36,7 +37,7 @@ namespace PetHome.Application.Volunteers.AddPet
                 BirthDay,
                 IsNeutered,
                 IsVaccinated,
-                HelpStatus,
+                HelpStatus.GetHelpStatusByDescription(),
                 Weight,
                 Height);
     }
