@@ -7,7 +7,7 @@ namespace PetHome.Application.Volunteers.AddPet
     public record AddPetRequest
             (string Nickname,
             Guid SpeciesId,
-            Guid BreedId,            
+            Guid BreedId,
             string Description,
             string Color,
             string Health,
@@ -17,7 +17,7 @@ namespace PetHome.Application.Volunteers.AddPet
             DateTime BirthDay,
             bool IsNeutered,
             bool IsVaccinated,
-            HelpStatus HelpStatus,
+            string HelpStatus,
             double Weight,
             double Height)
     {
@@ -36,7 +36,7 @@ namespace PetHome.Application.Volunteers.AddPet
                 BirthDay,
                 IsNeutered,
                 IsVaccinated,
-                HelpStatus,
+                (HelpStatus)Enum.Parse(typeof(HelpStatus), HelpStatus),
                 Weight,
                 Height);
     }

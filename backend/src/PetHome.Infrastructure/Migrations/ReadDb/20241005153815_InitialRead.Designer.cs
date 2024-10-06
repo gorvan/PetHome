@@ -12,7 +12,7 @@ using PetHome.Infrastructure.DbContexts;
 namespace PetHome.Infrastructure.Migrations.ReadDb
 {
     [DbContext(typeof(ReadDbContext))]
-    [Migration("20241002193043_InitialRead")]
+    [Migration("20241005153815_InitialRead")]
     partial class InitialRead
     {
         /// <inheritdoc />

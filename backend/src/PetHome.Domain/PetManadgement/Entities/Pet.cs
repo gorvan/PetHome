@@ -2,6 +2,8 @@
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
 using PetHome.Domain.SpeciesManagement.AggregateRoot;
+using System.Net;
+using System.Numerics;
 
 namespace PetHome.Domain.PetManadgement.Entities
 {
@@ -50,21 +52,21 @@ namespace PetHome.Domain.PetManadgement.Entities
         private List<PetPhoto> _photo = [];
         private bool _isDeleted = false;
 
-        public PetNickname Nickname { get; } = default!;
-        public SpeciesBreedValue SpeciesBreed { get; } = default!;
-        public PetDescription Description { get; } = default!;
-        public PetColor Color { get; } = default!;
-        public HealthInfo Health { get; } = default!;
-        public Address Address { get; } = default!;
-        public Phone Phone { get; } = default!;
-        public DateValue BirthDay { get; } = default!;
+        public PetNickname Nickname { get; private set; } = default!;
+        public SpeciesBreedValue SpeciesBreed { get; private set; } = default!;
+        public PetDescription Description { get; private set; } = default!;
+        public PetColor Color { get; private set; } = default!;
+        public HealthInfo Health { get; private set; } = default!;
+        public Address Address { get; private set; } = default!;
+        public Phone Phone { get; private set; } = default!;
+        public DateValue BirthDay { get; private set; } = default!;
         public DateValue CreateDate { get; } = default!;
-        public IReadOnlyList<Requisite> Requisites { get; } = default!;
-        public bool IsNeutered { get; }
-        public bool IsVaccinated { get; }
-        public HelpStatus HelpStatus { get; }
-        public double Weight { get; } = 0;
-        public double Height { get; } = 0;
+        public IReadOnlyList<Requisite> Requisites { get; private set; } = default!;
+        public bool IsNeutered { get; private set; }
+        public bool IsVaccinated { get; private set; }
+        public HelpStatus HelpStatus { get; private set; }
+        public double Weight { get; private set; } = 0;
+        public double Height { get; private set; } = 0;
         public SerialNumber SerialNumber { get; private set; } = default!;
 
         public IReadOnlyList<PetPhoto> Photos => _photo;
@@ -73,6 +75,11 @@ namespace PetHome.Domain.PetManadgement.Entities
         {
             _photo = petPhotos.ToList();
             return _photo.Count;
+        }
+
+        public void DeletePhotos()
+        {
+            _photo = new List<PetPhoto>();
         }
 
         public void SetSerialNumber(SerialNumber serialNumber)
@@ -110,6 +117,38 @@ namespace PetHome.Domain.PetManadgement.Entities
             }
                 
             SerialNumber = SerialNumber.Create(newNumber).Value;
+        }
+
+        public void Update(
+            PetNickname petNickName,
+            SpeciesBreedValue speciesBreedValue,
+            PetDescription petDescription,
+            PetColor petColor,
+            HealthInfo healthInfo,
+            Address address,
+            Phone phone,
+            IEnumerable<Requisite> requisites,
+            DateValue birthday,
+            bool isNeutered,
+            bool isVaccinated,
+            HelpStatus helpStatus,
+            double weight,
+            double height)
+        {
+            Nickname = petNickName;
+            SpeciesBreed = speciesBreedValue;
+            Description = petDescription;
+            Color = petColor;
+            Health = healthInfo;
+            Address = address;
+            Phone = phone;
+            BirthDay = birthday;
+            Requisites = requisites.ToList();
+            IsNeutered = isNeutered;
+            IsVaccinated = isVaccinated;
+            HelpStatus = helpStatus;
+            Weight = weight;
+            Height = height;
         }
     }
 }
