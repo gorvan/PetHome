@@ -150,5 +150,10 @@ namespace PetHome.Domain.PetManadgement.Entities
             Weight = weight;
             Height = height;
         }
+
+        public void UpdateHelpStatus(HelpStatus newHelpStatus)
+        {
+            HelpStatus = newHelpStatus;
+        }
     }
 }
