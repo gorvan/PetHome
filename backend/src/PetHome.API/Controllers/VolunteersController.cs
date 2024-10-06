@@ -10,6 +10,7 @@ using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPetFiles;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdateFiles;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdatePet;
+using PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdatePetHelpStatus;
 using PetHome.Application.VolunteersManagement.Commands.Restore;
 using PetHome.Application.VolunteersManagement.Commands.UpdateMainInfo;
 using PetHome.Application.VolunteersManagement.Commands.UpdateRequisites;
@@ -176,6 +177,19 @@ namespace PetHome.API.Controllers
             await using var fileProcessor = new FormFileProcessor();
             var filesDto = fileProcessor.Process(files);
             var command = new UpdateFilesCommand(volunteerId, petId, filesDto);
+            var result = await handler.Execute(command, token);
+            return result.ToResponse();
+        }
+
+        [HttpPut("{volunteerId:guid}/pet/{petId:guid}/help_status")]
+        public async Task<ActionResult<Guid>> UpdateHelpStatus(
+           [FromRoute] Guid volunteerId,
+           [FromRoute] Guid petId,
+           [FromBody] UpdatePetHelpStatusRequest request,
+           [FromServices] UpdatePetHelpStatusHandler handler,
+           CancellationToken token)
+        {
+            var command = request.ToCommand(volunteerId, petId);
             var result = await handler.Execute(command, token);
             return result.ToResponse();
         }
