@@ -1,9 +1,6 @@
-﻿using PetHome.API.Extensions;
-using PetHome.Application.Dtos;
+﻿using PetHome.Application.Dtos;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdatePet;
 using PetHome.Domain.Shared;
-using System.ComponentModel;
-using System.Reflection;
 
 namespace PetHome.API.Contracts
 {
@@ -46,25 +43,9 @@ namespace PetHome.API.Contracts
                 BirthDay,
                 IsNeutered,
                 IsVaccinated,
-                HelpStatus.GetHelpStatusByDescription(),
+                (HelpStatus)Enum.Parse(typeof(HelpStatus), HelpStatus),
                 Weight,
                 Height);
-        }
-
-        public string GetDescription(HelpStatus helpStatus)
-        {
-            var enum1 = helpStatus.GetType().GetMember(helpStatus.ToString()).FirstOrDefault();
-
-            var descAttribute =
-                enum1 == null
-                ? default
-                : enum1.GetCustomAttribute(typeof(DescriptionAttribute)) as DescriptionAttribute;
-
-            var result = descAttribute == null
-                ? helpStatus.ToString()
-                : descAttribute.Description;
-
-            return result;
         }
     }
 }

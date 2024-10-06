@@ -1,5 +1,4 @@
-﻿using PetHome.API.Extensions;
-using PetHome.Application.Dtos;
+﻿using PetHome.Application.Dtos;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
 using PetHome.Domain.Shared;
 
@@ -8,7 +7,7 @@ namespace PetHome.Application.Volunteers.AddPet
     public record AddPetRequest
             (string Nickname,
             Guid SpeciesId,
-            Guid BreedId,            
+            Guid BreedId,
             string Description,
             string Color,
             string Health,
@@ -37,7 +36,7 @@ namespace PetHome.Application.Volunteers.AddPet
                 BirthDay,
                 IsNeutered,
                 IsVaccinated,
-                HelpStatus.GetHelpStatusByDescription(),
+                (HelpStatus)Enum.Parse(typeof(HelpStatus), HelpStatus),
                 Weight,
                 Height);
     }
