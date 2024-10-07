@@ -13,8 +13,8 @@ using PetHome.Infrastructure.DbContexts;
 namespace PetHome.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20241005153702_InitialWrie")]
-    partial class InitialWrie
+    [Migration("20241007172808_InitialWrite")]
+    partial class InitialWrite
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

@@ -26,6 +26,8 @@ namespace PetHome.Infrastructure.Configurations.Write
             builder.HasMany(s => s.Breeds)
                 .WithOne()
                 .HasForeignKey("species_id");
+
+            builder.Navigation(s => s.Breeds).AutoInclude();
         }
     }
 }

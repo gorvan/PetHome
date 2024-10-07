@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetHome.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialWrie : Migration
+    public partial class InitialWrite : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
