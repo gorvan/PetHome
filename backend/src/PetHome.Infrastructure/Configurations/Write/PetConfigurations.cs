@@ -20,7 +20,7 @@ namespace PetHome.Infrastructure.Configurations.Write
                 .HasConversion(
                 id => id.Id,
                 value => PetId.Create(value))
-                .HasColumnName("pet_id");
+                .HasColumnName("id");
 
             builder.ComplexProperty(p => p.Nickname,
                 pb =>

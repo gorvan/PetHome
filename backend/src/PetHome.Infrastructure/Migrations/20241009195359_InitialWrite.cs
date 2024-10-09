@@ -66,7 +66,7 @@ namespace PetHome.Infrastructure.Migrations
                 name: "pets",
                 columns: table => new
                 {
-                    pet_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
                     requisites = table.Column<string>(type: "text", nullable: false),
                     is_neutered = table.Column<bool>(type: "boolean", nullable: false),
                     is_vaccinated = table.Column<bool>(type: "boolean", nullable: false),
@@ -92,7 +92,7 @@ namespace PetHome.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_pets", x => x.pet_id);
+                    table.PrimaryKey("pk_pets", x => x.id);
                     table.ForeignKey(
                         name: "fk_pets_volunteers_volunteer_id",
                         column: x => x.volunteer_id,
@@ -116,7 +116,7 @@ namespace PetHome.Infrastructure.Migrations
                         name: "fk_pet_photos_pets_pet_id",
                         column: x => x.pet_id,
                         principalTable: "pets",
-                        principalColumn: "pet_id");
+                        principalColumn: "id");
                 });
 
             migrationBuilder.CreateIndex(

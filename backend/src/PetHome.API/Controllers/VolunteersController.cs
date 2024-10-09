@@ -17,6 +17,7 @@ using PetHome.Application.VolunteersManagement.Commands.Restore;
 using PetHome.Application.VolunteersManagement.Commands.UpdateMainInfo;
 using PetHome.Application.VolunteersManagement.Commands.UpdateRequisites;
 using PetHome.Application.VolunteersManagement.Commands.UpdateSocialNetworks;
+using PetHome.Application.VolunteersManagement.Queries.GetAllPets;
 using PetHome.Application.VolunteersManagement.Queries.GetVolunteerById;
 using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPagination;
 using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPaginationDapper;
@@ -218,6 +219,17 @@ namespace PetHome.API.Controllers
             var command = new FullDeletePetCommand(volunteerId, petId);
             var result = await handler.Execute(command, token);
             return result.ToResponse();
+        }
+
+        [HttpGet("pets")]
+        public async Task<ActionResult> GetAllPets(
+            [FromServices] GetPetsWithPaginationFilterdHandler handler,            
+            [FromQuery] GetPetsWithPaginationFilteredRequest request,
+            CancellationToken token)
+        {
+            var query = request.ToQuery();
+            var result = await handler.Execute(query, token);
+            return Ok(result);
         }
     }
 }

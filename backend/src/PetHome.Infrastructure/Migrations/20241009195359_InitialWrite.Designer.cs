@@ -13,7 +13,7 @@ using PetHome.Infrastructure.DbContexts;
 namespace PetHome.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    [Migration("20241007172808_InitialWrite")]
+    [Migration("20241009195359_InitialWrite")]
     partial class InitialWrite
     {
         /// <inheritdoc />
@@ -116,7 +116,7 @@ namespace PetHome.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("pet_id");
+                        .HasColumnName("id");
 
                     b.Property<double>("Height")
                         .HasColumnType("double precision")

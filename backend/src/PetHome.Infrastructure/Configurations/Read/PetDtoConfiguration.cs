@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PetHome.Application.Dtos;
-using PetHome.Infrastructure.Extensions;
 using System.Text.Json;
 
 namespace PetHome.Infrastructure.Configurations.Read
@@ -19,7 +18,9 @@ namespace PetHome.Infrastructure.Configurations.Read
                     r => JsonSerializer.Serialize(string.Empty, JsonSerializerOptions.Default),
                     json => JsonSerializer.Deserialize<RequisiteDto[]>(json, JsonSerializerOptions.Default)!);
 
-            builder.Property(p => p.Photos).HasValueJsonConverter();
+            builder.HasMany(v => v.Photos)
+               .WithOne()
+               .HasForeignKey(i => i.PetId);
         }
     }
 }

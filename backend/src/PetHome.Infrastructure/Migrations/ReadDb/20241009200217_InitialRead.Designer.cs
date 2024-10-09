@@ -12,7 +12,7 @@ using PetHome.Infrastructure.DbContexts;
 namespace PetHome.Infrastructure.Migrations.ReadDb
 {
     [DbContext(typeof(ReadDbContext))]
-    [Migration("20241007172845_InitialRead")]
+    [Migration("20241009200217_InitialRead")]
     partial class InitialRead
     {
         /// <inheritdoc />
@@ -96,11 +96,6 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                         .HasColumnType("text")
                         .HasColumnName("nickname");
 
-                    b.Property<string>("Photos")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("photos");
-
                     b.Property<string>("Requisites")
                         .IsRequired()
                         .HasColumnType("text")
@@ -130,6 +125,35 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                         .HasDatabaseName("ix_pets_volunteer_id");
 
                     b.ToTable("pets", (string)null);
+                });
+
+            modelBuilder.Entity("PetHome.Application.Dtos.PhotoDto", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_main");
+
+                    b.Property<string>("Path")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("path");
+
+                    b.Property<Guid>("PetId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("pet_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_pet_photos");
+
+                    b.HasIndex("PetId")
+                        .HasDatabaseName("ix_pet_photos_pet_id");
+
+                    b.ToTable("pet_photos", (string)null);
                 });
 
             modelBuilder.Entity("PetHome.Application.Dtos.SpeciesDto", b =>
@@ -225,6 +249,21 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_pets_volunteers_volunteer_id");
+                });
+
+            modelBuilder.Entity("PetHome.Application.Dtos.PhotoDto", b =>
+                {
+                    b.HasOne("PetHome.Application.Dtos.PetDto", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("PetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_pet_photos_pets_pet_id");
+                });
+
+            modelBuilder.Entity("PetHome.Application.Dtos.PetDto", b =>
+                {
+                    b.Navigation("Photos");
                 });
 
             modelBuilder.Entity("PetHome.Application.Dtos.SpeciesDto", b =>
