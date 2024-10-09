@@ -12,7 +12,7 @@ using PetHome.Infrastructure.DbContexts;
 namespace PetHome.Infrastructure.Migrations.ReadDb
 {
     [DbContext(typeof(ReadDbContext))]
-    [Migration("20241005153815_InitialRead")]
+    [Migration("20241007172845_InitialRead")]
     partial class InitialRead
     {
         /// <inheritdoc />
@@ -37,10 +37,6 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                         .HasColumnType("text")
                         .HasColumnName("name");
 
-                    b.Property<Guid?>("SpeciesDtoId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("species_dto_id");
-
                     b.Property<Guid>("SpeciesId")
                         .HasColumnType("uuid")
                         .HasColumnName("species_id");
@@ -48,8 +44,8 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                     b.HasKey("Id")
                         .HasName("pk_breeds");
 
-                    b.HasIndex("SpeciesDtoId")
-                        .HasDatabaseName("ix_breeds_species_dto_id");
+                    b.HasIndex("SpeciesId")
+                        .HasDatabaseName("ix_breeds_species_id");
 
                     b.ToTable("breeds", (string)null);
                 });
@@ -215,8 +211,10 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                 {
                     b.HasOne("PetHome.Application.Dtos.SpeciesDto", null)
                         .WithMany("Breeds")
-                        .HasForeignKey("SpeciesDtoId")
-                        .HasConstraintName("fk_breeds_species_dto_species_dto_id");
+                        .HasForeignKey("SpeciesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_breeds_species_species_id");
                 });
 
             modelBuilder.Entity("PetHome.Application.Dtos.PetDto", b =>

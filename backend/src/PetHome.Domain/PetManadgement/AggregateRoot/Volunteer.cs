@@ -131,5 +131,49 @@ namespace PetHome.Domain.PetManadgement.AggregateRoot
 
             pet.SetSerialNumber(serialNumber);
         }
+
+        public Result SoftDeletePet(Pet pet)
+        {
+            _pets.Remove(pet);
+            pet.Delete();
+            return UpdatePetsPositions();
+        }
+
+        public Result FullDeletePet(Pet pet)
+        {
+            _pets.Remove(pet);
+            return UpdatePetsPositions();
+        }
+
+        private Result UpdatePetsPositions()
+        {
+            if (_pets.Count < 2)
+            {
+                return Result.Success();
+            }
+
+            var sortedPets = _pets.OrderBy(p => p.SerialNumber.Value).ToList();
+
+            for(int i = 0; i < sortedPets.Count; i++)
+            {
+                var pet = sortedPets[i];
+
+                if(pet.SerialNumber.Value == i + 1)
+                {
+                    continue;
+                }
+
+                var serialNumberResult = SerialNumber.Create(i);
+
+                if(serialNumberResult.IsFailure)
+                {
+                    return serialNumberResult.Error;
+                }
+
+                pet.SetSerialNumber(serialNumberResult.Value);
+            }
+
+            return Result.Success();
+        }
     }
 }

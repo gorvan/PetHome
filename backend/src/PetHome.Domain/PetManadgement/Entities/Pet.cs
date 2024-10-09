@@ -2,8 +2,6 @@
 using PetHome.Domain.Shared;
 using PetHome.Domain.Shared.IDs;
 using PetHome.Domain.SpeciesManagement.AggregateRoot;
-using System.Net;
-using System.Numerics;
 
 namespace PetHome.Domain.PetManadgement.Entities
 {
@@ -24,7 +22,7 @@ namespace PetHome.Domain.PetManadgement.Entities
             Phone phone,
             IEnumerable<Requisite> requisites,
             DateValue birthDay,
-            DateValue createDate,            
+            DateValue createDate,
             bool isNeutered,
             bool isVaccinated,
             HelpStatus helpStatus,
@@ -41,7 +39,7 @@ namespace PetHome.Domain.PetManadgement.Entities
             Phone = phone;
             Requisites = requisites.ToList();
             BirthDay = birthDay;
-            CreateDate = createDate;           
+            CreateDate = createDate;
             IsNeutered = isNeutered;
             IsVaccinated = isVaccinated;
             HelpStatus = helpStatus;
@@ -70,7 +68,7 @@ namespace PetHome.Domain.PetManadgement.Entities
         public SerialNumber SerialNumber { get; private set; } = default!;
 
         public IReadOnlyList<PetPhoto> Photos => _photo;
-           
+
         public Result<int> SetPhotos(IEnumerable<PetPhoto> petPhotos)
         {
             _photo = petPhotos.ToList();
@@ -115,7 +113,7 @@ namespace PetHome.Domain.PetManadgement.Entities
             {
                 return;
             }
-                
+
             SerialNumber = SerialNumber.Create(newNumber).Value;
         }
 

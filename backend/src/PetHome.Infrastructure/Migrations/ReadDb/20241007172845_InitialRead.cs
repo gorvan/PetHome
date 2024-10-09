@@ -49,17 +49,17 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     name = table.Column<string>(type: "text", nullable: false),
-                    species_id = table.Column<Guid>(type: "uuid", nullable: false),
-                    species_dto_id = table.Column<Guid>(type: "uuid", nullable: true)
+                    species_id = table.Column<Guid>(type: "uuid", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("pk_breeds", x => x.id);
                     table.ForeignKey(
-                        name: "fk_breeds_species_dto_species_dto_id",
-                        column: x => x.species_dto_id,
+                        name: "fk_breeds_species_species_id",
+                        column: x => x.species_id,
                         principalTable: "species",
-                        principalColumn: "id");
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -94,9 +94,9 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_breeds_species_dto_id",
+                name: "ix_breeds_species_id",
                 table: "breeds",
-                column: "species_dto_id");
+                column: "species_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_pets_volunteer_id",

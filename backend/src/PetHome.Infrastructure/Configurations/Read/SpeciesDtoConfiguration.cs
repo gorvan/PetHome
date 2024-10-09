@@ -10,7 +10,11 @@ namespace PetHome.Infrastructure.Configurations.Read
         {
             builder.ToTable("species");
 
-            builder.HasKey(p => p.Id);            
+            builder.HasKey(p => p.Id);
+
+            builder.HasMany(p => p.Breeds)
+                .WithOne()
+                .HasForeignKey(i => i.SpeciesId);
         }
     }
 }
