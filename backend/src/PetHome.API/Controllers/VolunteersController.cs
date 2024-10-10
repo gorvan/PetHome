@@ -18,6 +18,7 @@ using PetHome.Application.VolunteersManagement.Commands.UpdateMainInfo;
 using PetHome.Application.VolunteersManagement.Commands.UpdateRequisites;
 using PetHome.Application.VolunteersManagement.Commands.UpdateSocialNetworks;
 using PetHome.Application.VolunteersManagement.Queries.GetAllPets;
+using PetHome.Application.VolunteersManagement.Queries.GetPetById;
 using PetHome.Application.VolunteersManagement.Queries.GetVolunteerById;
 using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPagination;
 using PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPaginationDapper;
@@ -228,6 +229,17 @@ namespace PetHome.API.Controllers
             CancellationToken token)
         {
             var query = request.ToQuery();
+            var result = await handler.Execute(query, token);
+            return Ok(result);
+        }
+
+        [HttpGet("pet/{petId:guid}")]
+        public async Task<ActionResult> GetPetById(
+            [FromRoute] Guid petId,
+            [FromServices] GetPetByIdHandler handler,           
+            CancellationToken token)
+        {
+            var query = new GetPetByIdQuery(petId);
             var result = await handler.Execute(query, token);
             return Ok(result);
         }

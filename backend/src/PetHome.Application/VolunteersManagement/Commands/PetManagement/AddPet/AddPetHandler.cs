@@ -77,14 +77,12 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
 
             var speciesBreedResult = GetSpeciesAndBreed(command);
 
-            if (speciesBreedResult.IsFailure)
-            {
-                return speciesBreedResult.Error;
-            }
-
-            var speciesBreedValue = new SpeciesBreedValue(
-                speciesBreedResult.Value.speciesId,
-                speciesBreedResult.Value.breedId);
+            var speciesBreedValue =
+                speciesBreedResult.IsSuccess
+                ? new SpeciesBreedValue(
+                    speciesBreedResult.Value.speciesId,
+                    speciesBreedResult.Value.breedId)
+                : new SpeciesBreedValue(SpeciesId.Empty(), BreedId.Empty());
 
             var petDescription =
                 PetDescription.Create(command.Description).Value;
