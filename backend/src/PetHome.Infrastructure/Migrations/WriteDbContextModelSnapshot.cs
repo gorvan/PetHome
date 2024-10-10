@@ -113,7 +113,7 @@ namespace PetHome.Infrastructure.Migrations
                 {
                     b.Property<Guid>("Id")
                         .HasColumnType("uuid")
-                        .HasColumnName("pet_id");
+                        .HasColumnName("id");
 
                     b.Property<double>("Height")
                         .HasColumnType("double precision")

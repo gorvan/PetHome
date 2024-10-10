@@ -79,8 +79,7 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                     house = table.Column<string>(type: "text", nullable: false),
                     appartment = table.Column<string>(type: "text", nullable: false),
                     requisites = table.Column<string>(type: "text", nullable: false),
-                    serial_number = table.Column<int>(type: "integer", nullable: false),
-                    photos = table.Column<string>(type: "text", nullable: false)
+                    serial_number = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -93,10 +92,35 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "pet_photos",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    path = table.Column<string>(type: "text", nullable: false),
+                    pet_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    is_main = table.Column<bool>(type: "boolean", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_pet_photos", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_pet_photos_pets_pet_id",
+                        column: x => x.pet_id,
+                        principalTable: "pets",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "ix_breeds_species_id",
                 table: "breeds",
                 column: "species_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_pet_photos_pet_id",
+                table: "pet_photos",
+                column: "pet_id");
 
             migrationBuilder.CreateIndex(
                 name: "ix_pets_volunteer_id",
@@ -111,10 +135,13 @@ namespace PetHome.Infrastructure.Migrations.ReadDb
                 name: "breeds");
 
             migrationBuilder.DropTable(
-                name: "pets");
+                name: "pet_photos");
 
             migrationBuilder.DropTable(
                 name: "species");
+
+            migrationBuilder.DropTable(
+                name: "pets");
 
             migrationBuilder.DropTable(
                 name: "volunteers");
