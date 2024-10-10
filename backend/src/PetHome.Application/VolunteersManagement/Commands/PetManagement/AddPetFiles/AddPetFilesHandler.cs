@@ -96,7 +96,7 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet
                     return filePath.Error;
                 }
 
-                var fileInfo = new FileInfo(filePath.Value.Path, BUCKET_NAME);
+                var fileInfo = new FileInfo(BUCKET_NAME, filePath.Value.Path);
                 fileInfoCollection.Add(fileInfo);
 
                 var fileData = new FileData(file.Stream, fileInfo);

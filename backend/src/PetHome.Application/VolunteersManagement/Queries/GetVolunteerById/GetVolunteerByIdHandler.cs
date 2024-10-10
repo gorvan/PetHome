@@ -28,6 +28,11 @@ namespace PetHome.Application.VolunteersManagement.Queries.GetVolunteerById
                 return Errors.General.NotFound(query.Id);
             }
 
+            foreach (var item in volunteerResult.Pets)
+            {
+                item.SortPhotos();
+            }
+
             return volunteerResult;
         }
     }

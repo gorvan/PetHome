@@ -15,7 +15,7 @@
                 var forId = id == null ? "" : $" for id '{id}'";
                 return Error.NotFound("record.not.found", $"record not found{forId}");
             }
-
+           
             public static Error ValueIsRequeired(string? name = null)
             {
                 var label = name == null ? "" : " " + name + " ";
@@ -34,6 +34,15 @@
 
                 return Error.NotFound("record.is.used",
                     $"record is used{forId}");
+            }
+        }
+
+        public static class Files
+        {
+            public static Error NotFound(string? value = null)
+            {
+                var forFile = string.IsNullOrWhiteSpace(value) ? "" : $" for file '{value}'";
+                return Error.NotFound("record.not.found", $"record not found{forFile}");
             }
         }
     }
