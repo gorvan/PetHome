@@ -43,8 +43,8 @@ namespace PetHome.Application.VolunteersManagement.Queries.GetVolunteersWithPagi
                 : volunteerQuery.OrderBy(keySelector);
 
             volunteerQuery = volunteerQuery.WhereIf(
-            query.Experience > 0,
-            v => v.Experience == query.Experience);
+                query.Experience > 0,
+                v => v.Experience == query.Experience);
 
             return await volunteerQuery
                     .ToPagedList(query.Page, query.PageSize, token);

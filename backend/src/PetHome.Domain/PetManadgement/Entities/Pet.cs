@@ -153,5 +153,20 @@ namespace PetHome.Domain.PetManadgement.Entities
         {
             HelpStatus = newHelpStatus;
         }
+
+        public Result<bool> SetMainPhoto(string filePath)
+        {
+            var photoResult = _photo.FirstOrDefault(p => p.Path.Path == filePath);
+            if(photoResult == null)
+            {
+                return Errors.Files.NotFound(filePath);
+            }
+
+            _photo.ForEach(p => p.ResetMain());
+
+            photoResult.SetMain();
+
+            return true;
+        }
     }
 }

@@ -10,6 +10,7 @@ using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPet;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPetFiles;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.DeletePet;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.FullDeletePet;
+using PetHome.Application.VolunteersManagement.Commands.PetManagement.SetMainPetPhoto;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdateFiles;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdatePet;
 using PetHome.Application.VolunteersManagement.Commands.PetManagement.UpdatePetHelpStatus;
@@ -242,6 +243,19 @@ namespace PetHome.API.Controllers
             var query = new GetPetByIdQuery(petId);
             var result = await handler.Execute(query, token);
             return Ok(result);
+        }
+
+        [HttpPut("{volunteerId:guid}/pet/{petId:guid}/photo_set_main")]
+        public async Task<ActionResult<Guid>> SetMainPetPhoto(
+           [FromRoute] Guid volunteerId,
+           [FromRoute] Guid petId,
+           [FromBody] SetMainPetPhotoRequest request,
+           [FromServices] SetMainPetPhotoHandler handler,
+           CancellationToken token)
+        {
+            var command = request.ToCommand(volunteerId, petId);
+            var result = await handler.Execute(command, token);
+            return result.ToResponse();
         }
     }
 }
