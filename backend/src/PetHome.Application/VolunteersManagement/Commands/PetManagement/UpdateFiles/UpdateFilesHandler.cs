@@ -176,7 +176,7 @@ namespace PetHome.Application.VolunteersManagement.Commands.PetManagement.Update
         private Result<PetPhoto> GetPhoto(FilePath filePath)
         {
             var photoId = PetPhotoId.NewPhotoId();
-            return PetPhoto.Create(photoId, filePath, true);
+            return PetPhoto.Create(photoId, filePath, false);
         }
     }
 }

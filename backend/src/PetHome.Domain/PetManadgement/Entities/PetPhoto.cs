@@ -17,7 +17,7 @@ namespace PetHome.Domain.PetManadgement.Entities
         }
 
         public FilePath Path { get; } = default!;
-        public bool IsMain { get; }
+        public bool IsMain { get; private set; } = false;
         public bool IsUploaded { get; } = false;
 
         public static Result<PetPhoto> Create(
@@ -27,5 +27,9 @@ namespace PetHome.Domain.PetManadgement.Entities
         {
             return new PetPhoto(id, path, isMain);
         }
-    }    
+
+        public void SetMain() => IsMain = true;
+
+        public void ResetMain() => IsMain = false;
+    }
 }

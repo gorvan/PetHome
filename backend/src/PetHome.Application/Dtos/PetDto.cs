@@ -26,6 +26,11 @@ namespace PetHome.Application.Dtos
         public double Weight { get; } = 0;
         public double Height { get; } = 0;
         public int SerialNumber { get; private set; }
-        public PhotoDto[] Photos { get; init; } = [];
+        public PhotoDto[] Photos { get; private set; } = [];
+
+        public void SortPhotos()
+        {
+            Photos = Photos.OrderBy(ph => ph.IsMain).ToArray();
+        }
     }
 }

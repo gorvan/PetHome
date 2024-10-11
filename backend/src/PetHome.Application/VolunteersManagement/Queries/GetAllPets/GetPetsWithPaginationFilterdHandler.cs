@@ -1,4 +1,5 @@
-﻿using PetHome.Application.Abstractions;
+﻿using Microsoft.EntityFrameworkCore;
+using PetHome.Application.Abstractions;
 using PetHome.Application.Database;
 using PetHome.Application.Dtos;
 using PetHome.Application.Extensions;
@@ -33,6 +34,8 @@ namespace PetHome.Application.VolunteersManagement.Queries.GetAllPets
                 : petQuery.OrderBy(keySelector);
 
             petQuery = petQuery.Where(filter);
+
+            await petQuery.ForEachAsync(p => p.SortPhotos(), token);
 
             return await petQuery
                     .ToPagedList(query.Page, query.PageSize, token);
