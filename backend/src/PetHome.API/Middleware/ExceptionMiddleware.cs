@@ -1,6 +1,6 @@
-﻿using PetHome.API.Response;
+﻿using PetHome.Shared.Core.Response;
 
-namespace PetHome.API.Middleware
+namespace PetHome.Web.Middleware
 {
     public class ExceptionMiddleware
     {

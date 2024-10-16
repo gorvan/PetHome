@@ -1,7 +1,7 @@
 ﻿using Serilog;
 using Serilog.Events;
 
-namespace PetHome.API.Middleware
+namespace PetHome.Web.Middleware
 {
     public class LogsConfigurationManager
     {

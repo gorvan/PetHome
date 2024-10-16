@@ -1,9 +1,9 @@
-using PetHome.Domain.PetManadgement.AggregateRoot;
-using PetHome.Domain.PetManadgement.Entities;
-using PetHome.Domain.PetManadgement.ValueObjects;
-using PetHome.Domain.Shared;
-using PetHome.Domain.Shared.IDs;
-using PetHome.Domain.SpeciesManagement.AggregateRoot;
+using PetHome.Shared.Core.Shared;
+using PetHome.Shared.Core.Shared.IDs;
+using PetHome.Species.Domain;
+using PetHome.Volunteers.Domain;
+using PetHome.Volunteers.Domain.Entities;
+using PetHome.Volunteers.Domain.ValueObjects;
 
 namespace PetHome.UnitTests
 {
@@ -85,7 +85,7 @@ namespace PetHome.UnitTests
             Assert.Equal(expected, volunteer.Pets.Count);
             Assert.Equal(expected, pet.SerialNumber.Value);
         }
-        
+
         [Fact]
         public void MovePet_ItShould_Not_Change_Any_If_New_SerialNumber_Equals_Old_SerialNumber()
         {
@@ -194,7 +194,7 @@ namespace PetHome.UnitTests
             volunteer.AddPet(pet4);
             volunteer.AddPet(pet5);
 
-            var newNumber = 4;            
+            var newNumber = 4;
             var newSerialNumber = SerialNumber.Create(newNumber).Value;
 
             //Act
