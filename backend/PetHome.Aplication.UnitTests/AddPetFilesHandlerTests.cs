@@ -2,15 +2,15 @@
 using FluentValidation.Results;
 using Microsoft.Extensions.Logging;
 using Moq;
-using PetHome.Application.Dtos;
-using PetHome.Application.FileProvider;
-using PetHome.Application.Messaging;
-using PetHome.Application.VolunteersManagement;
-using PetHome.Application.VolunteersManagement.Commands.PetManagement.AddPetFiles;
-using PetHome.Domain.PetManadgement.AggregateRoot;
-using PetHome.Domain.Shared;
-using PetHome.Domain.Shared.IDs;
-using FileInfo = PetHome.Application.FileProvider.FileInfo;
+using PetHome.Shared.Core.Dtos;
+using PetHome.Shared.Core.FileProvider;
+using PetHome.Shared.Core.Messaging;
+using PetHome.Shared.Core.Shared;
+using PetHome.Shared.Core.Shared.IDs;
+using PetHome.Volunteers.Application.VolunteersManagement;
+using PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManagement.AddPetFiles;
+using PetHome.Volunteers.Domain;
+using FileInfo = PetHome.Shared.Core.FileProvider.FileInfo;
 
 namespace PetHome.UnitTests
 {

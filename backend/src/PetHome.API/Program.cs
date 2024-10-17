@@ -1,27 +1,42 @@
-using PetHome.API.Extensions;
-using PetHome.API.Middleware;
-using PetHome.Application;
-using PetHome.Infrastructure;
+using PetHome.Species.Application;
+using PetHome.Species.Infrastructure;
+using PetHome.Volunteers.Application;
+using PetHome.Volunteers.Infrastructure;
+using PetHome.Volunteers.Contracts;
+using PetHome.Species.Contracts;
+using PetHome.Web.Middleware;
 using Serilog;
+using PetHome.Volunteers.Presentation;
+using PetHome.Species.Presentation;
+using PetHome.Species.Presentation.Controllers;
+using PetHome.Volunteers.Presentation.Controllers;
 
-namespace PetHome.API
+namespace PetHome.Web
 {
     public class Program
     {
-        public static async Task Main(string[] args)
+        public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
 
             builder.ConfigureLogging();
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+            .AddApplicationPart(typeof(VolunteersController).Assembly)
+            .AddApplicationPart(typeof(SpeciesController).Assembly);
+
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddSerilog();
 
             builder.Services
-                .AddInfrastructure(builder.Configuration)
-                .AddApplication();
+                .AddVolunteersApplication()
+                .AddVolunteerInfrastructure(builder.Configuration)
+                .AddSpeciesApplication()
+                .AddSpeciesInfrastructure(builder.Configuration);
+
+            builder.Services.AddScoped<IVolunteersContract, VolunteersContract>();
+            builder.Services.AddScoped<ISpeciesContract, SpeciesContract>();
 
             var app = builder.Build();
 
@@ -32,7 +47,7 @@ namespace PetHome.API
                 app.UseSwagger();
                 app.UseSwaggerUI();
 
-                await app.ApplyMigrations();
+                //await app.ApplyMigrations();
             }
 
             app.UseSerilogRequestLogging();
