@@ -1,6 +1,6 @@
 ﻿using PetHome.Shared.Core.Shared.IDs;
 
-namespace PetHome.Species.Domain
+namespace PetHome.Shared.Core.Shared
 {
     public record SpeciesBreedValue
     {

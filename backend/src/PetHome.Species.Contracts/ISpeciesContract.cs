@@ -1,6 +1,6 @@
 ﻿using PetHome.Shared.Core.Dtos;
+using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
-using PetHome.Species.Domain;
 
 namespace PetHome.Species.Contracts
 {

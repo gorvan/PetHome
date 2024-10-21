@@ -1,6 +1,5 @@
 ﻿using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
-using PetHome.Species.Domain;
 using PetHome.Volunteers.Domain.ValueObjects;
 
 namespace PetHome.Volunteers.Domain.Entities

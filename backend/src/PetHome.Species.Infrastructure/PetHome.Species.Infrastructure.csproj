@@ -16,9 +16,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetHome.Shared.Core\PetHome.Shared.Core.csproj" />
-    <ProjectReference Include="..\PrtHome.Shared.Framework\PetHome.Shared.Framework.csproj" />
-    <ProjectReference Include="..\PrtHome.Sprcies.Application\PetHome.Species.Application.csproj" />
-    <ProjectReference Include="..\PrtHome.Sprcies.Domain\PetHome.Species.Domain.csproj" />
+    <ProjectReference Include="..\PetHome.Shared.Framework\PetHome.Shared.Framework.csproj" />
+    <ProjectReference Include="..\PetHome.Species.Application\PetHome.Species.Application.csproj" />
+    <ProjectReference Include="..\PetHome.Species.Domain\PetHome.Species.Domain.csproj" />
   </ItemGroup>
 
 </Project>

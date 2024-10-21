@@ -1,0 +1,6 @@
+@PetHome.Web_HostAddress = http://localhost:5250
+
+GET {{PetHome.Web_HostAddress}}/Volunteers/
+Accept: application/json
+
+###

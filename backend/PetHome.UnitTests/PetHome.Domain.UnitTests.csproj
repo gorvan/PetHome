@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\src\PetHome.Volunteers.Domain\PetHome.Volunteers.Domain.csproj" />
-    <ProjectReference Include="..\src\PrtHome.Sprcies.Domain\PetHome.Species.Domain.csproj" />
+    <ProjectReference Include="..\src\PetHome.Species.Domain\PetHome.Species.Domain.csproj" />
   </ItemGroup>
 
   <ItemGroup>
