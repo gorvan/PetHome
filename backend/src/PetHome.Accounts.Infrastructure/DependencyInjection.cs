@@ -1,7 +1,11 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using PetHome.Accounts.Application.Abstractions;
+using PetHome.Accounts.Domain;
+using PetHome.Accounts.Infrastructure.Providers;
 using System.Text;
 
 namespace PetHome.Accounts.Infrastructure
@@ -12,25 +16,59 @@ namespace PetHome.Accounts.Infrastructure
            this IServiceCollection services,
            IConfiguration configuration)
         {
-            //services.AddIdentity<User, Role>()
-            //    .AddEntityFrameworkStores<AuthorizationDbContext>();            
-
-            services.AddScoped<AuthorizationDbContext>();
-
             services
-            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddTransient<ITokenProvider, JwtTokenProvider>()
+                .AddJwtOptions(configuration)
+                .AddDbContext()
+                .AddJwtBearer(configuration);
+
+            return services;
+        }
+
+        private static IServiceCollection AddDbContext(this IServiceCollection services)
+        {
+            services
+                .AddIdentity<User, Role>(options => { options.User.RequireUniqueEmail = true; })
+                .AddEntityFrameworkStores<AuthorizationDbContext>()
+                .AddDefaultTokenProviders();
+
+            return services.AddScoped<AuthorizationDbContext>();
+        }
+
+        private static IServiceCollection AddJwtOptions(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services.Configure<JwtOtions>(configuration.GetSection(JwtOtions.JWT));
+            services.AddOptions<JwtOtions>();
+
+            return services;
+        }
+
+        private static IServiceCollection AddJwtBearer(
+            this IServiceCollection services,
+            IConfiguration configuration)
+        {
+            services
+            .AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
             .AddJwtBearer(options =>
             {
+                var jwtOptions = configuration.GetSection(JwtOtions.JWT).Get<JwtOtions>()
+                                    ?? throw new ApplicationException("Missing jwt configuration");
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = "test",
-                    ValidAudience = "test",
-                    IssuerSigningKey = new SymmetricSecurityKey
-                        (Encoding.UTF8.GetBytes(
-                            "testasdsg[kfgpfhgsdfjhlskdfhglurgrunvasnvropuaphruhgapfva")),
+                    ValidIssuer = jwtOptions.Issuer,
+                    ValidAudience = jwtOptions.Audience,
+                    IssuerSigningKey =
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
                     ValidateIssuer = true,
                     ValidateAudience = true,
-                    ValidateLifetime = false,
+                    ValidateLifetime = true,
                     ValidateIssuerSigningKey = true
                 };
             });

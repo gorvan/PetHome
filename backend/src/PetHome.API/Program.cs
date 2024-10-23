@@ -1,5 +1,7 @@
 using Microsoft.OpenApi.Models;
+using PetHome.Accounts.Application;
 using PetHome.Accounts.Infrastructure;
+using PetHome.Accounts.Presentation.Controllers;
 using PetHome.Species.Application;
 using PetHome.Species.Contracts;
 using PetHome.Species.Infrastructure;
@@ -25,7 +27,8 @@ namespace PetHome.Web
 
             builder.Services.AddControllers()
             .AddApplicationPart(typeof(VolunteersController).Assembly)
-            .AddApplicationPart(typeof(SpeciesController).Assembly);
+            .AddApplicationPart(typeof(SpeciesController).Assembly)
+            .AddApplicationPart(typeof(AccountsController).Assembly);
 
             builder.Services.AddEndpointsApiExplorer();
 
@@ -66,6 +69,7 @@ namespace PetHome.Web
                 .AddVolunteerInfrastructure(builder.Configuration)
                 .AddSpeciesApplication()
                 .AddSpeciesInfrastructure(builder.Configuration)
+                .AddAccountsApplication()
                 .AddAccountsInfrastructure(builder.Configuration);
 
             builder.Services.AddScoped<IVolunteersContract, VolunteersContract>();

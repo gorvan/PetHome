@@ -18,5 +18,15 @@ namespace PetHome.Shared.Core.Extensions
                                 error.PropertyName)
                     select errorResponse).ToList();
         }
+
+        public static List<Error> ToErrorList(this IEnumerable<Error> errors)
+        {
+            return (from error in errors                   
+                    let errorResponse = Error.Validation(
+                                error.Code,
+                                error.Message,
+                                error.Type.ToString())
+                    select errorResponse).ToList();
+        }
     }
 }

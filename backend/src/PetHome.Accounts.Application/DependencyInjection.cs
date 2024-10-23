@@ -3,13 +3,13 @@ using Microsoft.Extensions.DependencyInjection;
 using PetHome.Shared.Core.Abstractions;
 using System.Reflection;
 
-namespace PetHome.Volunteers.Application
+namespace PetHome.Accounts.Application
 {
     public static class DependencyInjection
     {
         private static Assembly assembly = typeof(DependencyInjection).Assembly;
 
-        public static IServiceCollection AddVolunteersApplication(this IServiceCollection services)
+        public static IServiceCollection AddAccountsApplication(this IServiceCollection services)
         {
             services
                 .AddCommands()

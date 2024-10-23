@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetHome.Accounts.Infrastructure\PetHome.Accounts.Infrastructure.csproj" />
+    <ProjectReference Include="..\PetHome.Accounts.Presentation\PetHome.Accounts.Presentation.csproj" />
     <ProjectReference Include="..\PetHome.Shared.Core\PetHome.Shared.Core.csproj" />
     <ProjectReference Include="..\PetHome.Volunteers.Application\PetHome.Volunteers.Application.csproj" />
     <ProjectReference Include="..\PetHome.Volunteers.Contracts\PetHome.Volunteers.Contracts.csproj" />
