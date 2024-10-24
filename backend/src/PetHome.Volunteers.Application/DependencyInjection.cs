@@ -16,7 +16,6 @@ namespace PetHome.Volunteers.Application
                 .AddQueries()
                 .AddValidatorsFromAssembly(assembly);
 
-
             return services;
         }
 

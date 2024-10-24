@@ -19,9 +19,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetHome.UnitTests\PetHome.Domain.UnitTests.csproj" />
+    <ProjectReference Include="..\src\PetHome.Species.Domain\PetHome.Species.Domain.csproj" />
     <ProjectReference Include="..\src\PetHome.Volunteers.Application\PetHome.Volunteers.Application.csproj" />
     <ProjectReference Include="..\src\PetHome.Volunteers.Infrastructure\PetHome.Volunteers.Infrastructure.csproj" />
-    <ProjectReference Include="..\src\PrtHome.Sprcies.Infrastructure\PetHome.Species.Infrastructure.csproj" />
+    <ProjectReference Include="..\src\PetHome.Species.Infrastructure\PetHome.Species.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>

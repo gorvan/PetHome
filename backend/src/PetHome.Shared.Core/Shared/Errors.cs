@@ -45,5 +45,13 @@
                 return Error.NotFound("record.not.found", $"record not found{forFile}");
             }
         }
+
+        public static class User
+        {
+            public static Error InvalidCredentials(string? value = null)
+            {
+                return Error.Validation("credentials.is.invalid", "Your credentials is invalid");
+            }
+        }
     }
 }

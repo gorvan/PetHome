@@ -1,7 +1,9 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PetHome.Shared.Core.Processors;
 using PetHome.Shared.Core.Extensions;
+using PetHome.Shared.Core.Processors;
+using PetHome.Shared.Framework.Controllers;
 using PetHome.Volunteers.Application.Contracts;
 using PetHome.Volunteers.Application.VolunteersManagement.Commands.Create;
 using PetHome.Volunteers.Application.VolunteersManagement.Commands.Delete;
@@ -22,7 +24,6 @@ using PetHome.Volunteers.Application.VolunteersManagement.Queries.GetPetById;
 using PetHome.Volunteers.Application.VolunteersManagement.Queries.GetVolunteerById;
 using PetHome.Volunteers.Application.VolunteersManagement.Queries.GetVolunteersWithPagination;
 using PetHome.Volunteers.Application.VolunteersManagement.Queries.GetVolunteersWithPaginationDapper;
-using PetHome.Shared.Framework.Controllers;
 
 namespace PetHome.Volunteers.Presentation.Controllers
 {
@@ -62,6 +63,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return Ok(response);
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
             [FromServices] CreateVolunteerHandler handler,

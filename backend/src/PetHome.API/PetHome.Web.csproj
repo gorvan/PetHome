@@ -27,15 +27,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PetHome.Accounts.Infrastructure\PetHome.Accounts.Infrastructure.csproj" />
+    <ProjectReference Include="..\PetHome.Accounts.Presentation\PetHome.Accounts.Presentation.csproj" />
     <ProjectReference Include="..\PetHome.Shared.Core\PetHome.Shared.Core.csproj" />
     <ProjectReference Include="..\PetHome.Volunteers.Application\PetHome.Volunteers.Application.csproj" />
     <ProjectReference Include="..\PetHome.Volunteers.Contracts\PetHome.Volunteers.Contracts.csproj" />
     <ProjectReference Include="..\PetHome.Volunteers.Infrastructure\PetHome.Volunteers.Infrastructure.csproj" />
     <ProjectReference Include="..\PetHome.Volunteers.Presentation\PetHome.Volunteers.Presentation.csproj" />
-    <ProjectReference Include="..\PrtHome.Sprcies.Application\PetHome.Species.Application.csproj" />
-    <ProjectReference Include="..\PrtHome.Sprcies.Contracts\PetHome.Species.Contracts.csproj" />
-    <ProjectReference Include="..\PrtHome.Sprcies.Infrastructure\PetHome.Species.Infrastructure.csproj" />
-    <ProjectReference Include="..\PrtHome.Sprcies.Presentation\PetHome.Species.Presentation.csproj" />
+    <ProjectReference Include="..\PetHome.Species.Application\PetHome.Species.Application.csproj" />
+    <ProjectReference Include="..\PetHome.Species.Contracts\PetHome.Species.Contracts.csproj" />
+    <ProjectReference Include="..\PetHome.Species.Infrastructure\PetHome.Species.Infrastructure.csproj" />
+    <ProjectReference Include="..\PetHome.Species.Presentation\PetHome.Species.Presentation.csproj" />
   </ItemGroup>
 
 </Project>

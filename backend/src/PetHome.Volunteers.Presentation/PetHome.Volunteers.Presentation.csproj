@@ -8,8 +8,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetHome.Shared.Core\PetHome.Shared.Core.csproj" />
+    <ProjectReference Include="..\PetHome.Shared.Framework\PetHome.Shared.Framework.csproj" />
+    <ProjectReference Include="..\PetHome.Species.Contracts\PetHome.Species.Contracts.csproj" />
     <ProjectReference Include="..\PetHome.Volunteers.Application\PetHome.Volunteers.Application.csproj" />
-    <ProjectReference Include="..\PrtHome.Sprcies.Infrastructure\PetHome.Species.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
