@@ -22,7 +22,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManage
                 .WithError(Errors.General.ValueIsRequeired());
 
             RuleFor(p => p.Description).MustBeValueObject(
-                PetDescription.Create);
+                Description.Create);
 
             RuleFor(p => p.Color).MustBeValueObject(
                 PetColor.Create);

@@ -7,11 +7,13 @@ using PetHome.Species.Application.SpeciesManagement.Commands.Delete;
 using PetHome.Species.Application.SpeciesManagement.Queries.GetBreeds;
 using PetHome.Species.Application.SpeciesManagement.Queries.GetSpecies;
 using PetHome.Shared.Framework.Controllers;
+using PetHome.Shared.SharedKernel.Authorization;
 
 namespace PetHome.Species.Presentation.Controllers
 {
     public class SpeciesController : ApplicationContoller
     {
+        [Permission(Permissions.Participant.ReadParticipant)]
         [HttpGet]
         public async Task<ActionResult> Get(
             [FromQuery] GetSpeciesWithPaginationRequest request,
@@ -23,6 +25,7 @@ namespace PetHome.Species.Presentation.Controllers
             return Ok(response);
         }
 
+        [Permission(Permissions.Participant.ReadParticipant)]
         [HttpGet("{speciesId:Guid}/breeds")]
         public async Task<ActionResult<PagedList<BreedDto>>> GetBreeds(
             [FromRoute] Guid speciesId,
@@ -39,6 +42,7 @@ namespace PetHome.Species.Presentation.Controllers
             return Ok(response);
         }
 
+        [Permission(Permissions.Volunteers.DeleteVolunteer)]
         [HttpDelete("{id:Guid}")]
         public async Task<ActionResult<Guid>> Delete(
             [FromRoute] Guid id,

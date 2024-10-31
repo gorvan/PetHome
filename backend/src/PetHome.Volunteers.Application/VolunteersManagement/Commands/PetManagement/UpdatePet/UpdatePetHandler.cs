@@ -5,7 +5,6 @@ using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
 using PetHome.Species.Contracts;
-using PetHome.Species.Domain;
 using PetHome.Volunteers.Domain.Entities;
 using PetHome.Volunteers.Domain.ValueObjects;
 
@@ -82,7 +81,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManage
                 speciesBreedResult.Value.breedId);
 
             var petDescription =
-                PetDescription.Create(command.Description).Value;
+                Description.Create(command.Description).Value;
 
             var petColor = PetColor.Create(command.Color).Value;
 

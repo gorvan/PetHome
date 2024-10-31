@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetHome.Accounts.Infrastructure;
@@ -12,9 +13,11 @@ using PetHome.Accounts.Infrastructure;
 namespace PetHome.Accounts.Infrastructure.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    partial class AuthorizationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241030160018_addAdmin")]
+    partial class addAdmin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -154,7 +157,7 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens", "accounts");
                 });
 
-            modelBuilder.Entity("PetHome.Accounts.Domain.Accounts.AdminAccount", b =>
+            modelBuilder.Entity("PetHome.Accounts.Domain.AdminAccount", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -165,7 +168,7 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
 
-                    b.ComplexProperty<Dictionary<string, object>>("FullName", "PetHome.Accounts.Domain.Accounts.AdminAccount.FullName#FullName", b1 =>
+                    b.ComplexProperty<Dictionary<string, object>>("FullName", "PetHome.Accounts.Domain.AdminAccount.FullName#FullName", b1 =>
                         {
                             b1.IsRequired();
 
@@ -193,102 +196,6 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         .HasDatabaseName("ix_admin_accounts_user_id");
 
                     b.ToTable("admin_accounts", "accounts");
-                });
-
-            modelBuilder.Entity("PetHome.Accounts.Domain.Accounts.ParticipantAccount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.ComplexProperty<Dictionary<string, object>>("FullName", "PetHome.Accounts.Domain.Accounts.ParticipantAccount.FullName#FullName", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("FirstName")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("first_name");
-
-                            b1.Property<string>("SecondName")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("second_name");
-
-                            b1.Property<string>("Surname")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("surname");
-                        });
-
-                    b.HasKey("Id")
-                        .HasName("pk_participant_account");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_participant_account_user_id");
-
-                    b.ToTable("participant_account", "accounts");
-                });
-
-            modelBuilder.Entity("PetHome.Accounts.Domain.Accounts.VolunteerAccount", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid")
-                        .HasColumnName("id");
-
-                    b.Property<int>("Expirience")
-                        .HasColumnType("integer")
-                        .HasColumnName("expirience");
-
-                    b.Property<string>("Requisites")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("requisites");
-
-                    b.Property<string>("Sertificates")
-                        .IsRequired()
-                        .HasColumnType("text")
-                        .HasColumnName("sertificates");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid")
-                        .HasColumnName("user_id");
-
-                    b.ComplexProperty<Dictionary<string, object>>("FullName", "PetHome.Accounts.Domain.Accounts.VolunteerAccount.FullName#FullName", b1 =>
-                        {
-                            b1.IsRequired();
-
-                            b1.Property<string>("FirstName")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("first_name");
-
-                            b1.Property<string>("SecondName")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("second_name");
-
-                            b1.Property<string>("Surname")
-                                .IsRequired()
-                                .HasColumnType("text")
-                                .HasColumnName("surname");
-                        });
-
-                    b.HasKey("Id")
-                        .HasName("pk_volunteer_account");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasDatabaseName("ix_volunteer_account_user_id");
-
-                    b.ToTable("volunteer_account", "accounts");
                 });
 
             modelBuilder.Entity("PetHome.Accounts.Domain.Permission", b =>
@@ -513,38 +420,14 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         .HasConstraintName("fk_asp_net_user_tokens_asp_net_users_user_id");
                 });
 
-            modelBuilder.Entity("PetHome.Accounts.Domain.Accounts.AdminAccount", b =>
+            modelBuilder.Entity("PetHome.Accounts.Domain.AdminAccount", b =>
                 {
                     b.HasOne("PetHome.Accounts.Domain.User", "User")
                         .WithOne()
-                        .HasForeignKey("PetHome.Accounts.Domain.Accounts.AdminAccount", "UserId")
+                        .HasForeignKey("PetHome.Accounts.Domain.AdminAccount", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_admin_accounts_users_user_id");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PetHome.Accounts.Domain.Accounts.ParticipantAccount", b =>
-                {
-                    b.HasOne("PetHome.Accounts.Domain.User", "User")
-                        .WithOne()
-                        .HasForeignKey("PetHome.Accounts.Domain.Accounts.ParticipantAccount", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_participant_account_users_user_id");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("PetHome.Accounts.Domain.Accounts.VolunteerAccount", b =>
-                {
-                    b.HasOne("PetHome.Accounts.Domain.User", "User")
-                        .WithOne()
-                        .HasForeignKey("PetHome.Accounts.Domain.Accounts.VolunteerAccount", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("fk_volunteer_account_users_user_id");
 
                     b.Navigation("User");
                 });

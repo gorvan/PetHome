@@ -50,7 +50,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.UpdateMai
 
             var phone = Phone.Create(command.Phone).Value;
 
-            var description = VolunteerDescription
+            var description = Description
                 .Create(command.Description).Value;
 
             volunteerResult.Value.UpdateMainInfo(

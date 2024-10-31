@@ -1,0 +1,53 @@
+{
+  "Permissions": {
+    "Volunteers": [
+      "volunteers.create",
+      "volunteers.read",
+      "volunteers.edit",
+      "volunteers.delete"
+    ],
+    "Pets": [
+      "pets.create",
+      "pets.read",
+      "petc.edit",
+      "petc.delete"
+    ],
+    "Species": [
+      "species.create",
+      "species.read",
+      "species.edit",
+      "species.delete"
+    ]
+  },
+  "Roles": {
+    "Admin": [
+      "volunteers.create",
+      "volunteers.read",
+      "volunteers.edit",
+      "volunteers.delete",
+      "pets.create",
+      "pets.read",
+      "petc.edit",
+      "petc.delete",
+      "species.create",
+      "species.read",
+      "species.edit",
+      "species.delete"
+    ],
+    "Participant": [
+      "pets.read"
+    ],
+    "Volunteer": [
+      "volunteers.read",
+      "volunteers.edit",      
+      "pets.create",
+      "pets.read",
+      "petc.edit",
+      "petc.delete",
+      "species.create",
+      "species.read",
+      "species.edit",
+      "species.delete"
+    ]
+  }
+}

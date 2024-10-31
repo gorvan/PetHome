@@ -1,6 +1,4 @@
-﻿using PetHome.Shared.Core.Shared;
-
-namespace PetHome.Volunteers.Domain.ValueObjects
+﻿namespace PetHome.Shared.Core.Shared
 {
     public record FullName
     {

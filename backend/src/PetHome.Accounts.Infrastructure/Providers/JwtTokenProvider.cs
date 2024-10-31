@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using PetHome.Accounts.Application.Abstractions;
 using PetHome.Accounts.Domain;
+using PetHome.Accounts.Infrastructure.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -20,13 +21,16 @@ namespace PetHome.Accounts.Infrastructure.Providers
         public string GenerateAccessToken(User user)
         {
             var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOtions.Key));
-
             var signingCredentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
+            var roleClaims = user.Roles.Select(r => new Claim(CustomClaims.Role, r.Name ?? string.Empty));
+
             Claim[] claims = [
-                new Claim(CustomClaims.Sub, user.Id.ToString()),
-                new Claim(CustomClaims.Email, user.Email ?? "")
+                new Claim(CustomClaims.Id, user.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, user.Email ?? ""),                
             ];
+
+            claims = claims.Concat(roleClaims).ToArray();
 
             var jwtToken = new JwtSecurityToken(
                 issuer: _jwtOtions.Issuer,

@@ -15,7 +15,7 @@ namespace PetHome.Volunteers.Domain
             VolunteerId id,
             FullName name,
             Email email,
-            VolunteerDescription description,
+            Description description,
             Phone phone,
             IEnumerable<SocialNetwork> socialNets,
             IEnumerable<Requisite> requisites,
@@ -36,7 +36,7 @@ namespace PetHome.Volunteers.Domain
 
         public FullName Name { get; private set; } = default!;
         public Email Email { get; private set; } = default!;
-        public VolunteerDescription Description { get; private set; } = default!;
+        public Description Description { get; private set; } = default!;
         public Phone Phone { get; private set; } = default!;
         public IReadOnlyList<SocialNetwork> SocialNetworks { get; private set; } = default!;
         public IReadOnlyList<Requisite> Requisites { get; private set; } = default!;
@@ -56,7 +56,7 @@ namespace PetHome.Volunteers.Domain
             FullName fullName,
             Email email,
             Phone phone,
-            VolunteerDescription description)
+            Description description)
         {
             Name = fullName;
             Email = email;
