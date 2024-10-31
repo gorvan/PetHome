@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PetHome.Accounts.Domain;
 using PetHome.Accounts.Domain.Accounts;
+using PetHome.Accounts.Infrastructure;
 using PetHome.Accounts.Infrastructure.IdentityManager;
 using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Extensions;
@@ -13,6 +15,7 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
         ParticipantAccountManager participantAccountManager,
+        [FromKeyedServices(nameof(Accounts))] IUnitOfWork unitOfWork,
         ILogger<RegisterUserHandler> logger) : ICommandHandler<RegisterUserCommand>
     {       
 
@@ -39,7 +42,7 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
                 var participantAccount = new ParticipantAccount(fullName, user);
 
                 await participantAccountManager.CreateParticipantAccount(participantAccount);
-
+                await unitOfWork.SaveChanges();
                 return Result.Success();
             }
 

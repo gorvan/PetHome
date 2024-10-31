@@ -5,12 +5,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using PetHome.Accounts.Domain;
+using PetHome.Accounts.Infrastructure;
 using PetHome.Accounts.Infrastructure.Abstractions;
 using PetHome.Accounts.Infrastructure.Authorization;
 using PetHome.Accounts.Infrastructure.IdentityManager;
 using PetHome.Accounts.Infrastructure.Options;
 using PetHome.Accounts.Infrastructure.Providers;
 using PetHome.Accounts.Infrastructure.Seeding;
+using PetHome.Shared.Core.Abstractions;
 using System.Text;
 
 namespace PetHome.Accounts.Infrastructure
@@ -37,6 +39,8 @@ namespace PetHome.Accounts.Infrastructure
                 .AddIdentity<User, Role>(options => { options.User.RequireUniqueEmail = true; })
                 .AddEntityFrameworkStores<AccountsDbContext>()
                 .AddDefaultTokenProviders();
+
+            services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(nameof(Accounts));
 
             return services.AddScoped<AccountsDbContext>();
         }
