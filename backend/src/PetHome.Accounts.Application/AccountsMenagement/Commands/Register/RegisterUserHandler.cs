@@ -2,39 +2,44 @@
 using Microsoft.Extensions.Logging;
 using PetHome.Accounts.Domain;
 using PetHome.Accounts.Domain.Accounts;
+using PetHome.Accounts.Infrastructure.IdentityManager;
 using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Shared;
 
 namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
 {
-    public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
-    {
-        private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
-        private readonly ILogger<RegisterUserHandler> _logger;
-        public RegisterUserHandler(
-            UserManager<User> userManager, 
-            RoleManager<Role> roleManager, 
-            ILogger<RegisterUserHandler> logger)
-        {
-            _userManager = userManager;
-            _roleManager = roleManager;
-            _logger = logger;
-        }
+    public class RegisterUserHandler(
+        UserManager<User> userManager,
+        RoleManager<Role> roleManager,
+        ParticipantAccountManager participantAccountManager,
+        ILogger<RegisterUserHandler> logger) : ICommandHandler<RegisterUserCommand>
+    {       
 
         public async Task<Result> Execute(RegisterUserCommand command, CancellationToken token)
         {
-            var adminRole = await _roleManager.FindByNameAsync(AdminAccount.ADMIN)
-                ?? throw new ApplicationException("Could not find admin role.");
+            var participantRole = await roleManager.FindByNameAsync(ParticipantAccount.PARTICIPANT)
+                ?? throw new ApplicationException("Could not find participant role.");
 
-            var user = User.CreateAmin(command.Email, command.UserName, adminRole);
+            var user = User.CreateParticipant(command.UserName, command.Email, participantRole);
 
-            var result = await _userManager.CreateAsync(user, command.Password);
+            var result = await userManager.CreateAsync(user, command.Password);
 
             if (result.Succeeded)
             {
-                _logger.LogInformation("User created: {userName} a new account with password", command.UserName);
+                logger.LogInformation("User created: {userName} a new account with password",
+                    command.UserName);
+
+                var fullName = FullName.Create(
+                        command.UserName,
+                        command.UserName,
+                        command.UserName)
+                    .Value;
+
+                var participantAccount = new ParticipantAccount(fullName, user);
+
+                await participantAccountManager.CreateParticipantAccount(participantAccount);
+
                 return Result.Success();
             }
 

@@ -12,7 +12,7 @@ namespace PetHome.Accounts.Infrastructure.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "participant_account",
+                name: "participant_accounts",
                 schema: "accounts",
                 columns: table => new
                 {
@@ -24,9 +24,9 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_participant_account", x => x.id);
+                    table.PrimaryKey("pk_participant_accounts", x => x.id);
                     table.ForeignKey(
-                        name: "fk_participant_account_users_user_id",
+                        name: "fk_participant_accounts_users_user_id",
                         column: x => x.user_id,
                         principalSchema: "accounts",
                         principalTable: "AspNetUsers",
@@ -35,7 +35,7 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "volunteer_account",
+                name: "volunteer_accounts",
                 schema: "accounts",
                 columns: table => new
                 {
@@ -50,9 +50,9 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("pk_volunteer_account", x => x.id);
+                    table.PrimaryKey("pk_volunteer_accounts", x => x.id);
                     table.ForeignKey(
-                        name: "fk_volunteer_account_users_user_id",
+                        name: "fk_volunteer_accounst_users_user_id",
                         column: x => x.user_id,
                         principalSchema: "accounts",
                         principalTable: "AspNetUsers",
@@ -61,16 +61,16 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "ix_participant_account_user_id",
+                name: "ix_participant_accounts_user_id",
                 schema: "accounts",
-                table: "participant_account",
+                table: "participant_accounts",
                 column: "user_id",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "ix_volunteer_account_user_id",
+                name: "ix_volunteer_accounts_user_id",
                 schema: "accounts",
-                table: "volunteer_account",
+                table: "volunteer_accounts",
                 column: "user_id",
                 unique: true);
         }

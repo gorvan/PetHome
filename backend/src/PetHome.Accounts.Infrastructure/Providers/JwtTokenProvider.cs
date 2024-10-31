@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using PetHome.Accounts.Application.Abstractions;
 using PetHome.Accounts.Domain;
+using PetHome.Accounts.Infrastructure.Abstractions;
 using PetHome.Accounts.Infrastructure.Models;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;

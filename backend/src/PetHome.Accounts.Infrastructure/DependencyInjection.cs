@@ -4,8 +4,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using PetHome.Accounts.Application.Abstractions;
 using PetHome.Accounts.Domain;
+using PetHome.Accounts.Infrastructure.Abstractions;
 using PetHome.Accounts.Infrastructure.Authorization;
 using PetHome.Accounts.Infrastructure.IdentityManager;
 using PetHome.Accounts.Infrastructure.Options;
@@ -100,6 +100,8 @@ namespace PetHome.Accounts.Infrastructure
             services.AddScoped<RolePermissionManager>();
 
             services.AddScoped<AdminAccountManager>();
+
+            services.AddScoped<ParticipantAccountManager>();
 
             return services;
         }

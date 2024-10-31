@@ -12,6 +12,7 @@ namespace PetHome.Accounts.Domain.Accounts
         {
             Id = Guid.NewGuid();
             UserId = user.Id;
+            User = user;
             FullName = fullName;
         }
 
