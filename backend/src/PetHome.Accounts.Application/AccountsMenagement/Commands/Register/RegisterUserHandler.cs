@@ -1,43 +1,74 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PetHome.Accounts.Domain;
+using PetHome.Accounts.Domain.Accounts;
+using PetHome.Accounts.Infrastructure.IdentityManager;
 using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Shared;
 
 namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
 {
-    public class RegisterUserHandler : ICommandHandler<RegisterUserCommand>
+    public class RegisterUserHandler(
+        UserManager<User> userManager,
+        RoleManager<Role> roleManager,
+        ParticipantAccountManager participantAccountManager,
+        [FromKeyedServices(nameof(Accounts))] IUnitOfWork unitOfWork,
+        ILogger<RegisterUserHandler> logger) : ICommandHandler<RegisterUserCommand>
     {
-        private readonly UserManager<User> _userManager;
-        private readonly ILogger<RegisterUserHandler> _logger;
-        public RegisterUserHandler(UserManager<User> userManager, ILogger<RegisterUserHandler> logger)
-        {
-            _userManager = userManager;
-            _logger = logger;
-        }
 
         public async Task<Result> Execute(RegisterUserCommand command, CancellationToken token)
         {
-            var user = new User
-            {
-                Email = command.Email,
-                UserName = command.UserName,
-            };
+            var transaction = await unitOfWork.BeginTransaction(token);
 
-            var result = await _userManager.CreateAsync(user, command.Password);
+            var participantRole = await roleManager.FindByNameAsync(ParticipantAccount.PARTICIPANT)
+                ?? throw new ApplicationException("Could not find participant role.");
 
-            if (result.Succeeded)
+            var user = User.CreateParticipant(command.UserName, command.Email, participantRole);
+
+            try
             {
-                _logger.LogInformation("User created: {userName} a new account with password", command.UserName);
+                var result = await userManager.CreateAsync(user, command.Password);
+
+                if (result.Succeeded is false)
+                {
+                    await userManager.DeleteAsync(user);
+                    transaction.Rollback();
+
+                    var errors = result.Errors
+                            .Select(e => Error.Failure(e.Code, e.Description))
+                            .ToList();
+                    
+                    return errors.ToErrorList();
+                }
+
+                logger.LogInformation("User created: {userName} a new account with password",
+                    command.UserName);
+
+                var fullName = FullName.Create(
+                        command.UserName,
+                        command.UserName,
+                        command.UserName)
+                    .Value;
+
+                var participantAccount = new ParticipantAccount(fullName, user);
+
+                await participantAccountManager.CreateParticipantAccount(participantAccount);
+                
+                await unitOfWork.SaveChanges(token);
+                transaction.Commit();
+
                 return Result.Success();
             }
+            catch(Exception ex)
+            {
+                await userManager.DeleteAsync(user);
 
-            var errors = result.Errors
-                    .Select(e => Error.Failure(e.Code, e.Description))
-                    .ToList();
+                transaction.Rollback();
 
-            return errors.ToErrorList();
+                return Error.Failure("user.register", "Fail to register user");                
+            }            
         }
     }
 }

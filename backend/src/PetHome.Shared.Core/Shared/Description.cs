@@ -1,21 +1,19 @@
-﻿using PetHome.Shared.Core.Shared;
-
-namespace PetHome.Volunteers.Domain.ValueObjects
+﻿namespace PetHome.Shared.Core.Shared
 {
-    public record VolunteerDescription
+    public record Description
     {
         public const int MAX_TEXT_LENGTH = 2000;
 
-        private VolunteerDescription(string description)
+        private Description(string description)
         {
-            Description = description;
+            DescriptionValue = description;
         }
 
 
-        public string Description { get; } = default!;
+        public string DescriptionValue { get; } = default!;
 
 
-        public static Result<VolunteerDescription> Create(string description)
+        public static Result<Description> Create(string description)
         {
             if (string.IsNullOrWhiteSpace(description))
             {
@@ -27,7 +25,7 @@ namespace PetHome.Volunteers.Domain.ValueObjects
                 return Errors.General.ValueIsInvalid("Description");
             }
 
-            return new VolunteerDescription(description);
+            return new Description(description);
         }
     }
 }

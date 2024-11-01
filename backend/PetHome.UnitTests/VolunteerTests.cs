@@ -1,6 +1,5 @@
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
-using PetHome.Species.Domain;
 using PetHome.Volunteers.Domain;
 using PetHome.Volunteers.Domain.Entities;
 using PetHome.Volunteers.Domain.ValueObjects;
@@ -14,7 +13,7 @@ namespace PetHome.UnitTests
             var id = VolunteerId.Empty();
             var name = FullName.Create("Test", "Test", "Test").Value;
             var email = Email.Create("test@ddd.ru").Value;
-            var description = VolunteerDescription.Create("Test").Value;
+            var description = Description.Create("Test").Value;
             var phone = Phone.Create("+70952365484").Value;
             var socialnetworks = new List<SocialNetwork>();
             var requisites = new List<Requisite>();
@@ -37,7 +36,7 @@ namespace PetHome.UnitTests
             var nickname = PetNickname.Create("test").Value;
             var speciesBreed =
                 new SpeciesBreedValue(SpeciesId.Empty(), BreedId.Empty());
-            var description = PetDescription.Create("test").Value;
+            var description = Description.Create("test").Value;
             var color = PetColor.Create("test").Value;
             var health = HealthInfo.Create("test").Value;
             var address = Address.Create("test", "test", "test", "test").Value;

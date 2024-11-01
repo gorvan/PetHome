@@ -1,6 +1,6 @@
 ﻿using PetHome.Accounts.Domain;
 
-namespace PetHome.Accounts.Application.Abstractions
+namespace PetHome.Accounts.Infrastructure.Abstractions
 {
     public interface ITokenProvider
     {

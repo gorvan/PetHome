@@ -14,7 +14,7 @@ namespace PetHome.Volunteers.Domain.Entities
             PetId id,
             PetNickname nickname,
             SpeciesBreedValue speciesBreed,
-            PetDescription description,
+            Description description,
             PetColor color,
             HealthInfo health,
             Address address,
@@ -51,7 +51,7 @@ namespace PetHome.Volunteers.Domain.Entities
 
         public PetNickname Nickname { get; private set; } = default!;
         public SpeciesBreedValue SpeciesBreed { get; private set; } = default!;
-        public PetDescription Description { get; private set; } = default!;
+        public Description Description { get; private set; } = default!;
         public PetColor Color { get; private set; } = default!;
         public HealthInfo Health { get; private set; } = default!;
         public Address Address { get; private set; } = default!;
@@ -119,7 +119,7 @@ namespace PetHome.Volunteers.Domain.Entities
         public void Update(
             PetNickname petNickName,
             SpeciesBreedValue speciesBreedValue,
-            PetDescription petDescription,
+            Description petDescription,
             PetColor petColor,
             HealthInfo healthInfo,
             Address address,

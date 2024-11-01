@@ -52,7 +52,7 @@ namespace PetHome.Volunteers.Infrastructure.Configurations.Write
             builder.ComplexProperty(p => p.Description,
                 pb =>
                 {
-                    pb.Property(d => d.Description)
+                    pb.Property(d => d.DescriptionValue)
                     .IsRequired()
                     .HasColumnName("description");
                 });

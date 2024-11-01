@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using PetHome.Accounts.Application.Abstractions;
 using PetHome.Accounts.Domain;
+using PetHome.Accounts.Infrastructure.Abstractions;
 using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Shared;
 

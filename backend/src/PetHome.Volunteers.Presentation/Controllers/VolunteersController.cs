@@ -1,9 +1,9 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Processors;
 using PetHome.Shared.Framework.Controllers;
+using PetHome.Shared.SharedKernel.Authorization;
 using PetHome.Volunteers.Application.Contracts;
 using PetHome.Volunteers.Application.VolunteersManagement.Commands.Create;
 using PetHome.Volunteers.Application.VolunteersManagement.Commands.Delete;
@@ -30,6 +30,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
 
     public class VolunteersController : ApplicationContoller
     {
+        [Permission(Permissions.Participant.ReadParticipant)]
         [HttpGet]
         public async Task<ActionResult> Get(
             [FromQuery] GetVolunteersWithPaginationFilteredRequest request,
@@ -41,6 +42,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return Ok(response);
         }
 
+        [Permission(Permissions.Participant.ReadParticipant)]
         [HttpGet("dapper")]
         public async Task<ActionResult> Get(
             [FromQuery] GetVolunteersWithPaginationFilteredRequest request,
@@ -52,6 +54,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return Ok(response);
         }
 
+        [Permission(Permissions.Participant.ReadParticipant)]
         [HttpGet("{volunteerId:guid}")]
         public async Task<ActionResult> GetById(
             [FromRoute] Guid volunteerId,
@@ -63,7 +66,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return Ok(response);
         }
 
-        [Authorize]
+        [Permission(Permissions.Volunteers.CreateVolunteer)]
         [HttpPost]
         public async Task<ActionResult<Guid>> Create(
             [FromServices] CreateVolunteerHandler handler,
@@ -75,6 +78,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpPut("{id:guid}/main-info")]
         public async Task<ActionResult<Guid>> UpdateMainInfo(
             [FromServices] UpdateMainInfoHandler handler,
@@ -87,6 +91,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpPut("{id:guid}/requisites")]
         public async Task<ActionResult<Guid>> UpdateRequisites(
             [FromServices] UpdateRequisitesHandler handler,
@@ -99,6 +104,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpPut("{id:guid}/social-networks")]
         public async Task<ActionResult<Guid>> UpdateSocialNetworks(
             [FromServices] UpdateSocialNetworksHandler handler,
@@ -111,6 +117,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.DeleteVolunteer)]        
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Guid>> Delete(
             [FromServices] DeleteVolunteerHandler handler,
@@ -122,6 +129,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Admin.RestoreAdmin)]
         [HttpPut("{id:guid}/restoring")]
         public async Task<ActionResult<Guid>> Restore(
             [FromServices] RestoreVolunteerHandler handler,
@@ -133,6 +141,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.CreateVolunteer)]
         [HttpPost("{id:guid}/pet")]
         public async Task<ActionResult<Guid>> CreatePet(
            [FromRoute] Guid id,
@@ -145,6 +154,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpPut("{volunteerId:guid}/pet/{petId:guid}/edit")]
         public async Task<ActionResult<Guid>> UpdatePet(
             [FromServices] UpdatePetHandler handler,
@@ -158,6 +168,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpPut("{volunteerId:guid}/pet/{petId:guid}/files")]
         public async Task<ActionResult<int>> AddFile(
            [FromRoute] Guid volunteerId,
@@ -173,6 +184,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpPut("{volunteerId:guid}/pet/{petId:guid}/files/edit")]
         public async Task<ActionResult<int>> UpdateFile(
            [FromRoute] Guid volunteerId,
@@ -188,6 +200,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpPut("{volunteerId:guid}/pet/{petId:guid}/help_status")]
         public async Task<ActionResult<Guid>> UpdateHelpStatus(
            [FromRoute] Guid volunteerId,
@@ -201,6 +214,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpDelete("{volunteerId:guid}/pet/{petId:guid}")]
         public async Task<ActionResult<Guid>> DeletePet(
             [FromServices] DeletePetHandler handler,
@@ -213,6 +227,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpDelete("{volunteerId:guid}/pet/{petId:guid}/full")]
         public async Task<ActionResult<Guid>> FullDeletePet(
             [FromServices] FullDeletePetHandler handler,
@@ -225,6 +240,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
+        [Permission(Permissions.Participant.ReadParticipant)]
         [HttpGet("pets")]
         public async Task<ActionResult> GetAllPets(
             [FromServices] GetPetsWithPaginationFilterdHandler handler,
@@ -236,6 +252,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return Ok(result);
         }
 
+        [Permission(Permissions.Participant.ReadParticipant)]
         [HttpGet("pet/{petId:guid}")]
         public async Task<ActionResult> GetPetById(
             [FromRoute] Guid petId,
@@ -247,6 +264,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return Ok(result);
         }
 
+        [Permission(Permissions.Volunteers.UpdateVolunteer)]
         [HttpPut("{volunteerId:guid}/pet/{petId:guid}/photo_set_main")]
         public async Task<ActionResult<Guid>> SetMainPetPhoto(
            [FromRoute] Guid volunteerId,

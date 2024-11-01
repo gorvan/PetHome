@@ -54,7 +54,7 @@ namespace PetHome.Volunteers.Infrastructure.Configurations.Write
             builder.ComplexProperty(v => v.Description,
                 vb =>
                 {
-                    vb.Property(d => d.Description)
+                    vb.Property(d => d.DescriptionValue)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_TEXT_LENGTH)
                     .HasColumnName("description");

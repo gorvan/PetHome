@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using PetHome.Accounts.Application;
 using PetHome.Accounts.Infrastructure;
+using PetHome.Accounts.Infrastructure.Seeding;
 using PetHome.Accounts.Presentation.Controllers;
 using PetHome.Species.Application;
 using PetHome.Species.Contracts;
@@ -15,89 +16,89 @@ using PetHome.Volunteers.Presentation.Controllers;
 using PetHome.Web.Middleware;
 using Serilog;
 
-namespace PetHome.Web
+namespace PetHome.Web;
+
+public class Program
 {
-    public class Program
+    public static async Task Main(string[] args)
     {
-        public static void Main(string[] args)
+        DotNetEnv.Env.Load();
+
+        var builder = WebApplication.CreateBuilder(args);
+
+        builder.ConfigureLogging();
+
+        builder.Services.AddControllers()
+        .AddApplicationPart(typeof(VolunteersController).Assembly)
+        .AddApplicationPart(typeof(SpeciesController).Assembly)
+        .AddApplicationPart(typeof(AccountsController).Assembly);
+
+        builder.Services.AddEndpointsApiExplorer();
+
+        builder.Services.AddSwaggerGen(c =>
         {
-            var builder = WebApplication.CreateBuilder(args);
-
-            builder.ConfigureLogging();
-
-            builder.Services.AddControllers()
-            .AddApplicationPart(typeof(VolunteersController).Assembly)
-            .AddApplicationPart(typeof(SpeciesController).Assembly)
-            .AddApplicationPart(typeof(AccountsController).Assembly);
-
-            builder.Services.AddEndpointsApiExplorer();
-
-            builder.Services.AddSwaggerGen(c =>
+            c.SwaggerDoc("v1", new OpenApiInfo
             {
-                c.SwaggerDoc("v1", new OpenApiInfo
-                {
-                    Title = "My API",
-                    Version = "v1"
-                });
-                c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                {
-                    In = ParameterLocation.Header,
-                    Description = "Please insert JWT with Bearer into field",
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    {
-                         new OpenApiSecurityScheme
-                         {
-                              Reference = new OpenApiReference
-                              {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                              }
-                         },
-                         new string[] { }
-                    }
-                });
+                Title = "My API",
+                Version = "v1"
             });
-
-            builder.Services.AddSerilog();
-
-            builder.Services
-                .AddVolunteersApplication()
-                .AddVolunteerInfrastructure(builder.Configuration)
-                .AddSpeciesApplication()
-                .AddSpeciesInfrastructure(builder.Configuration)
-                .AddAccountsApplication()
-                .AddAccountsInfrastructure(builder.Configuration);
-
-            builder.Services.AddScoped<IVolunteersContract, VolunteersContract>();
-            builder.Services.AddScoped<ISpeciesContract, SpeciesContract>();
-
-            builder.Services.AddAuthorization();
-
-            var app = builder.Build();
-
-            app.UseExceptionMiddleware();
-            app.UseSerilogRequestLogging();
-
-            if (app.Environment.IsDevelopment())
+            c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
             {
-                app.UseSwagger();
-                app.UseSwaggerUI();
+                In = ParameterLocation.Header,
+                Description = "Please insert JWT with Bearer into field",
+                Name = "Authorization",
+                Type = SecuritySchemeType.ApiKey
+            });
+            c.AddSecurityRequirement(new OpenApiSecurityRequirement
+            {
+                {
+                     new OpenApiSecurityScheme
+                     {
+                          Reference = new OpenApiReference
+                          {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                          }
+                     },
+                     new string[] { }
+                }
+            });
+        });
 
-                //await app.ApplyMigrations();
-            }
+        builder.Services.AddSerilog();
 
-            app.UseHttpsRedirection();
+        builder.Services
+            .AddVolunteersApplication()
+            .AddVolunteerInfrastructure(builder.Configuration)
+            .AddSpeciesApplication()
+            .AddSpeciesInfrastructure(builder.Configuration)
+            .AddAccountsApplication()
+            .AddAccountsInfrastructure(builder.Configuration);
 
-            app.UseAuthentication();
-            app.UseAuthorization();
+        builder.Services.AddScoped<IVolunteersContract, VolunteersContract>();
+        builder.Services.AddScoped<ISpeciesContract, SpeciesContract>();
 
-            app.MapControllers();
+        var app = builder.Build();
 
-            app.Run();
+        var seeder = app.Services.GetRequiredService<AccountsSeeder>();
+        await seeder.SeedAsync();
+
+        app.UseExceptionMiddleware();
+        app.UseSerilogRequestLogging();
+
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
         }
+
+        app.UseHttpsRedirection();
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+
+        app.MapControllers();
+
+        app.Run();
     }
 }
