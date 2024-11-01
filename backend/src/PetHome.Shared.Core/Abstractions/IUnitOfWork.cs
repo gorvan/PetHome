@@ -4,7 +4,7 @@ namespace PetHome.Shared.Core.Abstractions
 {
     public interface IUnitOfWork
     {
-        Task<DbTransaction> BeginTravsaction(CancellationToken cancellationToken = default);
+        Task<DbTransaction> BeginTransaction(CancellationToken cancellationToken = default);
         Task SaveChanges(CancellationToken cancellationToken = default);
     }
 }
