@@ -11,11 +11,11 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.RefreshTokens
 public class RefreshTokensHandler(
     IRefreshSessionManager refreshSessionManager,
     ITokenProvider tokenProvider,
-    [FromKeyedServices(nameof(Accounts))] IUnitOfWork unitOfWork) 
+    [FromKeyedServices(nameof(Accounts))] IUnitOfWork unitOfWork)
     : ICommandHandler<LoginResponse, RefreshTokensCommand>
 {
     public async Task<Result<LoginResponse>> Execute(
-        RefreshTokensCommand command, 
+        RefreshTokensCommand command,
         CancellationToken cancellationToken)
     {
         var oldRefreshSession = await refreshSessionManager.GetByRefreshToken(
