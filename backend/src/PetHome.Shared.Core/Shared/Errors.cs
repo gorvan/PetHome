@@ -35,6 +35,11 @@
                 return Error.NotFound("record.is.used",
                     $"record is used{forId}");
             }
+
+            public static Error Failure()
+            {
+                return Error.NotFound("failure", "Failure");
+            }
         }
 
         public static class Files
@@ -51,6 +56,19 @@
             public static Error InvalidCredentials(string? value = null)
             {
                 return Error.Validation("credentials.is.invalid", "Your credentials is invalid");
+            }
+        }
+
+        public static class Tokens
+        {
+            public static Error ExpiredToken()
+            {
+                return Error.Validation("token.is.expired", "Your token is expired");
+            }
+
+            public static Error InvalidToken()
+            {
+                return Error.Validation("token.is.invalid", "Your token is invalid");
             }
         }
     }

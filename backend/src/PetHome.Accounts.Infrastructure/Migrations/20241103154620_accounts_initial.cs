@@ -95,6 +95,29 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "admin_accounts",
+                schema: "accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    second_name = table.Column<string>(type: "text", nullable: false),
+                    surname = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_admin_accounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_admin_accounts_users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "accounts",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetUserClaims",
                 schema: "accounts",
                 columns: table => new
@@ -189,6 +212,78 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "participant_accounts",
+                schema: "accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    second_name = table.Column<string>(type: "text", nullable: false),
+                    surname = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_participant_accounts", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_participant_accounts_users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "accounts",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "refresh_sessions",
+                schema: "accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    refresh_token = table.Column<Guid>(type: "uuid", nullable: false),
+                    expires_in = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
+                    created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_refresh_sessions", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_refresh_sessions_users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "accounts",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "volunteer_account",
+                schema: "accounts",
+                columns: table => new
+                {
+                    id = table.Column<Guid>(type: "uuid", nullable: false),
+                    user_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    expirience = table.Column<int>(type: "integer", nullable: false),
+                    requisites = table.Column<string>(type: "text", nullable: false),
+                    sertificates = table.Column<string>(type: "text", nullable: false),
+                    first_name = table.Column<string>(type: "text", nullable: false),
+                    second_name = table.Column<string>(type: "text", nullable: false),
+                    surname = table.Column<string>(type: "text", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("pk_volunteer_account", x => x.id);
+                    table.ForeignKey(
+                        name: "fk_volunteer_account_users_user_id",
+                        column: x => x.user_id,
+                        principalSchema: "accounts",
+                        principalTable: "AspNetUsers",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "role_permissions",
                 schema: "accounts",
                 columns: table => new
@@ -214,6 +309,13 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         principalColumn: "id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "ix_admin_accounts_user_id",
+                schema: "accounts",
+                table: "admin_accounts",
+                column: "user_id",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "ix_asp_net_role_claims_role_id",
@@ -260,6 +362,13 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "ix_participant_accounts_user_id",
+                schema: "accounts",
+                table: "participant_accounts",
+                column: "user_id",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "ix_permissions_code",
                 schema: "accounts",
                 table: "permissions",
@@ -267,15 +376,32 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "ix_refresh_sessions_user_id",
+                schema: "accounts",
+                table: "refresh_sessions",
+                column: "user_id");
+
+            migrationBuilder.CreateIndex(
                 name: "ix_role_permissions_permission_id",
                 schema: "accounts",
                 table: "role_permissions",
                 column: "permission_id");
+
+            migrationBuilder.CreateIndex(
+                name: "ix_volunteer_account_user_id",
+                schema: "accounts",
+                table: "volunteer_account",
+                column: "user_id",
+                unique: true);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "admin_accounts",
+                schema: "accounts");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims",
                 schema: "accounts");
@@ -297,11 +423,19 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 schema: "accounts");
 
             migrationBuilder.DropTable(
+                name: "participant_accounts",
+                schema: "accounts");
+
+            migrationBuilder.DropTable(
+                name: "refresh_sessions",
+                schema: "accounts");
+
+            migrationBuilder.DropTable(
                 name: "role_permissions",
                 schema: "accounts");
 
             migrationBuilder.DropTable(
-                name: "AspNetUsers",
+                name: "volunteer_account",
                 schema: "accounts");
 
             migrationBuilder.DropTable(
@@ -310,6 +444,10 @@ namespace PetHome.Accounts.Infrastructure.Migrations
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles",
+                schema: "accounts");
+
+            migrationBuilder.DropTable(
+                name: "AspNetUsers",
                 schema: "accounts");
         }
     }

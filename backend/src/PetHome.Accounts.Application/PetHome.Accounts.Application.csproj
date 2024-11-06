@@ -4,17 +4,20 @@
     <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <UserSecretsId>a3264b02-73f9-4681-bf57-75546cb1042b</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="11.10.0" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="6.0.1" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.2" />
     <PackageReference Include="Scrutor" Version="5.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PetHome.Accounts.Contracts\PetHome.Accounts.Contracts.csproj" />
     <ProjectReference Include="..\PetHome.Accounts.Domain\PetHome.Accounts.Domain.csproj" />
     <ProjectReference Include="..\PetHome.Accounts.Infrastructure\PetHome.Accounts.Infrastructure.csproj" />
     <ProjectReference Include="..\PetHome.Shared.Core\PetHome.Shared.Core.csproj" />

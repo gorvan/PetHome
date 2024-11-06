@@ -19,7 +19,8 @@ namespace PetHome.Accounts.Infrastructure
         public DbSet<Permission> Permissions => Set<Permission>();
 
         public DbSet<AdminAccount> AdminAccounts => Set<AdminAccount>();
-        public DbSet<ParticipantAccount> ParticipantAccounts => Set<ParticipantAccount>();        
+        public DbSet<ParticipantAccount> ParticipantAccounts => Set<ParticipantAccount>();
+        public DbSet<RefreshSession> RefreshSessions => Set<RefreshSession>();
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,7 +32,8 @@ namespace PetHome.Accounts.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<User>().ToTable("users");
+            builder.Entity<User>()
+                .ToTable("users");
 
             builder.Entity<User>()
                 .Property(u => u.SocialNetworks)
@@ -137,9 +139,19 @@ namespace PetHome.Accounts.Infrastructure
                         .Select(dto => Requisite.Create(dto.Name, dto.Description).Value).ToList())
                 .HasColumnName("requisites");
 
-            builder.Entity<Role>().ToTable("roles");
+            builder.Entity<Role>()
+                .ToTable("roles");
 
-            builder.Entity<Permission>().ToTable("permissions");
+            builder.Entity<RefreshSession>()
+                .ToTable("refresh_sessions");
+
+            builder.Entity<RefreshSession>()
+                .HasOne(r => r.User)
+                .WithMany()
+                .HasForeignKey(r=>r.UserId);
+
+            builder.Entity<Permission>()
+                .ToTable("permissions");
 
             builder.Entity<Permission>()
                 .HasIndex(p => p.Code)

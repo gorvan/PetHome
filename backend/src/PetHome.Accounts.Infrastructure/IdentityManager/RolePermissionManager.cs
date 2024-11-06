@@ -5,7 +5,7 @@ namespace PetHome.Accounts.Infrastructure.IdentityManager
 {
     public class RolePermissionManager(AccountsDbContext accountsContext)
     {
-        public async Task AddRangeIfExist(Guid roleId, IEnumerable<string> permissions)
+        public async Task AddRangeIfNotExist(Guid roleId, IEnumerable<string> permissions)
         {
             foreach (var permissionCode in permissions)
             {
