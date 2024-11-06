@@ -13,8 +13,8 @@ using PetHome.Accounts.Infrastructure;
 namespace PetHome.Accounts.Infrastructure.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    [Migration("20241031130029_newAccounts")]
-    partial class newAccounts
+    [Migration("20241105192601_Accounts_AddJti")]
+    partial class Accounts_AddJti
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -230,13 +230,13 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         });
 
                     b.HasKey("Id")
-                        .HasName("pk_participant_account");
+                        .HasName("pk_participant_accounts");
 
                     b.HasIndex("UserId")
                         .IsUnique()
-                        .HasDatabaseName("ix_participant_account_user_id");
+                        .HasDatabaseName("ix_participant_accounts_user_id");
 
-                    b.ToTable("participant_account", "accounts");
+                    b.ToTable("participant_accounts", "accounts");
                 });
 
             modelBuilder.Entity("PetHome.Accounts.Domain.Accounts.VolunteerAccount", b =>
@@ -320,6 +320,42 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         .HasDatabaseName("ix_permissions_code");
 
                     b.ToTable("permissions", "accounts");
+                });
+
+            modelBuilder.Entity("PetHome.Accounts.Domain.RefreshSession", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("id");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("created_at");
+
+                    b.Property<DateTime>("ExpiresIn")
+                        .HasColumnType("timestamp with time zone")
+                        .HasColumnName("expires_in");
+
+                    b.Property<Guid>("Jti")
+                        .HasColumnType("uuid")
+                        .HasColumnName("jti");
+
+                    b.Property<Guid>("RefreshToken")
+                        .HasColumnType("uuid")
+                        .HasColumnName("refresh_token");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("Id")
+                        .HasName("pk_refresh_sessions");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_refresh_sessions_user_id");
+
+                    b.ToTable("refresh_sessions", "accounts");
                 });
 
             modelBuilder.Entity("PetHome.Accounts.Domain.Role", b =>
@@ -535,7 +571,7 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         .HasForeignKey("PetHome.Accounts.Domain.Accounts.ParticipantAccount", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
-                        .HasConstraintName("fk_participant_account_users_user_id");
+                        .HasConstraintName("fk_participant_accounts_users_user_id");
 
                     b.Navigation("User");
                 });
@@ -548,6 +584,18 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_volunteer_account_users_user_id");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PetHome.Accounts.Domain.RefreshSession", b =>
+                {
+                    b.HasOne("PetHome.Accounts.Domain.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_refresh_sessions_users_user_id");
 
                     b.Navigation("User");
                 });

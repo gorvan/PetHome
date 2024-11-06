@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.IdentityModel.Tokens;
 using PetHome.Accounts.Domain;
 using PetHome.Accounts.Infrastructure;
 using PetHome.Accounts.Infrastructure.Abstractions;
@@ -13,7 +12,6 @@ using PetHome.Accounts.Infrastructure.Options;
 using PetHome.Accounts.Infrastructure.Providers;
 using PetHome.Accounts.Infrastructure.Seeding;
 using PetHome.Shared.Core.Abstractions;
-using System.Text;
 
 namespace PetHome.Accounts.Infrastructure
 {
@@ -24,8 +22,8 @@ namespace PetHome.Accounts.Infrastructure
            IConfiguration configuration)
         {
             services
-                .AddTransient<ITokenProvider, JwtTokenProvider>()                
-                .AddDbContext()                
+                .AddTransient<ITokenProvider, JwtTokenProvider>()
+                .AddDbContext()
                 .AddCustomAuthorization()
                 .AddJwtOptions(configuration)
                 .AddJwtBearer(configuration);
@@ -52,6 +50,7 @@ namespace PetHome.Accounts.Infrastructure
             services.Configure<JwtOtions>(configuration.GetSection(JwtOtions.JWT));
             services.AddOptions<JwtOtions>();
             services.Configure<AdminOptions>(configuration.GetSection(AdminOptions.ADMIN));
+            services.Configure<RefreshSessionOptions>(configuration.GetSection(RefreshSessionOptions.SESSION_OPTIONS));            
             return services;
         }
 
@@ -71,18 +70,8 @@ namespace PetHome.Accounts.Infrastructure
                 var jwtOptions = configuration.GetSection(JwtOtions.JWT).Get<JwtOtions>()
                                     ?? throw new ApplicationException("Missing jwt configuration");
 
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = jwtOptions.Issuer,
-                    ValidAudience = jwtOptions.Audience,
-                    IssuerSigningKey =
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtOptions.Key)),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ClockSkew = TimeSpan.FromSeconds(1)
-                };
+                options.TokenValidationParameters = 
+                    TokenValidationParametersFactory.CreateWithLifeTime(jwtOptions);
             });
 
             return services;
@@ -100,6 +89,8 @@ namespace PetHome.Accounts.Infrastructure
             services.AddScoped<AccountsSeederService>();
 
             services.AddScoped<PermissionsManager>();
+
+            services.AddScoped<IRefreshSessionManager, RefreshSessionManager>();
 
             services.AddScoped<RolePermissionManager>();
 

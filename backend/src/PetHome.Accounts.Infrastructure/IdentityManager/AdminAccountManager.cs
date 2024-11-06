@@ -1,4 +1,5 @@
-﻿using PetHome.Accounts.Domain.Accounts;
+﻿using Microsoft.EntityFrameworkCore;
+using PetHome.Accounts.Domain.Accounts;
 
 namespace PetHome.Accounts.Infrastructure.IdentityManager
 {
@@ -6,8 +7,13 @@ namespace PetHome.Accounts.Infrastructure.IdentityManager
     {
         public async Task CreateAdminAccount(AdminAccount adminAccount)
         {
-            await accountsContext.AdminAccounts.AddAsync(adminAccount);
-            await accountsContext.SaveChangesAsync();
+            await accountsContext.AdminAccounts.AddAsync(adminAccount);            
+        }
+
+        public async Task<bool> IsAdminAccountExist(string userName, string email)
+        {
+            return await accountsContext.AdminAccounts
+                .AnyAsync(a => a.User.UserName == userName && a.User.Email == email);
         }
     }
 }

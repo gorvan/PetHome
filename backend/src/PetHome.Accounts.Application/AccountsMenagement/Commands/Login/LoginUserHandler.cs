@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
+using PetHome.Accounts.Contracts.Responses;
 using PetHome.Accounts.Domain;
 using PetHome.Accounts.Infrastructure.Abstractions;
 using PetHome.Shared.Core.Abstractions;
@@ -7,7 +8,7 @@ using PetHome.Shared.Core.Shared;
 
 namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Login;
 
-public class LoginUserHandler : ICommandHandler<string, LoginUserCommand>
+public class LoginUserHandler : ICommandHandler<LoginResponse, LoginUserCommand>
 {
     private readonly UserManager<User> _userManager;
     private readonly ITokenProvider _tokenProvider;
@@ -22,7 +23,7 @@ public class LoginUserHandler : ICommandHandler<string, LoginUserCommand>
         _logger = logger;
     }
 
-    public async Task<Result<string>> Execute(
+    public async Task<Result<LoginResponse>> Execute(
         LoginUserCommand command,
         CancellationToken cancellationtoken)
     {
@@ -38,10 +39,12 @@ public class LoginUserHandler : ICommandHandler<string, LoginUserCommand>
             return Errors.User.InvalidCredentials();
         }
 
-        var token = _tokenProvider.GenerateAccessToken(user);
+        var accessToken = await _tokenProvider.GenerateAccessToken(user, cancellationtoken);
+
+        var refreshToken = await _tokenProvider.GenerateRefreshToken(user, accessToken.Jti, cancellationtoken);
 
         _logger.LogInformation("Successfully logged in");
 
-        return token;
+        return new LoginResponse(accessToken.AccessToken, refreshToken);
     }
 }
