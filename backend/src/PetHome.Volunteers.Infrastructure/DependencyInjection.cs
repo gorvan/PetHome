@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Minio.AspNetCore;
 using Minio;
+using Minio.AspNetCore;
 using PetHome.Shared.Core.Database;
 using PetHome.Shared.Core.FileProvider;
 using PetHome.Shared.Core.Messaging;
@@ -69,7 +69,7 @@ namespace PetHome.Volunteers.Infrastructure
                 configuration.GetSection(MinioOptions.MINIO));
 
             services.AddMinio(options =>
-            {                
+            {
                 var minioOptions = configuration
                 .GetSection(MinioOptions.MINIO)
                 .Get<MinioOptions>() ??

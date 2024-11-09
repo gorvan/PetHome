@@ -54,7 +54,7 @@ namespace PetHome.Volunteers.Infrastructure.Configurations.Write
             builder.ComplexProperty(v => v.Description,
                 vb =>
                 {
-                    vb.Property(d => d.DescriptionValue)
+                    vb.Property(d => d.Description)
                     .IsRequired()
                     .HasMaxLength(Constants.MAX_TEXT_LENGTH)
                     .HasColumnName("description");
@@ -96,10 +96,6 @@ namespace PetHome.Volunteers.Infrastructure.Configurations.Write
             builder.Property(v => v.Experience)
                 .IsRequired()
                 .HasColumnName("experience");
-
-            builder.Property<bool>("_isDeleted")
-                .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("is_delete");
 
             builder.Navigation(v => v.Pets).AutoInclude();
         }

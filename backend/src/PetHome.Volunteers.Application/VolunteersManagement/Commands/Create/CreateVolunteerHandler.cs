@@ -66,7 +66,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.Create
 
             var email = Email.Create(request.Email).Value;
 
-            var description = Description
+            var description = DescriptionValueObject
                 .Create(request.Description).Value;
 
             var socialList = (from item in request.SocialNetworkDtos

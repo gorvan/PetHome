@@ -26,7 +26,9 @@ public class PermissionsManager(AccountsDbContext accountsContext)
     public async Task<Permission?> FindeByCode(string code, CancellationToken cancellationToken) =>
         await accountsContext.Permissions.FirstOrDefaultAsync(p => p.Code == code, cancellationToken);
 
-    public async Task<HashSet<string>> GetUserPermissions(Guid userId, CancellationToken cancellationToken = default)
+    public async Task<HashSet<string>> GetUserPermissions(
+        Guid userId, 
+        CancellationToken cancellationToken = default)
     {
         var permissions = await accountsContext.Users
             .Include(u => u.Roles)

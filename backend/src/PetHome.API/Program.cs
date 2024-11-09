@@ -3,6 +3,7 @@ using PetHome.Accounts.Application;
 using PetHome.Accounts.Infrastructure;
 using PetHome.Accounts.Infrastructure.Seeding;
 using PetHome.Accounts.Presentation.Controllers;
+using PetHome.Shared.Core.Extensions;
 using PetHome.Species.Application;
 using PetHome.Species.Contracts;
 using PetHome.Species.Infrastructure;
@@ -90,6 +91,10 @@ public class Program
         {
             app.UseSwagger();
             app.UseSwaggerUI();
+
+            await app.ApplyMigrations<AccountsDbContext>();
+            await app.ApplyMigrations<Species.Infrastructure.DbContexts.WriteDbContext>();
+            await app.ApplyMigrations<Volunteers.Infrastructure.DbContexts.WriteDbContext>();
         }
 
         app.UseHttpsRedirection();

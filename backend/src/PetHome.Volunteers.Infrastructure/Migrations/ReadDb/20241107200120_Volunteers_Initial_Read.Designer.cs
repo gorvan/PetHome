@@ -12,8 +12,8 @@ using PetHome.Volunteers.Infrastructure.DbContexts;
 namespace PetHome.Volunteers.Infrastructure.Migrations.ReadDb
 {
     [DbContext(typeof(ReadDbContext))]
-    [Migration("20241021195021_initialVolunteersRead")]
-    partial class initialVolunteersRead
+    [Migration("20241107200120_Volunteers_Initial_Read")]
+    partial class Volunteers_Initial_Read
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

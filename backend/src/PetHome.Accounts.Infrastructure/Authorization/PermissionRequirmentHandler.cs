@@ -3,7 +3,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PetHome.Accounts.Infrastructure.IdentityManager;
 using PetHome.Accounts.Infrastructure.Models;
 using PetHome.Shared.SharedKernel.Authorization;
-using System.IdentityModel.Tokens.Jwt;
 
 namespace PetHome.Accounts.Infrastructure.Authorization
 {

@@ -18,7 +18,7 @@ namespace PetHome.Accounts.Domain.Accounts
 
         private List<Requisite> _requisites = default!;
 
-        private List<Description> _sertificates = default!;
+        private List<DescriptionValueObject> _sertificates = default!;
 
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
@@ -26,6 +26,6 @@ namespace PetHome.Accounts.Domain.Accounts
         public FullName FullName { get; set; }
         public int Expirience { get; set; }
         public IEnumerable<Requisite> Requisites => _requisites;
-        public IEnumerable<Description> Sertificates => _sertificates;
+        public IEnumerable<DescriptionValueObject> Sertificates => _sertificates;
     }
 }

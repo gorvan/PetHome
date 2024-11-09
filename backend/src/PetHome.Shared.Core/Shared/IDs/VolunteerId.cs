@@ -1,6 +1,6 @@
 ﻿namespace PetHome.Shared.Core.Shared.IDs
 {
-    public record VolunteerId
+    public record VolunteerId : IComparable<VolunteerId>
     {
         private VolunteerId(Guid id)
         {
@@ -12,6 +12,11 @@
         public static VolunteerId NewVolunteerId() => new(Guid.NewGuid());
         public static VolunteerId Empty() => new(Guid.Empty);
         public static VolunteerId Create(Guid id) => new(id);
+
+        public int CompareTo(VolunteerId? other)
+        {
+            return this.Id.CompareTo(other?.Id);
+        }
 
         public static implicit operator Guid(VolunteerId volunteerId)
         {

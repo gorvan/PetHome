@@ -1,10 +1,11 @@
 ﻿using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
+using PetHome.Shared.Framework.Entities;
 using PetHome.Volunteers.Domain.ValueObjects;
 
 namespace PetHome.Volunteers.Domain.Entities
 {
-    public class Pet : Entity<PetId>, ISoftDeletable
+    public class Pet : SoftDeletableEntity<PetId>
     {
         private Pet(PetId id) : base(id)
         {
@@ -14,7 +15,7 @@ namespace PetHome.Volunteers.Domain.Entities
             PetId id,
             PetNickname nickname,
             SpeciesBreedValue speciesBreed,
-            Description description,
+            DescriptionValueObject description,
             PetColor color,
             HealthInfo health,
             Address address,
@@ -51,7 +52,7 @@ namespace PetHome.Volunteers.Domain.Entities
 
         public PetNickname Nickname { get; private set; } = default!;
         public SpeciesBreedValue SpeciesBreed { get; private set; } = default!;
-        public Description Description { get; private set; } = default!;
+        public DescriptionValueObject Description { get; private set; } = default!;
         public PetColor Color { get; private set; } = default!;
         public HealthInfo Health { get; private set; } = default!;
         public Address Address { get; private set; } = default!;
@@ -68,44 +69,28 @@ namespace PetHome.Volunteers.Domain.Entities
 
         public IReadOnlyList<PetPhoto> Photos => _photo;
 
-        public Result<int> SetPhotos(IEnumerable<PetPhoto> petPhotos)
+        internal Result<int> SetPhotos(IEnumerable<PetPhoto> petPhotos)
         {
             _photo = petPhotos.ToList();
             return _photo.Count;
         }
 
-        public void DeletePhotos()
+        internal void DeletePhotos()
         {
-            _photo = new List<PetPhoto>();
+            _photo = [];
         }
 
-        public void SetSerialNumber(SerialNumber serialNumber)
+        internal void SetSerialNumber(SerialNumber serialNumber)
         {
             SerialNumber = serialNumber;
         }
 
-        public void Delete()
-        {
-            if (_isDeleted == false)
-            {
-                _isDeleted = true;
-            }
-        }
-
-        public void Restore()
-        {
-            if (_isDeleted)
-            {
-                _isDeleted = false;
-            }
-        }
-
-        public void MoveUp()
+        internal void MoveUp()
         {
             SerialNumber = SerialNumber.Create(SerialNumber.Value + 1).Value;
         }
 
-        public void MoveDown()
+        internal void MoveDown()
         {
             var newNumber = SerialNumber.Value - 1;
             if (newNumber < 1)
@@ -116,10 +101,10 @@ namespace PetHome.Volunteers.Domain.Entities
             SerialNumber = SerialNumber.Create(newNumber).Value;
         }
 
-        public void Update(
+        internal void Update(
             PetNickname petNickName,
             SpeciesBreedValue speciesBreedValue,
-            Description petDescription,
+            DescriptionValueObject petDescription,
             PetColor petColor,
             HealthInfo healthInfo,
             Address address,
@@ -148,12 +133,12 @@ namespace PetHome.Volunteers.Domain.Entities
             Height = height;
         }
 
-        public void UpdateHelpStatus(HelpStatus newHelpStatus)
+        internal void UpdateHelpStatus(HelpStatus newHelpStatus)
         {
             HelpStatus = newHelpStatus;
         }
 
-        public Result<bool> SetMainPhoto(string filePath)
+        internal Result<bool> SetMainPhoto(string filePath)
         {
             var photoResult = _photo.FirstOrDefault(p => p.Path.Path == filePath);
             if (photoResult == null)

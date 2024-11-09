@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace PetHome.Volunteers.Infrastructure.Migrations.ReadDb
 {
     /// <inheritdoc />
-    public partial class initialVolunteersRead : Migration
+    public partial class Volunteers_Initial_Read : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

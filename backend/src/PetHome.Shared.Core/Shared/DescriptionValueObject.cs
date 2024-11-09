@@ -1,19 +1,18 @@
 ﻿namespace PetHome.Shared.Core.Shared
 {
-    public record Description
+    public record DescriptionValueObject
     {
         public const int MAX_TEXT_LENGTH = 2000;
 
-        private Description(string description)
+        private DescriptionValueObject(string description)
         {
-            DescriptionValue = description;
+            Description = description;
         }
 
+        public string Description { get; } = default!;
 
-        public string DescriptionValue { get; } = default!;
 
-
-        public static Result<Description> Create(string description)
+        public static Result<DescriptionValueObject> Create(string description)
         {
             if (string.IsNullOrWhiteSpace(description))
             {
@@ -25,7 +24,7 @@
                 return Errors.General.ValueIsInvalid("Description");
             }
 
-            return new Description(description);
+            return new DescriptionValueObject(description);
         }
     }
 }

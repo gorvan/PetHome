@@ -5,7 +5,6 @@ using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Models;
 using PetHome.Shared.Core.Shared;
 using System.Linq.Expressions;
-using Constants = PetHome.Shared.Core.Constants;
 
 namespace PetHome.Volunteers.Application.VolunteersManagement.Queries.GetAllPets
 {
