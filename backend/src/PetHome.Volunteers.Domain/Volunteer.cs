@@ -3,8 +3,6 @@ using PetHome.Shared.Core.Shared.IDs;
 using PetHome.Shared.Framework.Entities;
 using PetHome.Volunteers.Domain.Entities;
 using PetHome.Volunteers.Domain.ValueObjects;
-using System.Collections.Generic;
-using Constants = PetHome.Shared.Framework.Constants;
 
 namespace PetHome.Volunteers.Domain
 {
@@ -138,7 +136,7 @@ namespace PetHome.Volunteers.Domain
             }
         }
 
-        public void DeleteExpiredPets() => _pets.RemoveAll(p=>p.IsExpired);     
+        public void DeleteExpiredPets() => _pets.RemoveAll(p => p.IsExpired);
 
         public Result SoftDeletePet(Pet pet)
         {

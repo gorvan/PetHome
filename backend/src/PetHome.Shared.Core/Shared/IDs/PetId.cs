@@ -1,6 +1,8 @@
-﻿namespace PetHome.Shared.Core.Shared.IDs
+﻿using CSharpFunctionalExtensions;
+
+namespace PetHome.Shared.Core.Shared.IDs
 {
-    public record PetId : IComparable<PetId>
+    public class PetId : ValueObject
     {
         private PetId(Guid id)
         {
@@ -13,9 +15,9 @@
         public static PetId Empty() => new PetId(Guid.Empty);
         public static PetId Create(Guid id) => new PetId(id);
 
-        public int CompareTo(PetId? other)
+        protected override IEnumerable<object> GetEqualityComponents()
         {
-            return this.Id.CompareTo(other?.Id);
+            yield return Id;
         }
     }
 }

@@ -1,6 +1,8 @@
-﻿namespace PetHome.Shared.Core.Shared.IDs
+﻿using CSharpFunctionalExtensions;
+
+namespace PetHome.Shared.Core.Shared.IDs
 {
-    public record SpeciesId
+    public class SpeciesId : ValueObject
     {
         private SpeciesId(Guid id)
         {
@@ -12,5 +14,10 @@
         public static SpeciesId NewSpeciesId() => new(Guid.NewGuid());
         public static SpeciesId Empty() => new(Guid.Empty);
         public static SpeciesId Create(Guid id) => new(id);
+
+        protected override IEnumerable<object> GetEqualityComponents()
+        {
+            yield return Id;
+        }
     }
 }

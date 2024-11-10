@@ -1,8 +1,8 @@
-﻿using PetHome.Shared.Core.Shared;
+﻿using CSharpFunctionalExtensions;
 
 namespace PetHome.Shared.Framework.Entities
 {
-    public abstract class SoftDeletableEntity<TId> : Entity<TId> where TId : IComparable<TId>
+    public abstract class SoftDeletableEntity<TId> : Core.Shared.Entity<TId> where TId : ValueObject
     {
         protected SoftDeletableEntity(TId id) : base(id)
         {
