@@ -122,10 +122,10 @@ namespace PetHome.Accounts.Infrastructure
                 .Property(va => va.Sertificates)
                 .HasConversion(
                     s => JsonSerializer.Serialize(
-                        s.Select(x => x.DescriptionValue),
+                        s.Select(x => x.Description),
                         JsonSerializerOptions.Default),
                     json => JsonSerializer.Deserialize<List<string>>(json, JsonSerializerOptions.Default)!
-                        .Select(str => Description.Create(str).Value).ToList())
+                        .Select(str => DescriptionValueObject.Create(str).Value).ToList())
                 .HasColumnName("sertificates");
 
             builder.Entity<VolunteerAccount>()

@@ -4,7 +4,6 @@ using PetHome.Shared.Core.Dtos;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Models;
 using PetHome.Shared.Core.Shared;
-using Constants = PetHome.Shared.Core.Constants;
 
 namespace PetHome.Species.Application.SpeciesManagement.Queries.GetBreeds
 {

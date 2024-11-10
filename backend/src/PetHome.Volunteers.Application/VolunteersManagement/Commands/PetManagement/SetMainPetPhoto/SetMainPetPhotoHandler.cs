@@ -42,15 +42,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManage
                 return volunteerResult.Error;
             }
 
-            var petResult = volunteerResult.Value.Pets
-                .FirstOrDefault(p => p.Id.Id == command.PetId);
-            if (petResult == null)
-            {
-                return Errors.General.NotFound(command.PetId);
-            }
-
-            var result = petResult.SetMainPhoto(command.FilePath);
-
+            var result = volunteerResult.Value.SetMainPetPhoto(command.PetId, command.FilePath);
             if (result.IsFailure)
             {
                 return result.Error;

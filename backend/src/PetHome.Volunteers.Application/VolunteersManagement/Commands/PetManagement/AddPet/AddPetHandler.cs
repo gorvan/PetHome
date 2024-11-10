@@ -81,7 +81,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManage
                 : _speciesContract.CreateSpeciesBreedValue(SpeciesId.Empty(), BreedId.Empty());
 
             var petDescription =
-                Description.Create(command.Description).Value;
+                DescriptionValueObject.Create(command.Description).Value;
 
             var petColor = PetColor.Create(command.Color).Value;
 

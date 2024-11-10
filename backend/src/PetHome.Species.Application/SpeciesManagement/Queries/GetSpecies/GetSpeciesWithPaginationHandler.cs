@@ -22,7 +22,7 @@ namespace PetHome.Species.Application.SpeciesManagement.Queries.GetSpecies
         {
             var speciesQuery = _readDbContext.Species;
 
-            speciesQuery = query.SortDirection?.ToLower() == Shared.Core.Constants.SORT_DESCENDING
+            speciesQuery = query.SortDirection?.ToLower() == Constants.SORT_DESCENDING
                 ? speciesQuery.OrderByDescending(s => s.Name)
                 : speciesQuery.OrderBy(s => s.Name);
 

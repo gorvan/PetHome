@@ -67,7 +67,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManage
                 return petPhotosResult.Error;
             }
 
-            var result = petResult.SetPhotos(petPhotosResult.Value);
+            var result = volunteerResult.Value.AddPetFiles(petResult, petPhotosResult.Value);
             if (result.IsFailure)
             {
                 return result.Error;

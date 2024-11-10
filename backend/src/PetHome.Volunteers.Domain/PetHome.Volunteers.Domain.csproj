@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PetHome.Shared.Core\PetHome.Shared.Core.csproj" />
+    <ProjectReference Include="..\PetHome.Shared.Framework\PetHome.Shared.Framework.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,8 +5,6 @@ using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
 using PetHome.Species.Contracts;
-using PetHome.Volunteers.Domain.Entities;
-using PetHome.Volunteers.Domain.ValueObjects;
 
 namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManagement.UpdatePet
 {
@@ -38,36 +36,12 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManage
             }
 
             var volunteerId = VolunteerId.Create(command.VolunteerId);
-            var volunteerResult =
-                await _volunteerRepository.GetById(volunteerId, token);
+            var volunteerResult = await _volunteerRepository.GetById(volunteerId, token);
 
             if (volunteerResult.IsFailure)
             {
                 return volunteerResult.Error;
             }
-
-            var pet = volunteerResult.Value.Pets
-                .FirstOrDefault(p => p.Id.Id == command.PetId);
-
-            if (pet == null)
-            {
-                return Errors.General.NotFound(command.PetId);
-            }
-
-            var petResult = UpdatePet(pet, command);
-
-            var result =
-                await _volunteerRepository.Update(volunteerResult.Value, token);
-
-            _logger.LogInformation("Updated pet with id {pet.Id.Id}", pet.Id.Id);
-
-            return result;
-        }
-
-        private Result UpdatePet(Pet pet, UpdatePetCommand command)
-        {
-            var petNickName =
-                PetNickname.Create(command.Nickname).Value;
 
             var speciesBreedResult = GetSpeciesAndBreed(command);
 
@@ -77,50 +51,40 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManage
             }
 
             var speciesBreedValue = new SpeciesBreedValue(
-                speciesBreedResult.Value.speciesId,
-                speciesBreedResult.Value.breedId);
+               speciesBreedResult.Value.speciesId,
+               speciesBreedResult.Value.breedId);
 
-            var petDescription =
-                Description.Create(command.Description).Value;
-
-            var petColor = PetColor.Create(command.Color).Value;
-
-            var healthInfo =
-                HealthInfo.Create(command.Health).Value;
-
-            var address = Address.Create(
+            var petResult = volunteerResult.Value.UpdatePet(
+                command.PetId,
+                command.Nickname,
+                speciesBreedValue,
+                command.Description,
+                command.Color,
+                command.Health,
                 command.Address.City,
                 command.Address.Street,
                 command.Address.HouseNumber,
-                command.Address.AppartmentNumber).Value;
-
-            var phone = Phone.Create(command.Phone).Value;
-
-            var requisite = Requisite.Create(
+                command.Address.AppartmentNumber,
+                command.Phone,
                 command.Requisites.Name,
-                command.Requisites.Description);
+                command.Requisites.Description,
+                command.BirthDay,
+                command.IsNeutered,
+                command.IsVaccinated,
+                command.HelpStatus,
+                command.Weight,
+                command.Height);
+            if (petResult.IsFailure)
+            {
+                return petResult.Error;
+            }
 
-            var birthday = DateValue.Create(command.BirthDay).Value;
+            var result =
+                await _volunteerRepository.Update(volunteerResult.Value, token);
 
-            var createDate = DateValue.Create(DateTime.UtcNow).Value;
+            _logger.LogInformation("Updated pet with id {petId}", command.PetId);
 
-            pet.Update(
-            petNickName,
-            speciesBreedValue,
-            petDescription,
-            petColor,
-            healthInfo,
-            address,
-            phone,
-            [requisite.Value],
-            birthday,
-            command.IsNeutered,
-            command.IsVaccinated,
-            command.HelpStatus,
-            command.Weight,
-            command.Height);
-
-            return Result.Success();
+            return result;
         }
 
         private Result<(SpeciesId speciesId, BreedId breedId)> GetSpeciesAndBreed(

@@ -1,11 +1,12 @@
 ﻿using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
+using PetHome.Shared.Framework.Entities;
 using PetHome.Volunteers.Domain.Entities;
 using PetHome.Volunteers.Domain.ValueObjects;
 
 namespace PetHome.Volunteers.Domain
 {
-    public class Volunteer : Entity<VolunteerId>, ISoftDeletable
+    public class Volunteer : SoftDeletableEntity<VolunteerId>
     {
         private Volunteer(VolunteerId id) : base(id)
         {
@@ -15,7 +16,7 @@ namespace PetHome.Volunteers.Domain
             VolunteerId id,
             FullName name,
             Email email,
-            Description description,
+            DescriptionValueObject description,
             Phone phone,
             IEnumerable<SocialNetwork> socialNets,
             IEnumerable<Requisite> requisites,
@@ -36,7 +37,7 @@ namespace PetHome.Volunteers.Domain
 
         public FullName Name { get; private set; } = default!;
         public Email Email { get; private set; } = default!;
-        public Description Description { get; private set; } = default!;
+        public DescriptionValueObject Description { get; private set; } = default!;
         public Phone Phone { get; private set; } = default!;
         public IReadOnlyList<SocialNetwork> SocialNetworks { get; private set; } = default!;
         public IReadOnlyList<Requisite> Requisites { get; private set; } = default!;
@@ -56,7 +57,7 @@ namespace PetHome.Volunteers.Domain
             FullName fullName,
             Email email,
             Phone phone,
-            Description description)
+            DescriptionValueObject description)
         {
             Name = fullName;
             Email = email;
@@ -72,22 +73,6 @@ namespace PetHome.Volunteers.Domain
         public void UpdateSocialNetworks(IEnumerable<SocialNetwork> socialNetworks)
         {
             SocialNetworks = socialNetworks.ToList();
-        }
-
-        public void Delete()
-        {
-            if (_isDeleted == false)
-            {
-                _isDeleted = true;
-            }
-        }
-
-        public void Restore()
-        {
-            if (_isDeleted)
-            {
-                _isDeleted = false;
-            }
         }
 
         public Result<Guid> AddPet(Pet pet)
@@ -131,6 +116,27 @@ namespace PetHome.Volunteers.Domain
 
             pet.SetSerialNumber(serialNumber);
         }
+        public override void Delete()
+        {
+            base.Delete();
+
+            foreach (var pet in _pets)
+            {
+                pet.Delete();
+            }
+        }
+
+        public override void Restore()
+        {
+            base.Restore();
+
+            foreach (var pet in _pets)
+            {
+                pet.Restore();
+            }
+        }
+
+        public void DeleteExpiredPets() => _pets.RemoveAll(p => p.IsExpired);
 
         public Result SoftDeletePet(Pet pet)
         {
@@ -174,6 +180,125 @@ namespace PetHome.Volunteers.Domain
             }
 
             return Result.Success();
+        }
+
+        public Result<int> AddPetFiles(Pet pet, IReadOnlyList<PetPhoto> petPhotos)
+        {
+            var result = pet.SetPhotos(petPhotos);
+            if (result.IsFailure)
+            {
+                return result.Error;
+            }
+
+            return result;
+        }
+
+        public Result<int> UpdatePetFiles(Pet pet, IReadOnlyList<PetPhoto> petPhotos)
+        {
+            pet.DeletePhotos();
+
+            var result = pet.SetPhotos(petPhotos);
+            if (result.IsFailure)
+            {
+                return result.Error;
+            }
+
+            return result;
+        }
+
+        public Result UpdatePetStatus(Guid petId, HelpStatus helpStatus)
+        {
+            var pet = _pets.FirstOrDefault(p => p.Id.Id == petId);
+
+            if (pet == null)
+            {
+                return Errors.General.NotFound(petId);
+            }
+
+            pet.UpdateHelpStatus(helpStatus);
+
+            return Result.Success();
+        }
+
+        public Result UpdatePet(
+            Guid petId,
+            string nickName,
+            SpeciesBreedValue speciesBreedValue,
+            string description,
+            string color,
+            string health,
+            string city,
+            string street,
+            string houseNumber,
+            string appartmentNumber,
+            string phone,
+            string requisiteName,
+            string requisiteDescription,
+            DateTime birthday,
+            bool isNeutered,
+            bool isVaccinated,
+            HelpStatus helpStatus,
+            double weight,
+            double height)
+        {
+            var pet = _pets.FirstOrDefault(p => p.Id.Id == petId);
+            if (pet == null)
+            {
+                return Errors.General.NotFound(petId);
+            }
+
+            var petNickName = PetNickname.Create(nickName).Value;
+
+            var petDescription = DescriptionValueObject.Create(description).Value;
+
+            var petColor = PetColor.Create(color).Value;
+
+            var healthInfo = HealthInfo.Create(health).Value;
+
+            var address = Address.Create(
+                city,
+                street,
+                houseNumber,
+                appartmentNumber).Value;
+
+            var phoneValue = Phone.Create(phone).Value;
+
+            var requisite = Requisite.Create(
+                requisiteName,
+                requisiteDescription);
+
+            var birthdayValue = DateValue.Create(birthday).Value;
+
+            var createDate = DateValue.Create(DateTime.UtcNow).Value;
+
+            pet.Update(
+            petNickName,
+            speciesBreedValue,
+            petDescription,
+            petColor,
+            healthInfo,
+            address,
+            phoneValue,
+            [requisite.Value],
+            birthdayValue,
+            isNeutered,
+            isVaccinated,
+            helpStatus,
+            weight,
+            height);
+
+            return Result.Success();
+        }
+
+        public Result SetMainPetPhoto(Guid petId, string filePath)
+        {
+            var petResult = _pets.FirstOrDefault(p => p.Id.Id == petId);
+            if (petResult == null)
+            {
+                return Errors.General.NotFound(petId);
+            }
+
+            return petResult.SetMainPhoto(filePath);
         }
     }
 }

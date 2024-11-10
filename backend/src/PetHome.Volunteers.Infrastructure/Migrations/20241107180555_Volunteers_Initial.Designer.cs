@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using PetHome.Volunteers.Infrastructure.DbContexts;
@@ -12,9 +13,11 @@ using PetHome.Volunteers.Infrastructure.DbContexts;
 namespace PetHome.Volunteers.Infrastructure.Migrations
 {
     [DbContext(typeof(WriteDbContext))]
-    partial class WriteDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241107180555_Volunteers_Initial")]
+    partial class Volunteers_Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -29,10 +32,6 @@ namespace PetHome.Volunteers.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime?>("DeletionDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deletion_date");
-
                     b.Property<double>("Height")
                         .HasColumnType("double precision")
                         .HasColumnName("height");
@@ -40,10 +39,6 @@ namespace PetHome.Volunteers.Infrastructure.Migrations
                     b.Property<int>("HelpStatus")
                         .HasColumnType("integer")
                         .HasColumnName("help_status");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
 
                     b.Property<bool>("IsNeutered")
                         .HasColumnType("boolean")
@@ -61,6 +56,10 @@ namespace PetHome.Volunteers.Infrastructure.Migrations
                     b.Property<double>("Weight")
                         .HasColumnType("double precision")
                         .HasColumnName("weight");
+
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_delete");
 
                     b.Property<Guid?>("volunteer_id")
                         .HasColumnType("uuid")
@@ -230,17 +229,9 @@ namespace PetHome.Volunteers.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 
-                    b.Property<DateTime?>("DeletionDate")
-                        .HasColumnType("timestamp with time zone")
-                        .HasColumnName("deletion_date");
-
                     b.Property<int>("Experience")
                         .HasColumnType("integer")
                         .HasColumnName("experience");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean")
-                        .HasColumnName("is_deleted");
 
                     b.Property<string>("Requisites")
                         .IsRequired()
@@ -251,6 +242,10 @@ namespace PetHome.Volunteers.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text")
                         .HasColumnName("social_networks");
+
+                    b.Property<bool>("_isDeleted")
+                        .HasColumnType("boolean")
+                        .HasColumnName("is_delete");
 
                     b.ComplexProperty<Dictionary<string, object>>("Description", "PetHome.Volunteers.Domain.Volunteer.Description#DescriptionValueObject", b1 =>
                         {

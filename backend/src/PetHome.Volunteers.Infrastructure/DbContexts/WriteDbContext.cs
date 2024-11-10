@@ -6,8 +6,7 @@ using PetHome.Volunteers.Domain;
 
 namespace PetHome.Volunteers.Infrastructure.DbContexts
 {
-    public class WriteDbContext(
-        IConfiguration configuration) : DbContext
+    public class WriteDbContext(IConfiguration configuration) : DbContext
     {
         public DbSet<Volunteer> Volunteers => Set<Volunteer>();
 
@@ -17,12 +16,12 @@ namespace PetHome.Volunteers.Infrastructure.DbContexts
             optionsBuilder.UseSnakeCaseNamingConvention();
             optionsBuilder.EnableSensitiveDataLogging();
             optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
-            //optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfigurationsFromAssembly(typeof(WriteDbContext).Assembly,
+            modelBuilder.ApplyConfigurationsFromAssembly(
+                typeof(WriteDbContext).Assembly,
                 type => type.FullName?.Contains("Configurations.Write") ?? false);
         }
 

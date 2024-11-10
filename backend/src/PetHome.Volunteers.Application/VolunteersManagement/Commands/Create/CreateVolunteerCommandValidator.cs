@@ -16,7 +16,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.Create
 
             RuleFor(c => c.Phone).MustBeValueObject(Phone.Create);
 
-            RuleFor(c => c.Description).MustBeValueObject(Description.Create);
+            RuleFor(c => c.Description).MustBeValueObject(DescriptionValueObject.Create);
 
             RuleForEach(c => c.RequisiteDtos)
                  .MustBeValueObject(x => Requisite.Create(x.Name, x.Description));

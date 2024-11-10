@@ -45,20 +45,15 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManage
                 return volunteerResult.Error;
             }
 
-            var pet = volunteerResult.Value.Pets
-                .FirstOrDefault(p => p.Id.Id == command.PetId);
-
-            if (pet == null)
+            var updateResult = volunteerResult.Value.UpdatePetStatus(command.PetId, command.HelpStatus);
+            if (updateResult.IsFailure)
             {
-                return Errors.General.NotFound(command.PetId);
+                return updateResult.Error;
             }
 
-            pet.UpdateHelpStatus(command.HelpStatus);
+            var result = await _volunteerRepository.Update(volunteerResult.Value, token);
 
-            var result =
-                await _volunteerRepository.Update(volunteerResult.Value, token);
-
-            _logger.LogInformation("Updated HelpStatus pet with id {pet.Id.Id}", pet.Id.Id);
+            _logger.LogInformation("Updated HelpStatus pet with id {pet.Id.Id}", command.PetId);
 
             return result;
         }

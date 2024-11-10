@@ -48,11 +48,11 @@ namespace PetHome.Volunteers.Infrastructure.Configurations.Write
                     .IsRequired()
                     .HasColumnName("breed_id");
                 });
-
+           
             builder.ComplexProperty(p => p.Description,
                 pb =>
                 {
-                    pb.Property(d => d.DescriptionValue)
+                    pb.Property(d => d.Description)
                     .IsRequired()
                     .HasColumnName("description");
                 });
@@ -160,10 +160,6 @@ namespace PetHome.Volunteers.Infrastructure.Configurations.Write
             builder.HasMany(p => p.Photos)
             .WithOne()
             .HasForeignKey("pet_id");
-
-            builder.Property<bool>("_isDeleted")
-                .UsePropertyAccessMode(PropertyAccessMode.Field)
-                .HasColumnName("is_delete");
 
             builder.Navigation(v => v.Photos).AutoInclude();
         }
