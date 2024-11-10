@@ -17,7 +17,6 @@ namespace PetHome.Accounts.Infrastructure
     {
         public DbSet<RolePermission> RolePermissions => Set<RolePermission>();
         public DbSet<Permission> Permissions => Set<Permission>();
-
         public DbSet<AdminAccount> AdminAccounts => Set<AdminAccount>();
         public DbSet<ParticipantAccount> ParticipantAccounts => Set<ParticipantAccount>();
         public DbSet<RefreshSession> RefreshSessions => Set<RefreshSession>();
@@ -36,7 +35,7 @@ namespace PetHome.Accounts.Infrastructure
                 .ToTable("users");
 
             builder.Entity<User>()
-                .Property(u => u.SocialNetworks)
+               .Property(u => u.SocialNetworks)
                .HasConversion(
                    s => JsonSerializer.Serialize(s, JsonSerializerOptions.Default),
                    json => JsonSerializer.Deserialize<List<SocialNetwork>>(
@@ -139,6 +138,15 @@ namespace PetHome.Accounts.Infrastructure
                         .Select(dto => Requisite.Create(dto.Name, dto.Description).Value).ToList())
                 .HasColumnName("requisites");
 
+            builder.Entity<VolunteerAccount>()
+                .Property(p => p.SocialNetworks)
+                .HasConversion(
+                    sn => JsonSerializer.Serialize(sn
+                        .Select(n => new SocialNetworkDto(n.Name, n.Link)), JsonSerializerOptions.Default),
+                    json => JsonSerializer.Deserialize<List<SocialNetworkDto>>(json, JsonSerializerOptions.Default)!
+                        .Select(dto => SocialNetwork.Create(dto.Name, dto.Path).Value).ToList())
+                .HasColumnName("social_networks");
+
             builder.Entity<Role>()
                 .ToTable("roles");
 
@@ -148,7 +156,7 @@ namespace PetHome.Accounts.Infrastructure
             builder.Entity<RefreshSession>()
                 .HasOne(r => r.User)
                 .WithMany()
-                .HasForeignKey(r=>r.UserId);
+                .HasForeignKey(r => r.UserId);
 
             builder.Entity<Permission>()
                 .ToTable("permissions");

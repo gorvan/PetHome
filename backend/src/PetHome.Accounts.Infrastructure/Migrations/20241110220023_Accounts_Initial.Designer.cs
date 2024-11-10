@@ -13,8 +13,8 @@ using PetHome.Accounts.Infrastructure;
 namespace PetHome.Accounts.Infrastructure.Migrations
 {
     [DbContext(typeof(AccountsDbContext))]
-    [Migration("20241105192601_Accounts_AddJti")]
-    partial class Accounts_AddJti
+    [Migration("20241110220023_Accounts_Initial")]
+    partial class Accounts_Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -260,6 +260,11 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         .HasColumnType("text")
                         .HasColumnName("sertificates");
 
+                    b.Property<string>("SocialNetworks")
+                        .IsRequired()
+                        .HasColumnType("text")
+                        .HasColumnName("social_networks");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid")
                         .HasColumnName("user_id");
@@ -452,6 +457,10 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         .HasColumnType("character varying(256)")
                         .HasColumnName("normalized_user_name");
 
+                    b.Property<Guid>("ParticipantAccountId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("participant_account_id");
+
                     b.Property<string>("PasswordHash")
                         .HasColumnType("text")
                         .HasColumnName("password_hash");
@@ -481,6 +490,10 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("character varying(256)")
                         .HasColumnName("user_name");
+
+                    b.Property<Guid?>("VolunteerAccountId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("volunteer_account_id");
 
                     b.HasKey("Id")
                         .HasName("pk_asp_net_users");

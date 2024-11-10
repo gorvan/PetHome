@@ -17,8 +17,6 @@ using PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManagement
 using PetHome.Volunteers.Application.VolunteersManagement.Commands.PetManagement.UpdatePetHelpStatus;
 using PetHome.Volunteers.Application.VolunteersManagement.Commands.Restore;
 using PetHome.Volunteers.Application.VolunteersManagement.Commands.UpdateMainInfo;
-using PetHome.Volunteers.Application.VolunteersManagement.Commands.UpdateRequisites;
-using PetHome.Volunteers.Application.VolunteersManagement.Commands.UpdateSocialNetworks;
 using PetHome.Volunteers.Application.VolunteersManagement.Queries.GetAllPets;
 using PetHome.Volunteers.Application.VolunteersManagement.Queries.GetPetById;
 using PetHome.Volunteers.Application.VolunteersManagement.Queries.GetVolunteerById;
@@ -91,33 +89,7 @@ namespace PetHome.Volunteers.Presentation.Controllers
             return result.ToResponse();
         }
 
-        [Permission(Permissions.Volunteers.UpdateVolunteer)]
-        [HttpPut("{id:guid}/requisites")]
-        public async Task<ActionResult<Guid>> UpdateRequisites(
-            [FromServices] UpdateRequisitesHandler handler,
-            [FromRoute] Guid id,
-            [FromBody] UpdateRequisitesRequest request,
-            CancellationToken token)
-        {
-            var command = request.ToCommand(id);
-            var result = await handler.Execute(command, token);
-            return result.ToResponse();
-        }
-
-        [Permission(Permissions.Volunteers.UpdateVolunteer)]
-        [HttpPut("{id:guid}/social-networks")]
-        public async Task<ActionResult<Guid>> UpdateSocialNetworks(
-            [FromServices] UpdateSocialNetworksHandler handler,
-            [FromRoute] Guid id,
-            [FromBody] UpdateSocialNetworksRequest request,
-            CancellationToken token)
-        {
-            var command = request.ToCommand(id);
-            var result = await handler.Execute(command, token);
-            return result.ToResponse();
-        }
-
-        [Permission(Permissions.Volunteers.DeleteVolunteer)]        
+        [Permission(Permissions.Volunteers.DeleteVolunteer)]
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<Guid>> Delete(
             [FromServices] DeleteVolunteerHandler handler,

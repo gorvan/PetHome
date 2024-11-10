@@ -1,11 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using PetHome.Shared.Core.Dtos;
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
 using PetHome.Volunteers.Domain;
-using PetHome.Volunteers.Domain.ValueObjects;
-using System.Text.Json;
 
 namespace PetHome.Volunteers.Infrastructure.Configurations.Write
 {
@@ -68,26 +65,6 @@ namespace PetHome.Volunteers.Infrastructure.Configurations.Write
                     .HasMaxLength(Constants.MAX_TITLE_LENGTH)
                     .HasColumnName("phone");
                 });
-
-            builder.Property(p => p.SocialNetworks)
-                .HasConversion(
-                    sn => JsonSerializer.Serialize(
-                        sn.Select(n =>
-                            new SocialNetworkDto(n.Name, n.Link)),
-                            JsonSerializerOptions.Default),
-                    json => JsonSerializer.Deserialize<List<SocialNetworkDto>>(json, JsonSerializerOptions.Default)!
-                        .Select(dto => SocialNetwork.Create(dto.Name, dto.Path).Value).ToList())
-                .HasColumnName("social_networks");
-
-            builder.Property(p => p.Requisites)
-                .HasConversion(
-                    r => JsonSerializer.Serialize(
-                        r.Select(x =>
-                            new RequisiteDto(x.Name, x.Description)),
-                            JsonSerializerOptions.Default),
-                    json => JsonSerializer.Deserialize<List<RequisiteDto>>(json, JsonSerializerOptions.Default)!
-                        .Select(dto => Requisite.Create(dto.Name, dto.Description).Value).ToList())
-                .HasColumnName("requisites");
 
             builder.HasMany(v => v.Pets)
                 .WithOne()

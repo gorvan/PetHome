@@ -79,10 +79,7 @@ public class Program
         builder.Services.AddScoped<IVolunteersContract, VolunteersContract>();
         builder.Services.AddScoped<ISpeciesContract, SpeciesContract>();
 
-        var app = builder.Build();
-
-        var seeder = app.Services.GetRequiredService<AccountsSeeder>();
-        await seeder.SeedAsync();
+        var app = builder.Build();        
 
         app.UseExceptionMiddleware();
         app.UseSerilogRequestLogging();
@@ -96,6 +93,9 @@ public class Program
             await app.ApplyMigrations<Species.Infrastructure.DbContexts.WriteDbContext>();
             await app.ApplyMigrations<Volunteers.Infrastructure.DbContexts.WriteDbContext>();
         }
+
+        var seeder = app.Services.GetRequiredService<AccountsSeeder>();
+        await seeder.SeedAsync();
 
         app.UseHttpsRedirection();
 

@@ -4,7 +4,6 @@ using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
-using PetHome.Volunteers.Domain.ValueObjects;
 
 namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.UpdateSocialNetworks
 {
@@ -47,7 +46,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.UpdateSoc
                                     .Create(item.Name, item.Path).Value
                               select socialNetwork).ToList();
 
-            volunteerResult.Value.UpdateSocialNetworks(socialColl);
+            //volunteerResult.Value.UpdateSocialNetworks(socialColl);
 
             var result =
                 await _volunteerRepository.Update(volunteerResult.Value, token);

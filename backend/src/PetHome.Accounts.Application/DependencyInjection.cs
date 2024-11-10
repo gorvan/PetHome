@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using PetHome.Accounts.Application.AccountsMenagement.Queries.GetAccountById;
 using PetHome.Shared.Core.Abstractions;
 using System.Reflection;
 
@@ -14,7 +15,8 @@ namespace PetHome.Accounts.Application
             services
                 .AddCommands()
                 .AddQueries()
-                .AddValidatorsFromAssembly(assembly);
+                .AddValidatorsFromAssembly(assembly)
+                .AddSingleton<UserMapper>();
 
             return services;
         }

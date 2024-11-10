@@ -47,7 +47,7 @@ namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.UpdateReq
                                     .Create(item.Name, item.Description).Value
                                  select requisite).ToList();
 
-            volunteerResult.Value.UpdateRequisites(requisiteList);
+            //volunteerResult.Value.UpdateRequisites(requisiteList);
 
             var result = await _volunteerRepository.Update(volunteerResult.Value, token);
 

@@ -7,7 +7,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace PetHome.Accounts.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class accounts_initial : Migration
+    public partial class Accounts_Initial : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -37,6 +37,8 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                 {
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     social_networks = table.Column<string>(type: "text", nullable: false),
+                    participant_account_id = table.Column<Guid>(type: "uuid", nullable: false),
+                    volunteer_account_id = table.Column<Guid>(type: "uuid", nullable: true),
                     user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     normalized_user_name = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
                     email = table.Column<string>(type: "character varying(256)", maxLength: 256, nullable: true),
@@ -242,6 +244,7 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                     id = table.Column<Guid>(type: "uuid", nullable: false),
                     user_id = table.Column<Guid>(type: "uuid", nullable: false),
                     refresh_token = table.Column<Guid>(type: "uuid", nullable: false),
+                    jti = table.Column<Guid>(type: "uuid", nullable: false),
                     expires_in = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     created_at = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
                 },
@@ -267,6 +270,7 @@ namespace PetHome.Accounts.Infrastructure.Migrations
                     expirience = table.Column<int>(type: "integer", nullable: false),
                     requisites = table.Column<string>(type: "text", nullable: false),
                     sertificates = table.Column<string>(type: "text", nullable: false),
+                    social_networks = table.Column<string>(type: "text", nullable: false),
                     first_name = table.Column<string>(type: "text", nullable: false),
                     second_name = table.Column<string>(type: "text", nullable: false),
                     surname = table.Column<string>(type: "text", nullable: false)
