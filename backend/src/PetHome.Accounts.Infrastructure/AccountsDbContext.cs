@@ -51,13 +51,13 @@ namespace PetHome.Accounts.Infrastructure
 
             builder.Entity<User>()
                 .HasOne(u => u.ParticipantAccount)
-                .WithOne(u => u.User)
-                .HasForeignKey<ParticipantAccount>(u => u.UserId);
+                .WithOne()
+                .HasForeignKey<ParticipantAccount>(u => u.Id);
 
             builder.Entity<User>()
                 .HasOne(u => u.VolunteerAccount)
-                .WithOne(u => u.User)
-                .HasForeignKey<VolunteerAccount>(u => u.UserId)
+                .WithOne()
+                .HasForeignKey<VolunteerAccount>(u => u.Id)
                 .IsRequired(false);
 
             builder.Entity<AdminAccount>()
@@ -163,10 +163,6 @@ namespace PetHome.Accounts.Infrastructure
 
             builder.Entity<Permission>()
                 .ToTable("permissions");
-
-            builder.Entity<Permission>()
-                .HasIndex(p => p.Code)
-                .IsUnique();
 
             builder.Entity<Permission>()
                 .HasIndex(p => p.Code)

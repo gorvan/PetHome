@@ -69,12 +69,12 @@ public class Program
         builder.Services.AddSerilog();
 
         builder.Services
+            .AddAccountsApplication()
+            .AddAccountsInfrastructure(builder.Configuration)
             .AddVolunteersApplication()
             .AddVolunteerInfrastructure(builder.Configuration)
             .AddSpeciesApplication()
-            .AddSpeciesInfrastructure(builder.Configuration)
-            .AddAccountsApplication()
-            .AddAccountsInfrastructure(builder.Configuration);
+            .AddSpeciesInfrastructure(builder.Configuration);
 
         builder.Services.AddScoped<IVolunteersContract, VolunteersContract>();
         builder.Services.AddScoped<ISpeciesContract, SpeciesContract>();

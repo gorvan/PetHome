@@ -11,13 +11,11 @@ namespace PetHome.Accounts.Domain.Accounts
         public ParticipantAccount(FullName fullName, User user)
         {
             Id = Guid.NewGuid();
-            UserId = user.Id;
             User = user;
             FullName = fullName;
         }
 
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
         public User User { get; set; }
         public FullName FullName { get; set; }
     }
