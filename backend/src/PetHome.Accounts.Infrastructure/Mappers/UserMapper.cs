@@ -1,12 +1,11 @@
 ﻿using PetHome.Accounts.Domain;
-using PetHome.Accounts.Domain.Accounts;
 using PetHome.Shared.Core.Dtos;
 
-namespace PetHome.Accounts.Application.AccountsMenagement.Queries.GetAccountById;
+namespace PetHome.Accounts.Infrastructure.Mappers;
 
 public class UserMapper
 {
-    public UserDto MapFromUser(User user, ParticipantAccount participantAccount)
+    public UserDto MapFromUser(User user)
     {
         var roles = user.Roles.Select(r => new RoleDto
         {
@@ -22,12 +21,24 @@ public class UserMapper
 
         var participantAccountDto = new AccountDto
         {
-            Id = participantAccount.Id,
-            FirstName = participantAccount.FullName.FirstName,
-            SecondName = participantAccount.FullName.SecondName,
-            Surname =participantAccount.FullName.Surname
+            Id = user.ParticipantAccount.Id,
+            FirstName = user.ParticipantAccount.FullName.FirstName,
+            SecondName = user.ParticipantAccount.FullName.SecondName,
+            Surname = user.ParticipantAccount.FullName.Surname
         };
 
+        AccountDto volunteerAccountDto = default!;
+
+        if (user.VolunteerAccount != null)
+        {
+            volunteerAccountDto = new AccountDto
+            {
+                Id = user.VolunteerAccount.Id,
+                FirstName = user.VolunteerAccount.FullName.FirstName,
+                SecondName = user.VolunteerAccount.FullName.SecondName,
+                Surname = user.VolunteerAccount.FullName.Surname
+            };
+        }
 
         var userDto = new UserDto
         {
@@ -37,7 +48,8 @@ public class UserMapper
             SocialNetworks = user.SocialNetworks
                 .Select(s => new SocialNetworkDto(s.Name, s.Link))
                 .ToArray(),
-            Participant = participantAccountDto
+            Participant = participantAccountDto,
+            Volunteer = volunteerAccountDto
         };
 
         return userDto;

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PetHome.Accounts.Infrastructure;
+using PetHome.Accounts.Infrastructure.Mappers;
 using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Dtos;
 using PetHome.Shared.Core.Shared;
@@ -13,20 +14,14 @@ public class GetUserByIdHandler(
     {
         var userResult = await accountsContext.Users
             .Include(u => u.Roles)
+            .Include(u => u.ParticipantAccount)
+            .Include(u => u.VolunteerAccount)
             .FirstOrDefaultAsync(u => u.Id == query.UserId, cancellationToken);
         if (userResult == null)
         {
             return Errors.General.NotFound(query.UserId);
         }
 
-        var participantAccount = await accountsContext.ParticipantAccounts
-            .FirstOrDefaultAsync(p => p.Id == userResult.ParticipantAccountId, cancellationToken);
-        if (participantAccount == null)
-        {
-            return Errors.General.NotFound(userResult.ParticipantAccountId);
-        }
-
-
-        return userMapper.MapFromUser(userResult, participantAccount);
+        return userMapper.MapFromUser(userResult);
     }
 }

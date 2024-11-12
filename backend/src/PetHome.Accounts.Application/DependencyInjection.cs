@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using PetHome.Accounts.Application.AccountsMenagement.Queries.GetAccountById;
+using PetHome.Accounts.Infrastructure.Mappers;
 using PetHome.Shared.Core.Abstractions;
 using System.Reflection;
 

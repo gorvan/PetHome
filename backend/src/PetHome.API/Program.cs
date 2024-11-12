@@ -1,7 +1,7 @@
 using Microsoft.OpenApi.Models;
 using PetHome.Accounts.Application;
 using PetHome.Accounts.Infrastructure;
-using PetHome.Accounts.Infrastructure.Seeding;
+using PetHome.Accounts.Infrastructure.Extensions;
 using PetHome.Accounts.Presentation.Controllers;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Species.Application;
@@ -79,7 +79,7 @@ public class Program
         builder.Services.AddScoped<IVolunteersContract, VolunteersContract>();
         builder.Services.AddScoped<ISpeciesContract, SpeciesContract>();
 
-        var app = builder.Build();        
+        var app = builder.Build();
 
         app.UseExceptionMiddleware();
         app.UseSerilogRequestLogging();
@@ -94,8 +94,7 @@ public class Program
             await app.ApplyMigrations<Volunteers.Infrastructure.DbContexts.WriteDbContext>();
         }
 
-        var seeder = app.Services.GetRequiredService<AccountsSeeder>();
-        await seeder.SeedAsync();
+        await app.SeedAccountsData();
 
         app.UseHttpsRedirection();
 

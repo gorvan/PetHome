@@ -54,7 +54,7 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
 
                 var participantAccount = new ParticipantAccount(fullName, user); 
                 
-                user.ParticipantAccountId = participantAccount.Id;  
+                user.ParticipantAccount = participantAccount;  
 
                 await participantAccountManager.CreateParticipantAccount(participantAccount);
                 

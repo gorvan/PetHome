@@ -15,8 +15,8 @@ public class User : IdentityUser<Guid>
     private List<Role> _roles = [];
     public IReadOnlyList<Role> Roles => _roles;
 
-    public Guid ParticipantAccountId { get; set; }
-    public Guid? VolunteerAccountId { get; set; }
+    public ParticipantAccount ParticipantAccount { get; set; }
+    public VolunteerAccount? VolunteerAccount { get; set; }
 
 
     public static User CreateAmin(string userName, string email, Role role)

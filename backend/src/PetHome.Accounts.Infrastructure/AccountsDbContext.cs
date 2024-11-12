@@ -31,6 +31,8 @@ namespace PetHome.Accounts.Infrastructure
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+            base.OnModelCreating(builder);
+
             builder.Entity<User>()
                 .ToTable("users");
 
@@ -46,6 +48,17 @@ namespace PetHome.Accounts.Infrastructure
                 .HasMany(u => u.Roles)
                 .WithMany()
                 .UsingEntity<IdentityUserRole<Guid>>();
+
+            builder.Entity<User>()
+                .HasOne(u => u.ParticipantAccount)
+                .WithOne(u => u.User)
+                .HasForeignKey<ParticipantAccount>(u => u.UserId);
+
+            builder.Entity<User>()
+                .HasOne(u => u.VolunteerAccount)
+                .WithOne(u => u.User)
+                .HasForeignKey<VolunteerAccount>(u => u.UserId)
+                .IsRequired(false);
 
             builder.Entity<AdminAccount>()
                 .HasOne(a => a.User)
@@ -70,11 +83,6 @@ namespace PetHome.Accounts.Infrastructure
                 });
 
             builder.Entity<ParticipantAccount>()
-                .HasOne(pa => pa.User)
-                .WithOne()
-                .HasForeignKey<ParticipantAccount>(pa => pa.UserId);
-
-            builder.Entity<ParticipantAccount>()
                 .ComplexProperty(pa => pa.FullName,
                 fb =>
                 {
@@ -90,11 +98,6 @@ namespace PetHome.Accounts.Infrastructure
                     .IsRequired()
                     .HasColumnName("surname");
                 });
-
-            builder.Entity<VolunteerAccount>()
-                .HasOne(va => va.User)
-                .WithOne()
-                .HasForeignKey<VolunteerAccount>(va => va.UserId);
 
             builder.Entity<VolunteerAccount>()
                 .ComplexProperty(va => va.FullName,
@@ -202,8 +205,6 @@ namespace PetHome.Accounts.Infrastructure
                 .ToTable("user_roles");
 
             builder.HasDefaultSchema("accounts");
-
-            base.OnModelCreating(builder);
         }
 
         private ILoggerFactory CreateLoggerFactory() =>
