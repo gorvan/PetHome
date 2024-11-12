@@ -8,6 +8,7 @@ using PetHome.Accounts.Infrastructure.IdentityManager;
 using PetHome.Accounts.Infrastructure.Options;
 using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Shared;
+using PetHome.Shared.Framework;
 using PetHome.Shared.SharedKernel;
 using System.Text.Json;
 
@@ -19,7 +20,7 @@ namespace PetHome.Accounts.Infrastructure.Seeding
         AdminAccountManager adminAccountManager,
         PermissionsManager permissionManager,
         RolePermissionManager rolePermissionManager,
-        [FromKeyedServices(nameof(Accounts))] IUnitOfWork unitOfWork,
+        [FromKeyedServices(UnitOfWorkKey.Accounts)] IUnitOfWork unitOfWork,
         IOptions<AdminOptions> adminOptions,
         ILogger<AccountsSeeder> logger)
     {
