@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Validation;
-using PetHome.Volunteers.Domain.ValueObjects;
 
 namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.UpdateSocialNetworks
 {

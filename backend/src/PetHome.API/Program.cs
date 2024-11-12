@@ -1,7 +1,7 @@
 using Microsoft.OpenApi.Models;
 using PetHome.Accounts.Application;
 using PetHome.Accounts.Infrastructure;
-using PetHome.Accounts.Infrastructure.Seeding;
+using PetHome.Accounts.Infrastructure.Extensions;
 using PetHome.Accounts.Presentation.Controllers;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Species.Application;
@@ -69,20 +69,17 @@ public class Program
         builder.Services.AddSerilog();
 
         builder.Services
+            .AddAccountsApplication()
+            .AddAccountsInfrastructure(builder.Configuration)
             .AddVolunteersApplication()
             .AddVolunteerInfrastructure(builder.Configuration)
             .AddSpeciesApplication()
-            .AddSpeciesInfrastructure(builder.Configuration)
-            .AddAccountsApplication()
-            .AddAccountsInfrastructure(builder.Configuration);
+            .AddSpeciesInfrastructure(builder.Configuration);
 
         builder.Services.AddScoped<IVolunteersContract, VolunteersContract>();
         builder.Services.AddScoped<ISpeciesContract, SpeciesContract>();
 
         var app = builder.Build();
-
-        var seeder = app.Services.GetRequiredService<AccountsSeeder>();
-        await seeder.SeedAsync();
 
         app.UseExceptionMiddleware();
         app.UseSerilogRequestLogging();
@@ -96,6 +93,8 @@ public class Program
             await app.ApplyMigrations<Species.Infrastructure.DbContexts.WriteDbContext>();
             await app.ApplyMigrations<Volunteers.Infrastructure.DbContexts.WriteDbContext>();
         }
+
+        await app.SeedAccountsData();
 
         app.UseHttpsRedirection();
 

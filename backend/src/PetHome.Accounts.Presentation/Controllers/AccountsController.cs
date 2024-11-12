@@ -2,10 +2,12 @@
 using PetHome.Accounts.Application.AccountsMenagement.Commands.Login;
 using PetHome.Accounts.Application.AccountsMenagement.Commands.RefreshTokens;
 using PetHome.Accounts.Application.AccountsMenagement.Commands.Register;
+using PetHome.Accounts.Application.AccountsMenagement.Queries.GetAccountById;
 using PetHome.Accounts.Application.Contracts;
 using PetHome.Accounts.Contracts.Responses;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Framework.Controllers;
+using PetHome.Shared.SharedKernel.Authorization;
 
 namespace PetHome.Accounts.Presentation.Controllers
 {
@@ -54,6 +56,18 @@ namespace PetHome.Accounts.Presentation.Controllers
                 return result.ToResponse();
             }
             return Ok(result.Value);
+        }
+
+        [Permission(Permissions.Admin.ReadVolunteer)]
+        [HttpGet("{userId:guid}")]
+        public async Task<ActionResult> GetById(
+            [FromRoute] Guid userId,
+            [FromServices] GetUserByIdHandler handler,
+            CancellationToken token)
+        {
+            var query = new GetUserByIdQuery(userId);
+            var responce = await handler.Execute(query, token);
+            return Ok(responce);
         }
     }
 }

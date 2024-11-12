@@ -52,7 +52,9 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
                         command.UserName)
                     .Value;
 
-                var participantAccount = new ParticipantAccount(fullName, user);
+                var participantAccount = new ParticipantAccount(fullName, user); 
+                
+                user.ParticipantAccount = participantAccount;  
 
                 await participantAccountManager.CreateParticipantAccount(participantAccount);
                 

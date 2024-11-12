@@ -26,9 +26,7 @@ namespace PetHome.Volunteers.Domain
             Name = name;
             Email = email;
             Description = description;
-            Phone = phone;
-            SocialNetworks = socialNets.ToList();
-            Requisites = requisites.ToList();
+            Phone = phone;            
             Experience = experience;
         }
 
@@ -38,9 +36,7 @@ namespace PetHome.Volunteers.Domain
         public FullName Name { get; private set; } = default!;
         public Email Email { get; private set; } = default!;
         public DescriptionValueObject Description { get; private set; } = default!;
-        public Phone Phone { get; private set; } = default!;
-        public IReadOnlyList<SocialNetwork> SocialNetworks { get; private set; } = default!;
-        public IReadOnlyList<Requisite> Requisites { get; private set; } = default!;
+        public Phone Phone { get; private set; } = default!;        
         public int Experience { get; private set; } = default!;
         public IReadOnlyList<Pet> Pets => _pets;
 
@@ -63,16 +59,6 @@ namespace PetHome.Volunteers.Domain
             Email = email;
             Phone = phone;
             Description = description;
-        }
-
-        public void UpdateRequisites(IEnumerable<Requisite> requisites)
-        {
-            Requisites = requisites.ToList();
-        }
-
-        public void UpdateSocialNetworks(IEnumerable<SocialNetwork> socialNetworks)
-        {
-            SocialNetworks = socialNetworks.ToList();
         }
 
         public Result<Guid> AddPet(Pet pet)

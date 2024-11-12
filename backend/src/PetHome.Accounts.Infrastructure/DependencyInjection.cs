@@ -34,13 +34,12 @@ namespace PetHome.Accounts.Infrastructure
         private static IServiceCollection AddDbContext(this IServiceCollection services)
         {
             services
+                .AddScoped<AccountsDbContext>()
                 .AddIdentity<User, Role>(options => { options.User.RequireUniqueEmail = true; })
                 .AddEntityFrameworkStores<AccountsDbContext>()
                 .AddDefaultTokenProviders();
 
-            services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(nameof(Accounts));
-
-            return services.AddScoped<AccountsDbContext>();
+            return services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(nameof(Accounts));
         }
 
         private static IServiceCollection AddJwtOptions(

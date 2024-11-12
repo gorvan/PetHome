@@ -11,7 +11,6 @@ namespace PetHome.Accounts.Domain.Accounts
         public VolunteerAccount(FullName fullName, User user)
         {
             Id = Guid.NewGuid();
-            UserId = user.Id;
             User = user;
             FullName = fullName;
         }
@@ -20,12 +19,14 @@ namespace PetHome.Accounts.Domain.Accounts
 
         private List<DescriptionValueObject> _sertificates = default!;
 
+        private List<SocialNetwork> _socialNetworks = default!;
+
         public Guid Id { get; set; }
-        public Guid UserId { get; set; }
         public User User { get; set; }
         public FullName FullName { get; set; }
         public int Expirience { get; set; }
         public IEnumerable<Requisite> Requisites => _requisites;
         public IEnumerable<DescriptionValueObject> Sertificates => _sertificates;
+        public IReadOnlyList<SocialNetwork> SocialNetworks => _socialNetworks;
     }
 }
