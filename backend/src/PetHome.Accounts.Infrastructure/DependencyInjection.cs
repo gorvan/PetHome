@@ -12,6 +12,7 @@ using PetHome.Accounts.Infrastructure.Options;
 using PetHome.Accounts.Infrastructure.Providers;
 using PetHome.Accounts.Infrastructure.Seeding;
 using PetHome.Shared.Core.Abstractions;
+using PetHome.Shared.Framework;
 
 namespace PetHome.Accounts.Infrastructure
 {
@@ -39,7 +40,7 @@ namespace PetHome.Accounts.Infrastructure
                 .AddEntityFrameworkStores<AccountsDbContext>()
                 .AddDefaultTokenProviders();
 
-            return services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(nameof(Accounts));
+            return services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(ModulesKey.Accounts);
         }
 
         private static IServiceCollection AddJwtOptions(

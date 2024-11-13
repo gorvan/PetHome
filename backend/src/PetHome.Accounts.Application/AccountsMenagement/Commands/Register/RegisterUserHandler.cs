@@ -7,6 +7,7 @@ using PetHome.Accounts.Infrastructure.IdentityManager;
 using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Shared;
+using PetHome.Shared.Framework;
 
 namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
 {
@@ -14,7 +15,7 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
         ParticipantAccountManager participantAccountManager,
-        [FromKeyedServices(nameof(Accounts))] IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesKey.Accounts)] IUnitOfWork unitOfWork,
         ILogger<RegisterUserHandler> logger) : ICommandHandler<RegisterUserCommand>
     {
 
@@ -39,7 +40,7 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
                     var errors = result.Errors
                             .Select(e => Error.Failure(e.Code, e.Description))
                             .ToList();
-                    
+
                     return errors.ToErrorList();
                 }
 
@@ -52,25 +53,25 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
                         command.UserName)
                     .Value;
 
-                var participantAccount = new ParticipantAccount(fullName, user); 
-                
-                user.ParticipantAccount = participantAccount;  
+                var participantAccount = new ParticipantAccount(fullName, user);
+
+                user.ParticipantAccount = participantAccount;
 
                 await participantAccountManager.CreateParticipantAccount(participantAccount);
-                
+
                 await unitOfWork.SaveChanges(token);
                 transaction.Commit();
 
                 return Result.Success();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 await userManager.DeleteAsync(user);
 
                 transaction.Rollback();
 
-                return Error.Failure("user.register", "Fail to register user");                
-            }            
+                return Error.Failure("user.register", "Fail to register user");
+            }
         }
     }
 }
