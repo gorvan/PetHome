@@ -1,5 +1,5 @@
 ﻿namespace PetHome.Shared.Framework;
-public enum UnitOfWorkKey
+public enum ModulesKey
 {
     Accounts = 1,
     Volunteers,

@@ -20,7 +20,7 @@ namespace PetHome.Accounts.Infrastructure.Seeding
         AdminAccountManager adminAccountManager,
         PermissionsManager permissionManager,
         RolePermissionManager rolePermissionManager,
-        [FromKeyedServices(UnitOfWorkKey.Accounts)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesKey.Accounts)] IUnitOfWork unitOfWork,
         IOptions<AdminOptions> adminOptions,
         ILogger<AccountsSeeder> logger)
     {

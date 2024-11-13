@@ -15,7 +15,7 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
         ParticipantAccountManager participantAccountManager,
-        [FromKeyedServices(UnitOfWorkKey.Accounts)] IUnitOfWork unitOfWork,
+        [FromKeyedServices(ModulesKey.Accounts)] IUnitOfWork unitOfWork,
         ILogger<RegisterUserHandler> logger) : ICommandHandler<RegisterUserCommand>
     {
 
