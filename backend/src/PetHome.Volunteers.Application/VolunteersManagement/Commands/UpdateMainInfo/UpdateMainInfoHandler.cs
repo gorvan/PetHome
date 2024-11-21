@@ -4,7 +4,6 @@ using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
-using PetHome.Volunteers.Domain.ValueObjects;
 
 namespace PetHome.Volunteers.Application.VolunteersManagement.Commands.UpdateMainInfo
 {
