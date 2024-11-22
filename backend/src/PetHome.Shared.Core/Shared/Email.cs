@@ -1,7 +1,6 @@
-﻿using PetHome.Shared.Core.Shared;
-using System.Text.RegularExpressions;
+﻿using System.Text.RegularExpressions;
 
-namespace PetHome.Volunteers.Domain.ValueObjects
+namespace PetHome.Shared.Core.Shared
 {
     public record Email
     {
