@@ -2,9 +2,9 @@
 
 public enum RequestStatus
 {
-    none,
-    submitted,
-    rejected,
-    reversion_required,
-    approved
+    None,
+    Submitted,
+    Rejected,
+    Reversion_required,
+    Approved
 }
