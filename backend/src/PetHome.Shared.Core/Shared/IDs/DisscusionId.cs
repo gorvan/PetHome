@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace PetHome.VolunteerRequests.Domain.ValueObjects;
+namespace PetHome.Shared.Core.Shared.IDs;
 
 public class DisscusionId : ValueObject
 {

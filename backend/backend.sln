@@ -62,17 +62,31 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetHome.Accounts.Presentati
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "VolunteerRequest", "VolunteerRequest", "{9262F37C-A063-4A28-B12C-F0009A70153D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.VolunteerRequests.Application", "src\PetHome.VolunteerRequest\PetHome.VolunteerRequests.Application.csproj", "{DFBF49C6-46DD-49CE-9AFC-A0A1983CD5AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetHome.VolunteerRequests.Application", "src\PetHome.VolunteerRequest\PetHome.VolunteerRequests.Application.csproj", "{DFBF49C6-46DD-49CE-9AFC-A0A1983CD5AB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.VolunteerRequests.Domain", "src\PetHome.VolunteerRequest.Domain\PetHome.VolunteerRequests.Domain.csproj", "{2DDFBDE4-6EBC-41A8-AE95-DBDB9893D6CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetHome.VolunteerRequests.Domain", "src\PetHome.VolunteerRequest.Domain\PetHome.VolunteerRequests.Domain.csproj", "{2DDFBDE4-6EBC-41A8-AE95-DBDB9893D6CF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.VolunteerRequests.Infrastructure", "src\PetHome.VolunteerRequest.Infrastructure\PetHome.VolunteerRequests.Infrastructure.csproj", "{CAE15A97-71DB-4C0F-B1FB-3E27C5E45B06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetHome.VolunteerRequests.Infrastructure", "src\PetHome.VolunteerRequest.Infrastructure\PetHome.VolunteerRequests.Infrastructure.csproj", "{CAE15A97-71DB-4C0F-B1FB-3E27C5E45B06}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.VolunteerRequests.Presentation", "src\PetHome.VolunteerRequest.Presentation\PetHome.VolunteerRequests.Presentation.csproj", "{C0DA911F-249F-43E8-AD52-0A59DAB3DFC3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetHome.VolunteerRequests.Presentation", "src\PetHome.VolunteerRequest.Presentation\PetHome.VolunteerRequests.Presentation.csproj", "{C0DA911F-249F-43E8-AD52-0A59DAB3DFC3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.VolunteerRequests.Contracts", "src\PetHome.VolunteerRequest.Contracts\PetHome.VolunteerRequests.Contracts.csproj", "{EAB259DB-AD5D-45E8-BCE6-038F79C98160}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetHome.VolunteerRequests.Contracts", "src\PetHome.VolunteerRequest.Contracts\PetHome.VolunteerRequests.Contracts.csproj", "{EAB259DB-AD5D-45E8-BCE6-038F79C98160}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.VolunteerRequests.UnitTests", "src\PetHome.VolunteerRequest.UnitTests\PetHome.VolunteerRequests.UnitTests.csproj", "{D2841AA5-76D4-464D-BB67-EAC5E71E5EF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PetHome.VolunteerRequests.UnitTests", "src\PetHome.VolunteerRequest.UnitTests\PetHome.VolunteerRequests.UnitTests.csproj", "{D2841AA5-76D4-464D-BB67-EAC5E71E5EF7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Disscusion", "Disscusion", "{17FCAE5E-3407-4B88-A6CB-CDA9ACB66EE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.Disscusions.Domain", "src\PetHome.Disscusions.Domain\PetHome.Disscusions.Domain.csproj", "{246E2CEB-3443-497A-A4DA-8E8659ADD4D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.Disscusions.Infrastructure", "src\PetHome.Disscusions.Infrastructure\PetHome.Disscusions.Infrastructure.csproj", "{0B9E96EB-7F85-4F4E-831E-DFB8610BE8BA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.Disscusions.Application", "src\PetHome.Disscusions.Application\PetHome.Disscusions.Application.csproj", "{514C1E70-1AB1-4EBB-946F-564990A154E6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.Disscusions.Contracts", "src\PetHome.Disscusions.Contracts\PetHome.Disscusions.Contracts.csproj", "{4ACC7AC3-6E28-4CEB-B0CD-68D04F3B3C2F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.Disscusions.Presentation", "PetHome.Disscusions.Presentation\PetHome.Disscusions.Presentation.csproj", "{711E0FCB-FACF-400E-B64F-1EDADB3C920B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PetHome.Disscusions.UnitTests", "src\PetHome.Disscusions.UnitTests\PetHome.Disscusions.UnitTests.csproj", "{FC0513A7-D211-4FC7-A4EC-C46652890B86}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -188,6 +202,30 @@ Global
 		{D2841AA5-76D4-464D-BB67-EAC5E71E5EF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D2841AA5-76D4-464D-BB67-EAC5E71E5EF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D2841AA5-76D4-464D-BB67-EAC5E71E5EF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{246E2CEB-3443-497A-A4DA-8E8659ADD4D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{246E2CEB-3443-497A-A4DA-8E8659ADD4D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{246E2CEB-3443-497A-A4DA-8E8659ADD4D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{246E2CEB-3443-497A-A4DA-8E8659ADD4D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B9E96EB-7F85-4F4E-831E-DFB8610BE8BA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B9E96EB-7F85-4F4E-831E-DFB8610BE8BA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B9E96EB-7F85-4F4E-831E-DFB8610BE8BA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B9E96EB-7F85-4F4E-831E-DFB8610BE8BA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{514C1E70-1AB1-4EBB-946F-564990A154E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{514C1E70-1AB1-4EBB-946F-564990A154E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{514C1E70-1AB1-4EBB-946F-564990A154E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{514C1E70-1AB1-4EBB-946F-564990A154E6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4ACC7AC3-6E28-4CEB-B0CD-68D04F3B3C2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4ACC7AC3-6E28-4CEB-B0CD-68D04F3B3C2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4ACC7AC3-6E28-4CEB-B0CD-68D04F3B3C2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4ACC7AC3-6E28-4CEB-B0CD-68D04F3B3C2F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{711E0FCB-FACF-400E-B64F-1EDADB3C920B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{711E0FCB-FACF-400E-B64F-1EDADB3C920B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{711E0FCB-FACF-400E-B64F-1EDADB3C920B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{711E0FCB-FACF-400E-B64F-1EDADB3C920B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC0513A7-D211-4FC7-A4EC-C46652890B86}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC0513A7-D211-4FC7-A4EC-C46652890B86}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC0513A7-D211-4FC7-A4EC-C46652890B86}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC0513A7-D211-4FC7-A4EC-C46652890B86}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -219,6 +257,12 @@ Global
 		{C0DA911F-249F-43E8-AD52-0A59DAB3DFC3} = {9262F37C-A063-4A28-B12C-F0009A70153D}
 		{EAB259DB-AD5D-45E8-BCE6-038F79C98160} = {9262F37C-A063-4A28-B12C-F0009A70153D}
 		{D2841AA5-76D4-464D-BB67-EAC5E71E5EF7} = {6B465ED6-36BE-4CD3-8723-FAEF6ECF246B}
+		{246E2CEB-3443-497A-A4DA-8E8659ADD4D7} = {17FCAE5E-3407-4B88-A6CB-CDA9ACB66EE6}
+		{0B9E96EB-7F85-4F4E-831E-DFB8610BE8BA} = {17FCAE5E-3407-4B88-A6CB-CDA9ACB66EE6}
+		{514C1E70-1AB1-4EBB-946F-564990A154E6} = {17FCAE5E-3407-4B88-A6CB-CDA9ACB66EE6}
+		{4ACC7AC3-6E28-4CEB-B0CD-68D04F3B3C2F} = {17FCAE5E-3407-4B88-A6CB-CDA9ACB66EE6}
+		{711E0FCB-FACF-400E-B64F-1EDADB3C920B} = {17FCAE5E-3407-4B88-A6CB-CDA9ACB66EE6}
+		{FC0513A7-D211-4FC7-A4EC-C46652890B86} = {6B465ED6-36BE-4CD3-8723-FAEF6ECF246B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {06C878F5-0DD8-4F84-9E69-31F14DFBBD49}

@@ -1,4 +1,5 @@
 using PetHome.Shared.Core.Shared;
+using PetHome.Shared.Core.Shared.IDs;
 using PetHome.VolunteerRequests.Domain;
 using PetHome.VolunteerRequests.Domain.Shared;
 using PetHome.VolunteerRequests.Domain.ValueObjects;
@@ -18,7 +19,7 @@ public class VolunteerRequestTests
         var phone = Phone.Create("+70951234556").Value;
         var volunteerInfo = new VolunteerInfo(fullName, email, description, phone);
 
-        var status = RequestStatus.none;
+        var status = RequestStatus.None;
         var createAt = DateTime.UtcNow;        
         
         return VolunteerRequest.Create(
@@ -39,7 +40,7 @@ public class VolunteerRequestTests
         volunteerRequest.GetOnReview();
 
         //Assert
-        Assert.Equal(RequestStatus.submitted, volunteerRequest.Status);
+        Assert.Equal(RequestStatus.Submitted, volunteerRequest.Status);
     }
 
     [Fact]
@@ -54,7 +55,7 @@ public class VolunteerRequestTests
         volunteerRequest.SendToRevision(rejectionComment, disscucionId);
 
         //Assert
-        Assert.Equal(RequestStatus.reversion_required, volunteerRequest.Status);
+        Assert.Equal(RequestStatus.Reversion_required, volunteerRequest.Status);
         Assert.Equal(volunteerRequest.RejectionComment, rejectionComment);
         Assert.Equal(volunteerRequest.DisscusionId, disscucionId);
     }
@@ -69,7 +70,7 @@ public class VolunteerRequestTests
         volunteerRequest.RejectRequest();
 
         //Assert
-        Assert.Equal(RequestStatus.rejected, volunteerRequest.Status);
+        Assert.Equal(RequestStatus.Rejected, volunteerRequest.Status);
     }
 
     [Fact]
@@ -82,6 +83,6 @@ public class VolunteerRequestTests
         volunteerRequest.ApproveRequest();
 
         //Assert
-        Assert.Equal(RequestStatus.approved, volunteerRequest.Status);
+        Assert.Equal(RequestStatus.Approved, volunteerRequest.Status);
     }
 }
