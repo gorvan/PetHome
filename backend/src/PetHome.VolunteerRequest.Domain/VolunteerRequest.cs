@@ -1,4 +1,5 @@
-﻿using PetHome.VolunteerRequests.Domain.Shared;
+﻿using PetHome.Shared.Core.Shared.IDs;
+using PetHome.VolunteerRequests.Domain.Shared;
 using PetHome.VolunteerRequests.Domain.ValueObjects;
 
 namespace PetHome.VolunteerRequests.Domain;
@@ -43,18 +44,18 @@ public class VolunteerRequest
     }
 
     public void GetOnReview() =>
-        Status = RequestStatus.submitted;
+        Status = RequestStatus.Submitted;
 
     public void SendToRevision(Comment comment, DisscusionId disscusionId)
     {
         RejectionComment = comment;
         DisscusionId = disscusionId;
-        Status = RequestStatus.reversion_required;
+        Status = RequestStatus.Reversion_required;
     }        
 
     public void RejectRequest() =>
-        Status = RequestStatus.rejected;
+        Status = RequestStatus.Rejected;
 
     public void ApproveRequest() =>
-        Status = RequestStatus.approved;
+        Status = RequestStatus.Approved;
 }

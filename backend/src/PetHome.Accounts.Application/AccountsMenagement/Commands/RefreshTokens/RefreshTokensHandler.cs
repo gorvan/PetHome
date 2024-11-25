@@ -5,13 +5,14 @@ using PetHome.Accounts.Infrastructure.Models;
 using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Shared;
+using PetHome.Shared.Framework;
 
 namespace PetHome.Accounts.Application.AccountsMenagement.Commands.RefreshTokens;
 
 public class RefreshTokensHandler(
     IRefreshSessionManager refreshSessionManager,
     ITokenProvider tokenProvider,
-    [FromKeyedServices(nameof(Accounts))] IUnitOfWork unitOfWork)
+    [FromKeyedServices(ModulesKey.Accounts)] IUnitOfWork unitOfWork)
     : ICommandHandler<LoginResponse, RefreshTokensCommand>
 {
     public async Task<Result<LoginResponse>> Execute(
