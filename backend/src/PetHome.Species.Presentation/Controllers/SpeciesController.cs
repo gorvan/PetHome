@@ -52,7 +52,6 @@ namespace PetHome.Species.Presentation.Controllers
             var command = new DeleteSpeciesCommand(id);
             var result = await handler.Execute(command, token);
             return result.ToResponse();
-
         }
     }
 }

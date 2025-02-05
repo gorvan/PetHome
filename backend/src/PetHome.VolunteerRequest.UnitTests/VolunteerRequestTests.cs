@@ -9,8 +9,8 @@ namespace PetHome.VolunteerRequests.UnitTests;
 public class VolunteerRequestTests
 {
     public static VolunteerRequest CreateVolunteerRequest()
-    {
-        var adminId = AdminId.NewAdminId();
+    {       
+        var requestId = RequestId.NewRequestId();
         var userId = UserId.NewUserId();
 
         var fullName = FullName.Create("FiresName", "SecondName", "SurName").Value;
@@ -23,7 +23,7 @@ public class VolunteerRequestTests
         var createAt = DateTime.UtcNow;        
         
         return VolunteerRequest.Create(
-            adminId,
+            requestId,
             userId,
             volunteerInfo,
             status,
@@ -35,12 +35,14 @@ public class VolunteerRequestTests
     {
         //Arrange
         var volunteerRequest = CreateVolunteerRequest();
+        var adminId = AdminId.NewAdminId();
 
         //Act
-        volunteerRequest.GetOnReview();
+        volunteerRequest.GetOnReview(adminId);
 
         //Assert
         Assert.Equal(RequestStatus.Submitted, volunteerRequest.Status);
+        Assert.Equal(adminId, volunteerRequest.AdminId);
     }
 
     [Fact]
