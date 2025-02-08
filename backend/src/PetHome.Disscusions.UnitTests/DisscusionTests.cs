@@ -1,4 +1,3 @@
-using PetHome.Accounts.Domain;
 using PetHome.Disscusions.Domain;
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
@@ -11,10 +10,10 @@ public class DisscusionTests
     {
         var disscusionId = DisscusionId.NewDisscusionId();
         var relationId = Guid.NewGuid();
-        var users = new List<User>()
+        var users = new List<Guid>()
         {
-            User.CreateParticipant("Username1", "test1@mail.ru", new Role()),
-            User.CreateParticipant("Username2", "test2@mail.ru", new Role())
+            Guid.NewGuid(),
+            Guid.NewGuid()
         };
         var disscusion = Disscusion.Create(disscusionId, relationId, users);
 
@@ -25,9 +24,9 @@ public class DisscusionTests
     {
         var disscusionId = DisscusionId.NewDisscusionId();
         var relationId = Guid.NewGuid();
-        var users = new List<User>()
+        var users = new List<Guid>()
         {
-            User.CreateParticipant("Username1", "test1@mail.ru", new Role())
+            Guid.NewGuid()
         };
         var disscusion = Disscusion.Create(disscusionId, relationId, users);
 
@@ -59,193 +58,95 @@ public class DisscusionTests
         Assert.True(result.IsFailure);
         Assert.NotNull(result.Error);
     }
-
+   
     [Fact]
-    public void AddComment_ItShould_Return_Error_If_UserId_Not_Found()
+    public void AddComment_ItShould_Return_MessageGuid()
     {
         //Arrange 
         var disscusion = CreateDisscusion_2users().Value;
-        var userId = Guid.NewGuid();
-        var text = "TestComment";
-
-        //Act
-        var result = disscusion.AddComment(text, userId);
-
-        //Assert
-        Assert.True(result.IsFailure);
-        Assert.NotEmpty(result.Errors);
-    }
-
-    [Fact]
-    public void AddComment_ItShould_Return_Error_If_Text_Is_Empty()
-    {
-        //Arrange 
-        var disscusion = CreateDisscusion_2users().Value;
-        var userId = Guid.NewGuid();
-        var text = " ";
-
-        //Act
-        var result = disscusion.AddComment(text, userId);
-
-        //Assert
-        Assert.True(result.IsFailure);
-        Assert.NotEmpty(result.Errors);
-    }
-
-    [Fact]
-    public void AddComment_ItShould_Return_Success_If_Parameters_Are_Valid()
-    {
-        //Arrange 
-        var disscusion = CreateDisscusion_2users().Value;
-        var userId = disscusion.Users.First().Id;
+        var userId = disscusion.Users.First();
         var text = "Test comments";
-
-        //Act
-        var result = disscusion.AddComment(text, userId);
-
-        //Assert
-        Assert.True(result.IsSuccess);
-        Assert.NotEmpty(disscusion.Messages);
-    }
-
-    [Fact]
-    public void DeleteComment_ItShould_Return_Error_If_UserId_Not_Found()
-    {
-        //Arrange 
-        var disscusion = CreateDisscusion_2users().Value;
-        var userId = Guid.NewGuid();
-        var text = "Test comments";
-        disscusion.AddComment(text, userId);
+        var createAt = DateTime.Now;
         var messageId = MessageId.NewMessageId();
 
+        var message = Message.Create(messageId, text, createAt, false, userId);
         //Act
-        var result = disscusion.DeleteComment(userId, messageId);
+
+        var result = disscusion.AddComment(message.Value);
 
         //Assert
-        Assert.True(result.IsFailure);
-        Assert.NotEmpty(result.Errors);
+        Assert.IsType<Guid>(result);        
     }
 
     [Fact]
-    public void DeleteComment_ItShould_Return_Error_If_MessageId_Not_Found()
-    {
-        //Arrange 
-        var disscusion = CreateDisscusion_2users().Value;
-        var userId = disscusion.Users.First().Id;
-        var text = "Test comments";
-        disscusion.AddComment(text, userId);
-        var messageId = MessageId.NewMessageId();
-
-        //Act
-        var result = disscusion.DeleteComment(userId, messageId);
-
-        //Assert
-        Assert.True(result.IsFailure);
-        Assert.NotEmpty(result.Errors);
-    }
-
-    [Fact]
-    public void DeleteComment_ItShould_Return_Success_If_Parameters_Are_Valid()
-    {
-        //Arrange 
-        var disscusion = CreateDisscusion_2users().Value;
-        var userId = disscusion.Users.First().Id;
-        var text = "Test comments";
-        disscusion.AddComment(text, userId);
-        var messageId = disscusion.Messages.First().MessageId;
-
-        //Act
-        var result = disscusion.DeleteComment(userId, messageId);
-
-        //Assert
-        Assert.True(result.IsSuccess);
-        Assert.Empty(disscusion.Messages);
-    }
-
-    [Fact]
-    public void EditComment_ItShould_Return_Error_If_UserId_Not_Found()
+    public void DeleteComment_ItShould_Return_DeletedMessageId()
     {
         //Arrange 
         var disscusion = CreateDisscusion_2users().Value;
         var userId = Guid.NewGuid();
         var text = "Test comments";
-        disscusion.AddComment(text, userId);
+        var createAt = DateTime.Now;
         var messageId = MessageId.NewMessageId();
+
+        var message = Message.Create(messageId, text, createAt, false, userId);
+        var commentId = disscusion.AddComment(message.Value);
+
+        //Act
+        var result = disscusion.DeleteComment(message.Value);
+
+        //Assert
+        Assert.IsType<Guid>(result);       
+    } 
+   
+    [Fact]
+    public void EditComment_ItShould_Change_Text_In_Message()
+    {
+        //Arrange 
+        var disscusion = CreateDisscusion_2users().Value;
+        var userId = Guid.NewGuid();
+        var text = "Test comments";
+        var createAt = DateTime.Now;
+        var messageId = MessageId.NewMessageId();
+
+        var message = Message.Create(messageId, text, createAt, false, userId);
+        disscusion.AddComment(message.Value);
+        
         var newText = "New test comment";
 
         //Act
-        var result = disscusion.EditComment(userId, messageId, newText);
+        message.Value.Edit(newText);
 
         //Assert
-        Assert.True(result.IsFailure);
-        Assert.NotEmpty(result.Errors);
+        Assert.Contains(newText, message.Value.Text);        
     }
 
     [Fact]
-    public void EditComment_ItShould_Return_Error_If_MessageId_Not_Found()
+    public void EditComment_ItShould_Set_Message_IsEdit_True()
     {
         //Arrange 
         var disscusion = CreateDisscusion_2users().Value;
-        var userId = disscusion.Users.First().Id;
+        var userId = Guid.NewGuid();
         var text = "Test comments";
-        disscusion.AddComment(text, userId);
+        var createAt = DateTime.Now;
         var messageId = MessageId.NewMessageId();
+
+        var message = Message.Create(messageId, text, createAt, false, userId);
+        disscusion.AddComment(message.Value);
+
         var newText = "New test comment";
 
         //Act
-        var result = disscusion.EditComment(userId, messageId, newText);
+        message.Value.Edit(newText);
 
         //Assert
-        Assert.True(result.IsFailure);
-        Assert.NotEmpty(result.Errors);
-    }
-
-    [Fact]
-    public void EditComment_ItShould_Return_Error_If_New_Text_Is_Empty()
-    {
-        //Arrange 
-        var disscusion = CreateDisscusion_2users().Value;
-        var userId = disscusion.Users.First().Id;
-        var text = "Test comments";
-        disscusion.AddComment(text, userId);
-        var messageId = disscusion.Messages.First().MessageId;
-        var newText = " ";
-
-        //Act
-        var result = disscusion.EditComment(userId, messageId, newText);
-
-        //Assert
-        Assert.True(result.IsFailure);
-        Assert.NotEmpty(result.Errors);
-    }
-
-    [Fact]
-    public void EditComment_ItShould_Return_Success_If_Parameters_Are_Valid()
-    {
-        //Arrange 
-        var disscusion = CreateDisscusion_2users().Value;
-        var userId = disscusion.Users.First().Id;
-        var text = "Test comments";
-        disscusion.AddComment(text, userId);
-        var messageId = disscusion.Messages.First().MessageId;
-        var newText = "New test comment";
-
-        //Act
-        var result = disscusion.EditComment(userId, messageId, newText);
-
-        //Assert
-        Assert.True(result.IsSuccess);
-        Assert.True(disscusion.Messages.First().Text == newText);
+        Assert.True(message.Value.IsEdited);
     }
 
     [Fact]
     public void CloseDisscusion_ItShould_Set_Disscusion_State_Closed()
     {
         //Arrange 
-        var disscusion = CreateDisscusion_2users().Value;
-        var userId = disscusion.Users.First().Id;
-        var text = "Test comments";
-        disscusion.AddComment(text, userId);       
+        var disscusion = CreateDisscusion_2users().Value;           
 
         //Act
         disscusion.CloseDisscusion();

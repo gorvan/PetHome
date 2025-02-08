@@ -7,20 +7,21 @@ namespace PetHome.VolunteerRequests.Domain;
 public class VolunteerRequest
 {
     private VolunteerRequest(
-        AdminId adminId,
+        RequestId requestId,
         UserId userId,
         VolunteerInfo volunteerInfo,
         RequestStatus status,
         DateTime createAt)
     {
-        AdminId = adminId;
+        RequestId = requestId;
         UserId = userId;
         VolunteerInfo = volunteerInfo;
         Status = status;
         CreatedAt = createAt;  
     }
 
-    public AdminId AdminId { get; init; }
+    public RequestId RequestId { get; set; }
+    public AdminId AdminId { get; private set; } = default!;
     public UserId UserId { get; init; }
     public VolunteerInfo VolunteerInfo { get; private set; } = default!;
     public RequestStatus Status { get; private set; }
@@ -29,22 +30,25 @@ public class VolunteerRequest
     public DisscusionId DisscusionId { get; private set; } = default!;
 
     public static VolunteerRequest Create(
-        AdminId adminId,
+        RequestId requestId,
         UserId userId,
         VolunteerInfo volunteerInfo,
         RequestStatus status,
         DateTime createAt)
     {
         return new VolunteerRequest(
-            adminId,
+            requestId,
             userId,
             volunteerInfo,
             status,
             createAt);
     }
 
-    public void GetOnReview() =>
+    public void GetOnReview(AdminId adminId)
+    {
+        AdminId = adminId;
         Status = RequestStatus.Submitted;
+    }        
 
     public void SendToRevision(Comment comment, DisscusionId disscusionId)
     {

@@ -4,7 +4,7 @@ using PetHome.Shared.Core.Response;
 
 namespace PetHome.Shared.Framework.Controllers
 {
-    [ApiController]
+    [ApiController]    
     [Route("[controller]")]
     public abstract class ApplicationContoller : ControllerBase
     {

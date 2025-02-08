@@ -8,6 +8,5 @@ namespace PetHome.Species.Contracts
     {
         IQueryable<SpeciesDto> GetSpeciesDtos();
         SpeciesBreedValue CreateSpeciesBreedValue(SpeciesId speciesId, BreedId breedId);
-
     }
 }

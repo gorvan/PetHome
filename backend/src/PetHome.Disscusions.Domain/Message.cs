@@ -44,4 +44,10 @@ public class Message
             isEdited,
             userId);
     }
+
+    public void Edit(string newMessage)
+    {
+        Text = newMessage;
+        IsEdited = true;
+    }
 }
