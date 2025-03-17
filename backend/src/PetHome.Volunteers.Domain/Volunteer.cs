@@ -30,8 +30,7 @@ namespace PetHome.Volunteers.Domain
             Experience = experience;
         }
 
-        private readonly List<Pet> _pets = [];
-        private bool _isDeleted = false;
+        private readonly List<Pet> _pets = [];        
 
         public FullName Name { get; private set; } = default!;
         public Email Email { get; private set; } = default!;

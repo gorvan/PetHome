@@ -4,6 +4,7 @@ namespace PetHome.VolunteerRequests.Domain.ValueObjects;
 
 public record Comment
 {
+    private Comment() { }
     private Comment(string comment)
     {
         Value = comment;
@@ -15,7 +16,7 @@ public record Comment
     {
         if (string.IsNullOrWhiteSpace(comment))
         {
-            return Errors.General.ValueIsRequeired("Color");
+            return Errors.General.ValueIsRequeired("Comment");
         }
 
         return new Comment(comment);

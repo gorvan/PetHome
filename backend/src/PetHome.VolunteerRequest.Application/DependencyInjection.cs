@@ -8,7 +8,7 @@ public static class DependencyInjection
 {
     private static Assembly assembly = typeof(DependencyInjection).Assembly;
 
-    public static IServiceCollection AddSpeciesApplication(this IServiceCollection services)
+    public static IServiceCollection AddVolunteerRequestApplication(this IServiceCollection services)
     {
         services
             .AddCommands()

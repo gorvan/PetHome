@@ -2,22 +2,25 @@
 using PetHome.Shared.Core.Abstractions;
 using System.Data.Common;
 
-namespace PetHome.Accounts.Infrastructure
+namespace PetHome.Accounts.Infrastructure;
+public class UnitOfWork : IUnitOfWork
 {
-    public class UnitOfWork(AccountsDbContext accountsDbContext) : IUnitOfWork
+    private readonly AccountsDbContext Context;
+
+    public UnitOfWork(AccountsDbContext context)
     {
-        public async Task<DbTransaction> BeginTransaction(
-            CancellationToken cancellationToken = default)
-        {
-            var transaction = await accountsDbContext.Database
-                .BeginTransactionAsync(cancellationToken);
+        Context = context;
+    }
 
-            return transaction.GetDbTransaction();
-        }
+    public async Task<DbTransaction> BeginTransaction(CancellationToken cancellationToken)
+    {
+        var transaction = await Context.Database.BeginTransactionAsync(cancellationToken);
 
-        public async Task SaveChanges(CancellationToken cancellationToken = default)
-        {
-            await accountsDbContext.SaveChangesAsync(cancellationToken);
-        }
+        return transaction.GetDbTransaction();
+    }
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+    {
+        return await Context.SaveChangesAsync(cancellationToken);
     }
 }

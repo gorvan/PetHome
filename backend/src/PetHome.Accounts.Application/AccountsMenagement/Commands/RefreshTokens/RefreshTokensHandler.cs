@@ -1,5 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
 using PetHome.Accounts.Contracts.Responses;
+using PetHome.Accounts.Infrastructure;
 using PetHome.Accounts.Infrastructure.Abstractions;
 using PetHome.Accounts.Infrastructure.Models;
 using PetHome.Shared.Core.Abstractions;
@@ -12,7 +14,7 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.RefreshTokens
 public class RefreshTokensHandler(
     IRefreshSessionManager refreshSessionManager,
     ITokenProvider tokenProvider,
-    [FromKeyedServices(ModulesKey.Accounts)] IUnitOfWork unitOfWork)
+    [FromServices] IUnitOfWork unitOfWork)
     : ICommandHandler<LoginResponse, RefreshTokensCommand>
 {
     public async Task<Result<LoginResponse>> Execute(
@@ -63,7 +65,7 @@ public class RefreshTokensHandler(
         }
 
         refreshSessionManager.Delete(oldRefreshSession.Value);
-        await unitOfWork.SaveChanges(cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
 
         var accessToken = await tokenProvider
             .GenerateAccessToken(oldRefreshSession.Value.User, cancellationToken);

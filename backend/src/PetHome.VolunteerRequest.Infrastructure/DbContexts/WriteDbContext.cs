@@ -7,7 +7,7 @@ using PetHome.VolunteerRequests.Domain;
 namespace PetHome.VolunteerRequests.Infrastructure.DbContexts;
 public class WriteDbContext(IConfiguration configuration) : DbContext
 {
-    public DbSet<VolunteerRequest> Volunteers => Set<VolunteerRequest>();
+    public DbSet<VolunteerRequest> VolunteerRequests => Set<VolunteerRequest>();
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

@@ -2,6 +2,7 @@
 {
     public record DateValue
     {
+        private DateValue() { }
         private DateValue(DateTime date)
         {
             Date = date;

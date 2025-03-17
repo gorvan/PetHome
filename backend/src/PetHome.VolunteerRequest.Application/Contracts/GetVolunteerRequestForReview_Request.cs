@@ -1,8 +1,11 @@
-﻿using PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Queries.GetVolunteerRequestForReview;
+﻿using PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Commands.GetVolunteerRequestForReview;
 
 namespace PetHome.VolunteerRequests.Application.Contracts;
-public record GetVolunteerRequestForReview_Request()
+public record GetVolunteerRequestForReview_Request(Guid VolunteerId)
 {
-    public GetVolunteerRequestForReviewQuery ToCommand() =>
-        new GetVolunteerRequestForReviewQuery();
+    public GetVolunteerRequestForReviewCommand ToCommand(Guid VolunteerRequestId, Guid AdminId) =>
+        new GetVolunteerRequestForReviewCommand(
+            VolunteerRequestId,
+            AdminId,
+            VolunteerId);
 }

@@ -12,7 +12,7 @@ using PetHome.Accounts.Infrastructure.Options;
 using PetHome.Accounts.Infrastructure.Providers;
 using PetHome.Accounts.Infrastructure.Seeding;
 using PetHome.Shared.Core.Abstractions;
-using PetHome.Shared.Framework;
+using PetHome.Shared.Core.Database;
 
 namespace PetHome.Accounts.Infrastructure
 {
@@ -40,7 +40,7 @@ namespace PetHome.Accounts.Infrastructure
                 .AddEntityFrameworkStores<AccountsDbContext>()
                 .AddDefaultTokenProviders();
 
-            return services.AddKeyedScoped<IUnitOfWork, UnitOfWork>(ModulesKey.Accounts);
+            return services.AddScoped<IUnitOfWork, UnitOfWork>();
         }
 
         private static IServiceCollection AddJwtOptions(
@@ -50,7 +50,7 @@ namespace PetHome.Accounts.Infrastructure
             services.Configure<JwtOtions>(configuration.GetSection(JwtOtions.JWT));
             services.AddOptions<JwtOtions>();
             services.Configure<AdminOptions>(configuration.GetSection(AdminOptions.ADMIN));
-            services.Configure<RefreshSessionOptions>(configuration.GetSection(RefreshSessionOptions.SESSION_OPTIONS));            
+            services.Configure<RefreshSessionOptions>(configuration.GetSection(RefreshSessionOptions.SESSION_OPTIONS));
             return services;
         }
 
@@ -70,7 +70,7 @@ namespace PetHome.Accounts.Infrastructure
                 var jwtOptions = configuration.GetSection(JwtOtions.JWT).Get<JwtOtions>()
                                     ?? throw new ApplicationException("Missing jwt configuration");
 
-                options.TokenValidationParameters = 
+                options.TokenValidationParameters =
                     TokenValidationParametersFactory.CreateWithLifeTime(jwtOptions);
             });
 

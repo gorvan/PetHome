@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PetHome.Accounts.Domain;
 using PetHome.Accounts.Domain.Accounts;
+using PetHome.Accounts.Infrastructure;
 using PetHome.Accounts.Infrastructure.IdentityManager;
 using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Shared.Core.Shared;
-using PetHome.Shared.Framework;
 
 namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
 {
@@ -15,7 +15,7 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
         UserManager<User> userManager,
         RoleManager<Role> roleManager,
         ParticipantAccountManager participantAccountManager,
-        [FromKeyedServices(ModulesKey.Accounts)] IUnitOfWork unitOfWork,
+        [FromServices] IUnitOfWork unitOfWork,
         ILogger<RegisterUserHandler> logger) : ICommandHandler<RegisterUserCommand>
     {
 
@@ -59,7 +59,7 @@ namespace PetHome.Accounts.Application.AccountsMenagement.Commands.Register
 
                 await participantAccountManager.CreateParticipantAccount(participantAccount);
 
-                await unitOfWork.SaveChanges(token);
+                await unitOfWork.SaveChangesAsync(token);
                 transaction.Commit();
 
                 return Result.Success();

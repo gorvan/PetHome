@@ -1,23 +1,25 @@
-﻿using PetHome.Shared.Core.Shared.IDs;
-using PetHome.VolunteerRequests.Domain.Shared;
+﻿using PetHome.Shared.Core.Shared;
+using PetHome.Shared.Core.Shared.IDs;
 using PetHome.VolunteerRequests.Domain.ValueObjects;
 
 namespace PetHome.VolunteerRequests.Domain;
 
 public class VolunteerRequest
 {
+    private VolunteerRequest() { }
+
     private VolunteerRequest(
         RequestId requestId,
         UserId userId,
         VolunteerInfo volunteerInfo,
         RequestStatus status,
-        DateTime createAt)
+        DateValue createAt)
     {
         RequestId = requestId;
         UserId = userId;
         VolunteerInfo = volunteerInfo;
         Status = status;
-        CreatedAt = createAt;  
+        CreatedAt = createAt;
     }
 
     public RequestId RequestId { get; set; }
@@ -25,7 +27,7 @@ public class VolunteerRequest
     public UserId UserId { get; init; }
     public VolunteerInfo VolunteerInfo { get; private set; } = default!;
     public RequestStatus Status { get; private set; }
-    public DateTime CreatedAt { get; init; }
+    public DateValue CreatedAt { get; init; }
     public Comment RejectionComment { get; private set; } = default!;
     public DisscusionId DisscusionId { get; private set; } = default!;
 
@@ -34,7 +36,7 @@ public class VolunteerRequest
         UserId userId,
         VolunteerInfo volunteerInfo,
         RequestStatus status,
-        DateTime createAt)
+        DateValue createAt)
     {
         return new VolunteerRequest(
             requestId,
@@ -48,14 +50,14 @@ public class VolunteerRequest
     {
         AdminId = adminId;
         Status = RequestStatus.Submitted;
-    }        
+    }
 
     public void SendToRevision(Comment comment, DisscusionId disscusionId)
     {
         RejectionComment = comment;
         DisscusionId = disscusionId;
         Status = RequestStatus.Reversion_required;
-    }        
+    }
 
     public void RejectRequest() =>
         Status = RequestStatus.Rejected;
