@@ -62,6 +62,8 @@ public class AproveVolunteerRequestHandler : ICommandHandler<AproveVolunteerRequ
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+        transaction.Commit();
+
         return Result.Success();
     }
 }

@@ -68,6 +68,8 @@ public class GetVolunteerRequestForReviewHandler
         await _volunteerRequestRepository.Update(volunteerRequestResult.Value, cancellationToken);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
+        
+        transaction.Commit();
 
         return disscusionResult;
     }
