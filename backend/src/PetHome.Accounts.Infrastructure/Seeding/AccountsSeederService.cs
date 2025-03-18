@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -20,7 +21,7 @@ namespace PetHome.Accounts.Infrastructure.Seeding
         AdminAccountManager adminAccountManager,
         PermissionsManager permissionManager,
         RolePermissionManager rolePermissionManager,
-        [FromKeyedServices(ModulesKey.Accounts)] IUnitOfWork unitOfWork,
+        [FromServices] IUnitOfWork unitOfWork,
         IOptions<AdminOptions> adminOptions,
         ILogger<AccountsSeeder> logger)
     {
@@ -118,7 +119,7 @@ namespace PetHome.Accounts.Infrastructure.Seeding
 
                 await adminAccountManager.CreateAdminAccount(adminAccount);
 
-                await unitOfWork.SaveChanges(cancellationToken);
+                await unitOfWork.SaveChangesAsync(cancellationToken);
                 transaction.Commit();
 
                 logger.LogInformation("Admin added to database");

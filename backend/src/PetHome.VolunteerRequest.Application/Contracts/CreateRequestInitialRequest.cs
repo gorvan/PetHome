@@ -1,6 +1,6 @@
 ﻿using PetHome.Shared.Core.Dtos;
-using PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Commands.InitialRequest;
-using PetHome.VolunteerRequests.Domain.Shared;
+using PetHome.Shared.Core.Shared;
+using PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Commands.CreateInitialVolunteerRequest;
 
 namespace PetHome.VolunteerRequests.Application.Contracts;
 public record CreateInitialRequest_Request(

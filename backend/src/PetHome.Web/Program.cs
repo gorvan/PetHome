@@ -4,7 +4,9 @@ using PetHome.Accounts.Infrastructure;
 using PetHome.Accounts.Infrastructure.Extensions;
 using PetHome.Accounts.Presentation.Controllers;
 using PetHome.Disscusions.Application;
+using PetHome.Disscusions.Contracts;
 using PetHome.Disscusions.Infrastructure;
+using PetHome.Disscusions.Presentation;
 using PetHome.Disscusions.Presentation.Controllers;
 using PetHome.Shared.Core.Extensions;
 using PetHome.Species.Application;
@@ -12,6 +14,8 @@ using PetHome.Species.Contracts;
 using PetHome.Species.Infrastructure;
 using PetHome.Species.Presentation;
 using PetHome.Species.Presentation.Controllers;
+using PetHome.VolunteerRequests.Application;
+using PetHome.VolunteerRequests.Infrastructure;
 using PetHome.VolunteerRequests.Presentation.Controllers;
 using PetHome.Volunteers.Application;
 using PetHome.Volunteers.Contracts;
@@ -84,10 +88,13 @@ public class Program
             .AddSpeciesApplication()
             .AddSpeciesInfrastructure(builder.Configuration)
             .AddDisscusionApplication()
-            .AddDisscusionInfrastructure(builder.Configuration);
+            .AddDisscusionInfrastructure(builder.Configuration)
+            .AddVolunteerRequestApplication()
+            .AddVolunteerRequestInfrastructure();
 
         builder.Services.AddScoped<IVolunteersContract, VolunteersContract>();
         builder.Services.AddScoped<ISpeciesContract, SpeciesContract>();
+        builder.Services.AddScoped<IDisscusionContract, DisscusionContract>();
 
         var app = builder.Build();
 

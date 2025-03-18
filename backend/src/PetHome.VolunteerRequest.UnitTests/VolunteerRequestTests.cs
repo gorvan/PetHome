@@ -1,7 +1,6 @@
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Shared.IDs;
 using PetHome.VolunteerRequests.Domain;
-using PetHome.VolunteerRequests.Domain.Shared;
 using PetHome.VolunteerRequests.Domain.ValueObjects;
 
 namespace PetHome.VolunteerRequests.UnitTests;
@@ -17,10 +16,10 @@ public class VolunteerRequestTests
         var email = Email.Create("test@mail.ru").Value;
         var description = DescriptionValueObject.Create("Some test description").Value;
         var phone = Phone.Create("+70951234556").Value;
-        var volunteerInfo = new VolunteerInfo(fullName, email, description, phone);
+        var volunteerInfo = VolunteerInfo.Create(fullName, email, description, phone);
 
         var status = RequestStatus.None;
-        var createAt = DateTime.UtcNow;        
+        var createAt = DateValue.Create(DateTime.UtcNow).Value;        
         
         return VolunteerRequest.Create(
             requestId,

@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Configurations\Read\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.10" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
   </ItemGroup>
@@ -19,7 +15,6 @@
     <ProjectReference Include="..\PetHome.Shared.Framework\PetHome.Shared.Framework.csproj" />
     <ProjectReference Include="..\PetHome.VolunteerRequest.Application\PetHome.VolunteerRequests.Application.csproj" />
     <ProjectReference Include="..\PetHome.VolunteerRequest.Domain\PetHome.VolunteerRequests.Domain.csproj" />
-    <ProjectReference Include="..\PetHome.VolunteerRequest\PetHome.VolunteerRequests.Application.csproj" />
   </ItemGroup>
 
 </Project>

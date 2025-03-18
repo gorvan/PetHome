@@ -1,8 +1,8 @@
 ﻿using PetHome.Shared.Core.Abstractions;
 using PetHome.Shared.Core.Dtos;
-using PetHome.VolunteerRequests.Domain.Shared;
+using PetHome.Shared.Core.Shared;
 
-namespace PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Commands.InitialRequest;
+namespace PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Commands.CreateInitialVolunteerRequest;
 public record InitialRequestCommand(
     Guid RequestId,
     Guid UserId,

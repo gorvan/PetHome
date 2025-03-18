@@ -52,7 +52,7 @@ public class DisscusionConrtoller : ApplicationContoller
     }
 
     [Permission(Permissions.Admin.CreateVolunteer)]
-    [HttpDelete("{disscussionId:guid}")]
+    [HttpDelete("close/{disscussionId:guid}")]
     public async Task<ActionResult<Guid>> Close(
             [FromServices] CloseDisscusionHandler handler,
             [FromRoute] Guid disscussionId,

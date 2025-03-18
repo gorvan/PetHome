@@ -1,4 +1,4 @@
-﻿namespace PetHome.VolunteerRequests.Domain.Shared;
+﻿namespace PetHome.Shared.Core.Shared;
 
 public enum RequestStatus
 {

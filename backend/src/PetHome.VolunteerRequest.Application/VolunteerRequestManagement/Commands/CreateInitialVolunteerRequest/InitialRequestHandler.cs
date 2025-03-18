@@ -6,7 +6,7 @@ using PetHome.Shared.Core.Shared;
 using PetHome.VolunteerRequests.Domain;
 using PetHome.VolunteerRequests.Domain.ValueObjects;
 
-namespace PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Commands.InitialRequest;
+namespace PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Commands.CreateInitialVolunteerRequest;
 public class InitialRequestHandler : ICommandHandler<Guid, InitialRequestCommand>
 {
     private readonly IVolunteerRequestRepository _volunteerRequestRepository;
@@ -42,14 +42,15 @@ public class InitialRequestHandler : ICommandHandler<Guid, InitialRequestCommand
         var email = Email.Create(command.Email).Value;
         var description = DescriptionValueObject.Create(command.Description).Value;
         var phone = Phone.Create(command.Phone).Value;
-        var volunteerInfo = new VolunteerInfo(fullName, email, description, phone);
+        var volunteerInfo = VolunteerInfo.Create(fullName, email, description, phone);
+        var createAt = DateValue.Create(command.CreateAt).Value;
 
         var requestResult = VolunteerRequest.Create(
             requestId,
             userId,
             volunteerInfo,
             command.Status,
-            command.CreateAt);
+            createAt);
 
         return await _volunteerRequestRepository.Add(requestResult, cancellationToken);
     }

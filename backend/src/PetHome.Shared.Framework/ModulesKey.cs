@@ -4,5 +4,7 @@ public enum ModulesKey
     Accounts = 1,
     Volunteers,
     Species,
-    Shared
+    Shared,
+    Disscusion,
+    VolunteerRequest
 }

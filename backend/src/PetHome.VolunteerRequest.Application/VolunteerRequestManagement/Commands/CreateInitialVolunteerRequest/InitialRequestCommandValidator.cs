@@ -2,7 +2,7 @@
 using PetHome.Shared.Core.Shared;
 using PetHome.Shared.Core.Validation;
 
-namespace PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Commands.InitialRequest;
+namespace PetHome.VolunteerRequests.Application.VolunteerRequestManagement.Commands.CreateInitialVolunteerRequest;
 public class InitialRequestCommandValidator : AbstractValidator<InitialRequestCommand>
 {
     public InitialRequestCommandValidator()
@@ -20,6 +20,6 @@ public class InitialRequestCommandValidator : AbstractValidator<InitialRequestCo
 
         RuleFor(c => c.Description).MustBeValueObject(DescriptionValueObject.Create);
 
-        RuleFor(c=>c.CreateAt).GreaterThan(DateTime.MinValue).LessThan(DateTime.MaxValue);
+        RuleFor(c => c.CreateAt).GreaterThan(DateTime.MinValue).LessThan(DateTime.MaxValue);
     }
 }

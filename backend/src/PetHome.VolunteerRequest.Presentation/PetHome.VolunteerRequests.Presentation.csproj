@@ -10,7 +10,6 @@
     <ProjectReference Include="..\PetHome.Shared.Framework\PetHome.Shared.Framework.csproj" />
     <ProjectReference Include="..\PetHome.Shared.SharedKernel\PetHome.Shared.SharedKernel.csproj" />
     <ProjectReference Include="..\PetHome.VolunteerRequest.Application\PetHome.VolunteerRequests.Application.csproj" />
-    <ProjectReference Include="..\PetHome.VolunteerRequest\PetHome.VolunteerRequests.Application.csproj" />
   </ItemGroup>
 
 </Project>
