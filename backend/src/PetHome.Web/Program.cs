@@ -35,6 +35,7 @@ public class Program
 
         var builder = WebApplication.CreateBuilder(args);
 
+        builder.Services.AddSerilog();
         builder.ConfigureLogging();
 
         builder.Services.AddControllers()
@@ -78,8 +79,6 @@ public class Program
             });
         });
 
-        builder.Services.AddSerilog();
-
         builder.Services
             .AddAccountsApplication()
             .AddAccountsInfrastructure(builder.Configuration)
@@ -110,6 +109,7 @@ public class Program
             await app.ApplyMigrations<Species.Infrastructure.DbContexts.WriteDbContext>();
             await app.ApplyMigrations<Volunteers.Infrastructure.DbContexts.WriteDbContext>();
             await app.ApplyMigrations<Disscusions.Infrastructure.DbContexts.WriteDbContext>();
+            await app.ApplyMigrations<VolunteerRequests.Infrastructure.DbContexts.WriteDbContext>();
         }
 
         await app.SeedAccountsData();

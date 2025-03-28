@@ -130,7 +130,7 @@ namespace PetHome.UnitTests
 
             var fileProviderMock = new Mock<IFileProvider>();
             fileProviderMock.Setup(p => p.UploadFile(It.IsAny<FileData>(), token))
-            .Returns(Task.Run(() => new Result<string>("", false, Error.NotFound("test", "test"))));
+                .Returns(Task.Run(() => new Result<string>("", false, Error.NotFound("test", "test"))));
 
             var messageQueueMock = new Mock<IMessageQueue<FileInfo>>();
 
